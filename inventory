@@ -1,0 +1,32 @@
+[local]
+localhost             ansible_connection=local
+
+
+[winubuntu]
+sauron.local
+
+
+
+# name can be used by a variety of playbooks.  runonce playbook should rename
+# host to something more unique.
+[raspberrypi-generic]
+raspberrypi.local
+
+
+[volumio-servers]
+volumio.local
+frodo.local
+#bilbo.local
+
+[osmc-servers]
+gimli.local
+
+
+
+
+
+[python3-hosts]
+gollum.local
+
+[python3-hosts:vars]
+ansible_python_interpreter=/usr/bin/python3

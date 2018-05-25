@@ -1,0 +1,42 @@
+---
+
+# limited ability to install stuff, e.g. the python modules to use the fancy
+# docker tasks.   For now stuck with basic command line.
+
+# maybe I will one day try to figure this out, but for now it works.
+
+- name: Install docker
+  command: snap install docker
+
+- name: download samba container
+  command: docker pull {{samba_container}}
+
+- name: copy systemd samba template
+  template:
+    src: 'docker-samba.service'
+    dest: '/writable/system-data/etc/systemd/system/docker-samba.service'
+
+- name: ensure share mount directory exists
+  file:
+    path: "{{ samba_mount }}"
+    state: directory
+    mode: 0775
+    owner: root
+    group: root
+
+- name: ensure samba shares directories exist
+  file:
+    path: "{{ samba_mount }}/{{item}}"
+    state: directory
+    mode: 775
+    owner: root
+    group: root
+  with_items: "{{ samba_shares_list }}"
+
+
+- name: enable and start samba
+  systemd:
+    daemon-reload: true
+    enabled: true
+    state: started
+    name: docker-samba.service

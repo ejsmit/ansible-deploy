@@ -1,0 +1,9 @@
+---
+
+
+samba_container: "dperson/samba:armhf"
+
+samba_ports: -p 445:445
+samba_users: -u "example;password"
+samba_shares: -s "temp;/tmp"
+samba_mount: /media/data/shares

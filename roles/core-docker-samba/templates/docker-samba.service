@@ -1,0 +1,18 @@
+[Unit]
+Description=samba docker container
+After=snap.docker.dockerd.service
+Requires=snap.docker.dockerd.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/snap/bin/docker stop samba
+ExecStartPre=-/snap/bin/docker rm samba
+ExecStartPre=/snap/bin/docker pull {{samba_container}}
+ExecStart=/snap/bin/docker run --restart unless-stopped --name samba      \
+    {{samba_ports}}  -v {{samba_mount}}:{{samba_mount}} {{samba_container}}  \
+    -p {{samba_users}} \
+    {{samba_shares}}
+ExecStop=/snap/bin/docker stop samba
+
+[Install]
+WantedBy=multi-user.target

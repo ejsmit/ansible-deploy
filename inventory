@@ -22,7 +22,8 @@ frodo.local
 gimli.local
 
 
-
+[ubuntucore-servers]
+gollum.local
 
 
 [python3-hosts]

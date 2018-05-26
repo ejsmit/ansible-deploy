@@ -1,0 +1,51 @@
+---
+
+
+- name: install nextcloud
+  command: snap install nextcloud
+
+- name: allow the use of external disks
+  command: snap connect nextcloud:removable-media :removable-media
+
+- name: Auto first run configure wizard
+  command: snap run nextcloud.manual-install {{nextcloud_user}} "{{nextcloud_pass}}"
+
+
+- name: add trusted host {{hostname}}
+  command: snap run nextcloud.occ config:system:set trusted_domains 1 --value={{hostname}}
+
+- name: add trusted host {{hostname_fqdn}}
+  command: snap run nextcloud.occ config:system:set trusted_domains 2 --value={{hostname_fqdn}}
+
+
+
+- name: stop  nextcloud
+  command: snap stop nextcloud
+
+- name: Update data directory to point to external disk
+  lineinfile:
+    dest: /writable/system-data/var/snap/nextcloud/current/nextcloud/config/config.php
+    regexp: "'datadirectory' =>"
+    line: "  'datadirectory' => '{{nextcloud_data_directory}}',"
+    state: present
+
+- name: create nextcloud directory on external disk
+  file:
+    path: "{{nextcloud_data_directory}}"
+    state: directory
+    mode: 0755
+
+- name: move nextcloud files to external disks
+  command: mv /writable/system-data/var/snap/nextcloud/common/nextcloud/data {{nextcloud_data_directory}}
+
+- name: check ownership of moves files
+  command: chown -R root:root {{nextcloud_data_directory}}
+
+- name: check permissions of moved files
+  command: chmod -R 0770 {{nextcloud_data_directory}}
+
+- name: enable https support
+  command: snap run nextcloud.enable-https custom {{https_cert}} {{https_key}} {{https_chain}}
+
+- name: start nextcloud
+  command: snap start nextcloud

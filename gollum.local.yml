@@ -1,0 +1,61 @@
+
+
+
+- name: a playbook to configure gollum.local, my private cloud sync server
+  hosts: gollum.local
+  become: true
+  vars_files:
+    - vault_vars/gollum.local/main.yml
+    - vault_vars/gollum.local/ssl.yml
+    - vault_vars/rootca-ssl.yml
+  tasks:
+
+
+
+
+# --------------------------
+#   Mount disk
+# --------------------------
+
+  - name: mount external disk
+    include_role:
+      name: core-mount
+
+
+# --------------------------
+#   add temp certificates
+# --------------------------
+
+
+  - name: Write SSL CA Root Certificate
+    copy:
+      content: "{{ssl_ca_certificate}}"
+      dest: "{{https_chain}}"
+
+  - name: Write SSL Certificate Key
+    copy:
+      content: "{{ssl_certificate_key}}"
+      dest: "{{https_key}}"
+
+  - name: Write SSL Certificate
+    copy:
+      content: "{{ssl_certificate}}"
+      dest: "{{https_cert}}"
+
+
+# --------------------------
+#   install nextcloud
+# --------------------------
+
+  - name: Install and configure nextcloud
+    include_role:
+      name: core-nextcloud-snap
+
+
+# --------------------------
+#   install samba
+# --------------------------
+
+  - name: Install and configure docker & samba
+    include_role:
+      name: core-docker-samba

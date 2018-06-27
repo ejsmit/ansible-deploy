@@ -17,16 +17,17 @@
 - name: add trusted host {{hostname_fqdn}}
   command: snap run nextcloud.occ config:system:set trusted_domains 2 --value={{hostname_fqdn}}
 
-
+- name: start  nextcloud
+  command: snap start nextcloud
 
 - name: stop  nextcloud
   command: snap stop nextcloud
 
 - name: Update data directory to point to external disk
   lineinfile:
-    dest: /writable/system-data/var/snap/nextcloud/current/nextcloud/config/config.php
+    dest: /var/snap/nextcloud/current/nextcloud/config/config.php
     regexp: "'datadirectory' =>"
-    line: "  'datadirectory' => '{{nextcloud_data_directory}}',"
+    line: "  'datadirectory' => '{{nextcloud_data_directory}}/data',"
     state: present
 
 - name: create nextcloud directory on external disk
@@ -36,7 +37,7 @@
     mode: 0755
 
 - name: move nextcloud files to external disks
-  command: mv /writable/system-data/var/snap/nextcloud/common/nextcloud/data {{nextcloud_data_directory}}
+  command: mv /var/snap/nextcloud/common/nextcloud/data {{nextcloud_data_directory}}
 
 - name: check ownership of moves files
   command: chown -R root:root {{nextcloud_data_directory}}
@@ -44,8 +45,38 @@
 - name: check permissions of moved files
   command: chmod -R 0770 {{nextcloud_data_directory}}
 
+
+
+- name: Write SSL CA Root Certificate
+  copy:
+    content: "{{ssl_ca_certificate}}"
+    dest: "{{https_cert_path}}/{{https_chain}}"
+
+- name: Write SSL Certificate Key
+  copy:
+    content: "{{ssl_certificate_key}}"
+    dest: "{{https_cert_path}}/{{https_key}}"
+
+- name: Write SSL Certificate
+  copy:
+    content: "{{ssl_certificate}}"
+    dest: "{{https_cert_path}}/{{https_cert}}"
+
+
 - name: enable https support
-  command: snap run nextcloud.enable-https custom {{https_cert}} {{https_key}} {{https_chain}}
+  command: snap run nextcloud.enable-https custom {{https_cert_path}}/{{https_cert}}  \
+                                                  {{https_cert_path}}/{{https_key}} \
+                                                  {{https_cert_path}}/{{https_chain}}
+
+- name: delete temp certificates
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "{{https_cert_path}}/{{https_cert}}"
+    - "{{https_cert_path}}/{{https_key}}"
+    - "{{https_cert_path}}/{{https_chain}}"
+
 
 - name: start nextcloud
   command: snap start nextcloud

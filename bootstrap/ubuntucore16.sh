@@ -1,14 +1,8 @@
 #!/bin/bash
 
-if [ -z "$1" ] ; then
-    echo 'ERROR: missing user@ipaddress and hostname'
-    echo "     $0   user@ipaddress newhostname"
-    exit 1
-fi
-
-if [ -z "$2" ] ; then
-    echo 'ERROR: missing target hostname'
-    echo "     $0   user@ipaddress newhostname"
+if [[ -z "$1" || -z "$2" ]] ; then
+    echo 'ERROR: missing parameters'
+    echo "     $0   user@address newhostname"
     exit 1
 fi
 

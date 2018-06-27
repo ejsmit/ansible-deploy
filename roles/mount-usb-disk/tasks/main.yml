@@ -7,7 +7,7 @@
 - name: copy systemd mount template
   template:
     src: 'media-disk.mount'
-    dest: '/writable/system-data/etc/systemd/system/media-{{external_disk}}.mount'
+    dest: '/etc/systemd/system/media-{{external_disk}}.mount'
 
 - name: enable mount
   systemd:
@@ -18,4 +18,4 @@
 
 - pause:
    prompt: waiting a few more seconds to make sure disk is ready to use
-   seconds: 5
+   seconds: 10

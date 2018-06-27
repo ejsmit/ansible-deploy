@@ -5,8 +5,6 @@
 
 # maybe I will one day try to figure this out, but for now it works.
 
-- name: Install docker
-  command: snap install docker
 
 - name: download samba container
   command: docker pull {{samba_container}}
@@ -14,7 +12,7 @@
 - name: copy systemd samba template
   template:
     src: 'docker-samba.service'
-    dest: '/writable/system-data/etc/systemd/system/docker-samba.service'
+    dest: '/etc/systemd/system/docker-samba.service'
 
 - name: ensure share mount directory exists
   file:

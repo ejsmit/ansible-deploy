@@ -8,6 +8,8 @@ nextcloud_data_directory: /media/data1/nextcloud
 nextcloud_user: admin
 nextcloud_pass: password
 
-https_cert: /home/nextcloud/cert.pem
-https_key: /home/nextcloud/key.pem
-https_chain: /home/nextcloud/rootca.crt
+
+https_cert_path: /root/snap/common
+https_cert: cert.pem
+https_key: key.pem
+https_chain: rootca.crt

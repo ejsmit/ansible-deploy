@@ -1,0 +1,40 @@
+---
+# hostname specified on command line
+# goal: change host name, create dedicated user and make host accessible through network.
+
+- name: a playbook to bootstrap raspbian stretch
+  hosts: '{{ host }}'
+  remote_user: pi
+  become: true
+  vars:
+    - orig_hostname: raspberrypi
+  tasks:
+
+    - name: change hostname
+      command: hostnamectl set-hostname {{new_hostname}}
+
+    - name: update hosts file
+      replace:
+        path: /etc/hosts
+        regexp: '{{orig_hostname}}'
+        replace: '{{new_hostname}}'
+
+    - name: Add new deploy user
+      include_role:
+        name: deploy-user
+
+    - name: reboot
+      async: 1
+      poll: 0
+      ignore_errors: true
+      shell: sleep 5 && shutdown -r now
+
+    - name: wait for host
+      become: false
+      wait_for:
+        timeout: 300
+        delay: 15
+        connect_timeout: 5
+        host: "{{new_hostname}}.local"
+        port: 22
+      delegate_to: localhost

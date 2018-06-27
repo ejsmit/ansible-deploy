@@ -1,0 +1,63 @@
+# smaug.local
+# assume raspbian base image
+
+- name: a playbook to configure smaug.local
+  hosts: smaug.local
+  become: true
+  vars_files:
+    - vault_vars/smaug.local/main.yml
+  tasks:
+
+
+# --------------------------
+#   password
+# --------------------------
+
+  - name: change pi user password
+    user:
+      name: pi
+      password: "{{ pi_password_hash }}"
+
+
+# --------------------------
+#   install packages
+# --------------------------
+
+
+  - name: Run the equivalent of "apt-get update"
+    apt:
+      update_cache: yes
+
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+
+  - name: install a few packages
+    apt:
+      name: "{{item}}"
+      state: latest
+    with_items: "{{required_packages}}"
+
+
+# --------------------------
+#   ipv6 mac based address
+# --------------------------
+
+  - name: ipv6 hardware based address
+    lineinfile:
+      dest: /etc/dhcpcd.conf
+      state: present
+      backup: yes
+      regexp: '^slaac'
+      line: 'slaac hwaddr'
+
+# --------------------------
+#   nightly reboots
+# --------------------------
+
+  - cron:
+      name: "Auto reboot"
+      minute: "3"
+      hour: "3"
+      job: "/sbin/shutdown -r now"

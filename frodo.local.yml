@@ -1,0 +1,31 @@
+- name: a playbook to setup a new volumio music player
+  hosts: frodo.local
+  become: true
+  vars_files:
+    - vault_vars/frodo.local/main.yml
+  tasks:
+
+
+
+
+    - name: change volumio user default password
+      user:
+        name: volumio
+        password: "{{ volumio_password_hash }}"
+
+
+    - name: disable samba shares
+      systemd:
+        name: smbd
+        state: stopped
+        enabled: no
+
+    - systemd:
+        name: nmbd
+        state: stopped
+        enabled: no
+
+    - systemd:
+        name: winbind
+        state: stopped
+        enabled: no

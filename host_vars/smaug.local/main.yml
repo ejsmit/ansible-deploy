@@ -1,0 +1,11 @@
+---
+
+hostname: smaug
+hostname_fqdn: smaug.local
+
+
+required_packages:
+  - mc
+  - tmux
+  - ufw
+  

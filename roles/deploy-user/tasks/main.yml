@@ -1,0 +1,41 @@
+
+---
+
+# Yes this is a bit of a hack, but it work well enough on all
+# distributions I use.
+
+
+- name: Create deploy group
+  group:
+    name: deploy
+    state: present
+
+- name: Add deploy user
+  user:
+    name: deploy
+    shell: /bin/bash
+    group: deploy
+    state: present
+    password: "{{ deploy_password_hash }}"
+
+- name: Ensure sudoers.d is enabled
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    backup: yes
+    regexp: '^#includedir /etc/sudoers.d'
+    line: '#includedir /etc/sudoers.d'
+
+- name: Set up password-less sudo for deploy
+  copy:
+    content: "%deploy ALL=(ALL) NOPASSWD:ALL"
+    dest: "/etc/sudoers.d/deploy"
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Add authorized keys for deploy user
+  authorized_key:
+    user: deploy
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    manage_dir: yes

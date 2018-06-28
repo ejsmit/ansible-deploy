@@ -61,3 +61,12 @@
       minute: "3"
       hour: "3"
       job: "/sbin/shutdown -r now"
+
+
+# --------------------------
+#   enable firewall
+# --------------------------
+
+  - name: Install and configure firewall
+    include_role:
+      name: ufw-firewall

@@ -7,5 +7,7 @@ hostname_fqdn: smaug.local
 required_packages:
   - mc
   - tmux
-  - ufw
-  
+
+
+firewall_apps:
+  - my-pihole

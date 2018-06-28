@@ -1,0 +1,51 @@
+---
+
+
+
+- name: install required firewall packages
+  apt:
+    name: ufw
+    state: latest
+
+
+- name: enable ufw systemd service
+  systemd:
+    name: ufw
+    state: started
+    enabled: yes
+
+
+- name: install my-firewall-apps
+  copy:
+    src: files/my-firewall-apps
+    dest: /etc/ufw/applications.d/my-firewall-apps
+
+
+- name: alllow firewall ssh connections
+  ufw:
+    rule: limit
+    name: OpenSSH
+
+
+- name: allow firewall applications
+  ufw:
+    rule: allow
+    name: "{{item}}"
+  with_items: "{{firewall_apps}}"
+
+
+
+- name: firewall INCOMING policy
+  ufw:
+    direction: incoming
+    policy: deny
+
+- name: firewall OUTGOING policy
+  ufw:
+    direction: outgoing
+    policy: allow
+
+
+- name: enable ufw
+  ufw:
+    state: enabled

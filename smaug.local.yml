@@ -5,6 +5,7 @@
   hosts: smaug.local
   become: true
   vars_files:
+    - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/smaug.local/main.yml
   tasks:
 
@@ -70,3 +71,12 @@
   - name: Install and configure firewall
     include_role:
       name: ufw-firewall
+
+
+# --------------------------
+#   enable email
+# --------------------------
+
+  - name: Install and configure email
+    include_role:
+      name: email

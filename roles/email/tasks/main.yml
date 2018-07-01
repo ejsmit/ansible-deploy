@@ -1,0 +1,35 @@
+---
+
+- name: Install email packages
+  apt:
+    name: "{{item}}"
+    status: latest
+  with_items:
+    - msmtp
+    - msmtp-mta
+    - bsd-mailx
+
+
+- name: install root config file
+  template:
+    src: msmtprc
+    dest: /root/.msmtprc
+    mode: '0600'
+    owner: root
+    group: root
+
+
+- name: install config file for users
+  template:
+    src: msmtprc
+    dest: /home/{{item}}/.msmtprc
+    mode: '0600'
+    owner: {{item}}
+    group: {{item}}
+  with_items:  "{{mail_install_users}}"
+
+
+- name: install aliases
+  template:
+    src: aliases
+    dest: /etc/aliases

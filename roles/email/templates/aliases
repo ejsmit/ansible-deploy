@@ -1,0 +1,5 @@
+# Send root to Joe and Jane
+root: {{mail_root_email}}
+
+# Send everything else to admin
+default: {{mail_default_email}}

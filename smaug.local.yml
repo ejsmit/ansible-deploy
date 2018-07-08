@@ -80,18 +80,3 @@
   - name: Install and configure email
     include_role:
       name: email
-
-
-# --------------------------
-#   enable email
-# --------------------------
-
-  - name: install a few packages
-    apt:
-      name: logwatch
-      state: latest
-
-  - name: add daily logwatch cron job
-    copy:
-      content: /usr/sbin/logwatch --output mail --mailto rassie@smit.org.uk --detail medium
-      dest: /etc/cron.daily/logwatch

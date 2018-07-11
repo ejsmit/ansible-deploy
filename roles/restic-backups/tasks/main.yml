@@ -1,0 +1,56 @@
+
+
+- name: Download restic from github
+  get_url:
+    url: "https://github.com/restic/restic/releases/download/v{{restic_version}}/{{restic_binary}}.bz2"
+    dest: "/usr/local/bin/"
+
+- name: extract restic
+  command: bunzip2 -f /usr/local/bin/{{restic_binary}}.bz2
+
+- name: chmod +x restic
+  file:
+    dest: /usr/local/bin/{{restic_binary}}
+    mode: "0755"
+
+- name: create restic script
+  template:
+    src: restic
+    dest: /usr/local/bin/restic
+    mode: "0755"
+
+- name: install restic password file
+  copy:
+    content: {{restic_password}}
+    dest: {{restic_password_file}}
+    mode: "0600"
+
+- name: create backup scripts directory
+- file:
+    path: /etc/mybackup/scripts.d
+    state: directory
+    mode: 0755
+
+- name: install backup script
+  template:
+    src: backup.sh
+    dest: /etc/mybackup/backup.sh
+
+- name: install backup data scripts
+  copy:
+    src: files/{{item}}.sh
+    dest: /etc/mybackup/scripts.d/{{item}}.sh
+    mode: "0755"
+  with_items: "{{backup_scripts}}"
+
+- name: install daily backup cron job
+  copy:
+    content: "2 30 * * *      root    /etc/mybackup/backup.sh"
+    dest: /etc/cron.d/backup
+    mode: "0644"
+
+- name: install weekly purge cron script
+  copy:
+    src: files/restic-backup-prune.sh
+    dest: /etc/cron.weekly/
+    mode: "0755"

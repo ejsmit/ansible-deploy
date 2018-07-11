@@ -1,0 +1,20 @@
+---
+
+restic_version: "0.9.1"
+restic_arch: "linux_arm"
+
+restic_binary: restic_{{restic_version}}_{{restic_arch}}
+
+
+b2_account_id:  123456789
+b2_account_key: 1234567890abcdef
+
+restic_repository: b2:mybucket
+restic_password_file: /root/.restic-password
+restic_password: mypassword
+
+backup_destination: /var/backup/mybackup
+
+backup_scripts:
+  - date
+  

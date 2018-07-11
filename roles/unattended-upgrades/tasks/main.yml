@@ -1,0 +1,71 @@
+---
+
+
+- name: install unattended upgrade packages
+  apt:
+    name:  "{{item}}"
+    state: latest
+  with_items:
+    - unattended-upgrade
+    - apt-listchanges
+    - apticron
+
+
+- name: copy 50-unattended-upgrades (Raspbian)
+  template:
+    src: '50unattended-upgrades-raspbian'
+    dest: '/etc/apt/apt.conf.d/50unattended-upgrades'
+  when: ansible_lsb.id == 'Raspbian'
+
+# add any other os distributions here
+
+
+
+- name: configure 20auto-upgrades - Update-Package-Lists 1
+  lineinfile:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    regexp: 'APT::Periodic::Update-Package-Lists'
+    line: 'APT::Periodic::Update-Package-Lists "1"'
+    state: present
+
+- name: configure 20auto-upgrades - Unattended-Upgrade 1
+  lineinfile:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    regexp: 'APT::Periodic::Unattended-Upgrade'
+    line: 'APT::Periodic::Unattended-Upgrade "1"'
+    state: present
+
+- name: configure 20auto-upgrades - AutocleanInterval 7
+  lineinfile:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    regexp: 'APT::Periodic::AutocleanInterval'
+    line: 'APT::Periodic::AutocleanInterval "7"'
+    state: present
+
+
+
+- name: configure listchanges.conf - frontend=pager
+  lineinfile:
+    dest: /etc/apt/listchanges.conf
+    regexp: "frontend="
+    line: "frontend=pager"
+    state: present
+
+- name: configure apt-listchanges.conf - which=both
+  lineinfile:
+    dest: /etc/apt/listchanges.conf
+    regexp: "which="
+    line: "which=both"
+    state: present
+
+- name: configure apt-listchanges.conf - mail=root
+  lineinfile:
+    dest: /etc/apt/listchanges.conf
+    regexp: "mail="
+    line: "mail=root"
+    state: present
+
+
+# apticron has no configuration that need to be changed.
+# - by default it runs once per day using its own crontab
+# - mail is sent to root.

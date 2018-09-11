@@ -3,7 +3,7 @@
 - name: Install email packages
   apt:
     name: "{{item}}"
-    status: latest
+    state: latest
   with_items:
     - msmtp
     - msmtp-mta

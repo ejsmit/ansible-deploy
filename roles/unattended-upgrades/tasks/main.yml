@@ -6,7 +6,7 @@
     name:  "{{item}}"
     state: latest
   with_items:
-    - unattended-upgrade
+    - unattended-upgrades
     - apt-listchanges
 #    - apticron
 
@@ -25,21 +25,21 @@
   lineinfile:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     regexp: 'APT::Periodic::Update-Package-Lists'
-    line: 'APT::Periodic::Update-Package-Lists "1"'
+    line: 'APT::Periodic::Update-Package-Lists "1";'
     state: present
 
 - name: configure 20auto-upgrades - Unattended-Upgrade 1
   lineinfile:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     regexp: 'APT::Periodic::Unattended-Upgrade'
-    line: 'APT::Periodic::Unattended-Upgrade "1"'
+    line: 'APT::Periodic::Unattended-Upgrade "1";'
     state: present
 
 - name: configure 20auto-upgrades - AutocleanInterval 7
   lineinfile:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     regexp: 'APT::Periodic::AutocleanInterval'
-    line: 'APT::Periodic::AutocleanInterval "7"'
+    line: 'APT::Periodic::AutocleanInterval "7";'
     state: present
 
 

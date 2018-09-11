@@ -159,7 +159,7 @@
     - name: disable samba in startup.sh
       lineinfile:
         dest: /opt/musicbox/startup.sh
-        regexp: '/etc/init.d/samba restart'
+        regexp: '$/etc/init.d/samba restart'
         line: '# /etc/init.d/samba restart'
         state: present
 

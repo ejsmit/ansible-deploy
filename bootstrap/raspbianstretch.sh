@@ -16,7 +16,12 @@ hostname=$2
 
 
 # enable passwordless login
-ssh-copy-id pi@$target -i ~/.ssh/id_rsa.pub
+ssh-keygen -R ${target} >/dev/null
+ssh-keyscan -H ${target}  >~/.ssh/known_hosts  2>/dev/null
+
+ssh-copy-id -i ~/.ssh/id_rsa.pub pi@$target
+read -p "Press enter to continue"
+
 
 # check if we can connect
 ansible $target -i "$target," -m ping -u pi

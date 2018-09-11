@@ -22,6 +22,15 @@
 
 
 # --------------------------
+#   pi-common
+# --------------------------
+
+  - name: common raspberry pi config
+    include_role:
+      name: pi-common
+
+
+# --------------------------
 #   install packages
 # --------------------------
 

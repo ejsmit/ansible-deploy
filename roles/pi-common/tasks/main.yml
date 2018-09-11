@@ -1,0 +1,6 @@
+
+
+- name: fix timezone
+  copy:
+    content: "{{timezone}}"
+    dest: "/etc/timezone"

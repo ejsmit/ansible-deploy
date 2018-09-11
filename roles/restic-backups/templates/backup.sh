@@ -12,7 +12,7 @@ rm -rf ${BACKUP_DEST}/*
 if [ -d /etc/mybackup/scripts.d ]; then
   for i in /etc/mybackup/scripts.d/*.sh; do
     if [ -r $i ]; then
-      . $i
+      . $i ${BACKUP_DEST}
     fi
   done
   unset i

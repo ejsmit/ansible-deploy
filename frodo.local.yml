@@ -1,31 +1,212 @@
-- name: a playbook to setup a new volumio music player
+- name: a playbook to setup a new pimusicbox music player
   hosts: frodo.local
   become: true
   vars_files:
+    - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/frodo.local/main.yml
   tasks:
 
 
 
 
-    - name: change volumio user default password
+# --------------------------
+#   root password
+# --------------------------
+
+    - name: change root user default password
       user:
-        name: volumio
-        password: "{{ volumio_password_hash }}"
+        name: root
+        password: "{{ root_password_hash }}"
 
 
-    - name: disable samba shares
-      systemd:
-        name: smbd
+# --------------------------
+#   regular user
+# --------------------------
+
+    - name: Create rsmit group
+      group:
+        name: rsmit
+        state: present
+
+    - name: Add rsmit user
+      user:
+        name: rsmit
+        shell: /bin/bash
+        group: rsmit
+        state: present
+        password: "{{ rsmit_password_hash }}"
+
+    - name: Set up password-less sudo for rsmit
+      copy:
+        content: "%rsmit ALL=(ALL:ALL) ALL"
+        dest: "/etc/sudoers.d/rsmit"
+        owner: root
+        group: root
+        mode: '0440'
+
+    - name: Add authorized keys for rsmit
+      authorized_key:
+        user: rsmit
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+        manage_dir: yes
+
+
+
+# --------------------------
+#   network hacks
+# --------------------------
+
+
+    - name: fix network test
+      lineinfile:
+        dest: /opt/musicbox/startup.sh
+        regexp: '^while (.*)INI__network__wait_for_network'
+        line: 'while ! ping -nq -c3 www.google.co.uk;'
+        state: present
+
+
+# --------------------------
+#   network settings
+# --------------------------
+
+    - name: samba mount address
+      ini_file:
+        path: /boot/config/settings.ini
+        section: network
+        option: mount_address
+        value: //gollum.local/music
+
+    - name: samba mount user
+      ini_file:
+        path: /boot/config/settings.ini
+        section: network
+        option: mount_user
+        value: nas_media
+
+    - name: samba mount password
+      ini_file:
+        path: /boot/config/settings.ini
+        section: network
+        option: mount_password
+        value: nas_media_password
+
+    - name: samba mount options
+      ini_file:
+        path: /boot/config/settings.ini
+        section: network
+        option: mount_options
+        value: vers=3.0
+
+
+    - name: enable firewall
+      ini_file:
+        path: /boot/config/settings.ini
+        section: network
+        option: enable_firewall
+        value: "true"
+
+
+# --------------------------
+#   musicbox settings
+# --------------------------
+
+    - name: enable shairport
+      ini_file:
+        path: /boot/config/settings.ini
+        section: musicbox
+        option: enable_shairport
+        value: "true"
+
+    - name: enable dlna/upnp
+      ini_file:
+        path: /boot/config/settings.ini
+        section: musicbox
+        option: enable_upnp
+        value: "true"
+
+
+    - name: set output device
+      ini_file:
+        path: /boot/config/settings.ini
+        section: musicbox
+        option: output
+        value: justboom_dac
+
+    - name: default volume
+      ini_file:
+        path: /boot/config/settings.ini
+        section: audio
+        option: mixer_volume
+        value: 40
+
+
+# --------------------------
+#   samba disable
+# --------------------------
+
+    - name: disable samba service
+      service:
+        name: samba
         state: stopped
         enabled: no
 
-    - systemd:
-        name: nmbd
-        state: stopped
-        enabled: no
-
-    - systemd:
+    - name: disable winbind service
+      service:
         name: winbind
         state: stopped
         enabled: no
+
+    - name: disable samba in startup.sh
+      lineinfile:
+        dest: /opt/musicbox/startup.sh
+        regexp: '/etc/init.d/samba restart'
+        line: '# /etc/init.d/samba restart'
+        state: present
+
+
+
+
+
+# --------------------------
+#   reboot
+# --------------------------
+
+
+    - name: reboot
+      async: 1
+      poll: 0
+      become: true
+      ignore_errors: true
+      shell: sleep 5 && shutdown -r now
+
+    - name: wait for host
+      become: false
+      wait_for:
+        timeout: 300
+        delay: 15
+        connect_timeout: 5
+        host: "{{inventory_hostname}}"
+        port: 22
+      delegate_to: localhost
+
+
+
+
+
+
+# --------------------------
+#   enable email
+# --------------------------
+
+    # - name: Install and configure email
+    #   include_role:
+    #     name: email
+
+
+# --------------------------
+#   enable restic backups
+# --------------------------
+
+  # - name: Install and configure restic backups
+  #   include_role:
+  #     name: restic-backups

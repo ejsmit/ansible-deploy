@@ -8,7 +8,7 @@
   with_items:
     - unattended-upgrade
     - apt-listchanges
-    - apticron
+#    - apticron
 
 
 - name: copy 50-unattended-upgrades (Raspbian)
@@ -64,8 +64,3 @@
     regexp: "mail="
     line: "mail=root"
     state: present
-
-
-# apticron has no configuration that need to be changed.
-# - by default it runs once per day using its own crontab
-# - mail is sent to root.

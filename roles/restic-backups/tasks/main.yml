@@ -45,7 +45,9 @@
 
 - name: install daily backup cron job
   copy:
-    content: "2 30 * * *      root    /etc/mybackup/backup.sh"
+    content:
+      "2 30 * * *      root    /etc/mybackup/backup.sh
+      "
     dest: /etc/cron.d/backup
     mode: "0644"
 

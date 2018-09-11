@@ -24,8 +24,8 @@
     src: msmtprc
     dest: /home/{{item}}/.msmtprc
     mode: '0600'
-    owner: {{item}}
-    group: {{item}}
+    owner: "{{item}}"
+    group: "{{item}}"
   with_items:  "{{mail_install_users}}"
 
 

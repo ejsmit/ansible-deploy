@@ -1,0 +1,26 @@
+
+# goal: change host name, create dedicated user and make host accessible through network.
+# use user interface for all configuration, at least for now.....
+
+
+
+
+- name: a playbook to pre-bootstrap pimusicbox
+  hosts: localhost
+  become: true
+  tasks:
+
+    - name: enable ssh
+      ini_file:
+        path: /mnt/config/settings.ini
+        section: network
+        option: "enable_ssh"
+        value: "true"
+
+
+    - name: change hostname
+      ini_file:
+        path: /mnt/config/settings.ini
+        section: network
+        option: name
+        value: "{{new_hostname}}"

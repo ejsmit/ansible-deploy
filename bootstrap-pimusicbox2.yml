@@ -1,0 +1,10 @@
+---
+
+- name: a playbook to bootstrap pimusicbox
+  hosts: '{{ host }}'
+  remote_user: root
+  tasks:
+
+    - name: Add new deploy user
+      include_role:
+        name: deploy-user

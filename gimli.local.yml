@@ -16,24 +16,13 @@
 
 
 # --------------------------
-#   password
-# --------------------------
-
-  # - name: change pi user password
-  #   user:
-  #     name: pi
-  #     password: "{{ pi_password_hash }}"
-
-
-
-# --------------------------
 #   pi-common
 # --------------------------
 
-  # - name: common raspberry pi config
-  #   include_role:
-  #     name: pi-common
-  #
+  - name: common raspberry pi config
+    include_role:
+      name: pi-common
+
 
 # --------------------------
 #   raspi-config settings
@@ -85,20 +74,6 @@
   #
 
 
-# --------------------------
-#   install packages
-# --------------------------
-
-
-  # - name: Run the equivalent of "apt-get update"
-  #   apt:
-  #     update_cache: yes
-  #
-  # - name: Upgrade all packages to the latest version
-  #   apt:
-  #     name: "*"
-  #     state: latest
-  #   notify: reboot and wait
   #
   # - name: install a few packages
   #   apt:

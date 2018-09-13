@@ -7,18 +7,11 @@
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/smaug.local/main.yml
+
+  handlers:
+  - include: handlers/reboot.yml
+
   tasks:
-
-
-# --------------------------
-#   password
-# --------------------------
-
-  # - name: change pi user password
-  #   user:
-  #     name: pi
-  #     password: "{{ pi_password_hash }}"
-
 
 # --------------------------
 #   pi-common
@@ -28,81 +21,60 @@
     include_role:
       name: pi-common
 
-# --------------------------
-#   install packages
-# --------------------------
-
-
-  # - name: Run the equivalent of "apt-get update"
-  #   apt:
-  #     update_cache: yes
-  #
-  # - name: Upgrade all packages to the latest version
-  #   apt:
-  #     name: "*"
-  #     state: latest
-  #
-  # - name: install a few packages
-  #   apt:
-  #     name: "{{item}}"
-  #     state: latest
-  #   with_items: "{{required_packages}}"
-
 
 # --------------------------
 #   ipv6 mac based address
 # --------------------------
 
-  # - name: ipv6 hardware based address
-  #   lineinfile:
-  #     dest: /etc/dhcpcd.conf
-  #     state: present
-  #     backup: yes
-  #     regexp: '^slaac'
-  #     line: 'slaac hwaddr'
+  - name: ipv6 hardware based address
+    lineinfile:
+      dest: /etc/dhcpcd.conf
+      state: present
+      backup: yes
+      regexp: '^slaac'
+      line: 'slaac hwaddr'
 
 # --------------------------
 #   nightly reboots
 # --------------------------
 
-  # - cron:
-  #     name: "Auto reboot"
-  #     minute: "3"
-  #     hour: "3"
-  #     job: "/sbin/shutdown -r now"
+  - cron:
+      name: "Auto reboot"
+      minute: "3"
+      hour: "3"
+      job: "/sbin/shutdown -r now"
+      cron_file: reboot
+      user: root
 
 
 # --------------------------
-#   enable firewall
+#   various roles
 # --------------------------
 
-  # - name: Install and configure firewall
-  #   include_role:
-  #     name: ufw-firewall
+  - name: Install and configure firewall
+    include_role:
+      name: ufw-firewall
 
+  - name: Install and configure email
+    include_role:
+      name: email
 
-# --------------------------
-#   enable email
-# --------------------------
-
-  # - name: Install and configure email
-  #   include_role:
-  #     name: email
-
-
-# --------------------------
-#   enable unattended-upgrades
-# --------------------------
-
-  # - name: Install and configure unattended upgrades
-  #   include_role:
-  #     name: unattended-upgrades
-
-
-# --------------------------
-#   enable restic backups
-# --------------------------
+  - name: Install and configure unattended upgrades
+    include_role:
+      name: unattended-upgrades
 
   - name: Install and configure restic backups
     include_role:
       name: restic-backups
+
+  - name: Install and configure logwatch
+    include_role:
+      name: logwatch
+
+# --------------------------
+#   forced reboot
+# --------------------------
+
+  - debug: msg="Trigger Reboot"
+    notify: reboot and wait
+    changed_when: true

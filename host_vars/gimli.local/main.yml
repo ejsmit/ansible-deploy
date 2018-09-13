@@ -36,4 +36,4 @@ restic_password: "{{private_restic_password}}"
 restic_repository: "b2:ejsmit-restic"
 
 backup_scripts:
- - date
+ - 00date

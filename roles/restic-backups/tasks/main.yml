@@ -21,12 +21,12 @@
 
 - name: install restic password file
   copy:
-    content: {{restic_password}}
-    dest: {{restic_password_file}}
+    content: "{{restic_password}}"
+    dest: "{{restic_password_file}}"
     mode: "0600"
 
 - name: create backup scripts directory
-- file:
+  file:
     path: /etc/mybackup/scripts.d
     state: directory
     mode: 0755

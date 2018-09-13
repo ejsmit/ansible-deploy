@@ -1,0 +1,6 @@
+---
+
+- name: install logwatch
+  apt:
+    name: logwatch
+    state: latest

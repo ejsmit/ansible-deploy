@@ -1,0 +1,212 @@
+# gimli.local
+# assume raspbian base image
+
+- name: a playbook to configure gimli.local
+  hosts: gimli.local
+  become: true
+
+  vars_files:
+    - ~/.private/ansible/vars/me-myself-and-i.yml
+    - vault_vars/smaug.local/main.yml
+
+  handlers:
+  - include: handlers/reboot.yml
+
+  tasks:
+
+
+# --------------------------
+#   password
+# --------------------------
+
+  # - name: change pi user password
+  #   user:
+  #     name: pi
+  #     password: "{{ pi_password_hash }}"
+
+
+
+# --------------------------
+#   pi-common
+# --------------------------
+
+  # - name: common raspberry pi config
+  #   include_role:
+  #     name: pi-common
+  #
+
+# --------------------------
+#   raspi-config settings
+# --------------------------
+
+  # - name: change graphics memory split
+  #   lineinfile:
+  #     dest: /boot/config.txt
+  #     regexp: "^gpu_mem="
+  #     line: "gpu_mem=256"
+  #     state: present
+  #   notify: reboot and wait
+  #
+  # - name: enable camera to enable advanced video codecs
+  #   lineinfile:
+  #     dest: /boot/config.txt
+  #     regexp: "^start_x="
+  #     line: "start_x=1"
+  #     state: present
+  #   notify: reboot and wait
+  #
+
+# --------------------------
+#   firmware
+# --------------------------
+
+
+  # - name: pctv firmware (1)
+  #   copy:
+  #     src: firmware/pctv/dvb-demod-si2168-02.fw
+  #     dest: /lib/firmware/dvb-demod-si2168-02.fw
+  #   notify: reboot and wait
+  #
+  #
+  # - name: pctv firmware (2)
+  #   copy:
+  #     src: firmware/pctv/dvb-demod-si2168-b40-01.fw
+  #     dest: /lib/firmware/dvb-demod-si2168-b40-01.fw
+  #   notify: reboot and wait
+
+
+# --------------------------
+#   mount usb disk
+# --------------------------
+
+  # - name: Install and configure email
+  #   include_role:
+  #     name: mount-usb-disk
+  #
+
+
+# --------------------------
+#   install packages
+# --------------------------
+
+
+  # - name: Run the equivalent of "apt-get update"
+  #   apt:
+  #     update_cache: yes
+  #
+  # - name: Upgrade all packages to the latest version
+  #   apt:
+  #     name: "*"
+  #     state: latest
+  #   notify: reboot and wait
+  #
+  # - name: install a few packages
+  #   apt:
+  #     name: "{{item}}"
+  #     state: latest
+  #   with_items: "{{required_packages}}"
+  #   notify: reboot and wait
+  #
+
+
+# --------------------------
+#   reboot if we need to
+# --------------------------
+
+  - name: reboot if we need to
+    meta: flush_handlers
+
+
+
+# --------------------------
+#   nightly reboots
+# --------------------------
+
+  # - cron:
+  #     name: "Auto reboot"
+  #     minute: "3"
+  #     hour: "3"
+  #     job: "/sbin/shutdown -r now"
+
+
+
+# --------------------------
+#   enable firewall
+# --------------------------
+
+  # - name: Install and configure firewall
+  #   include_role:
+  #     name: ufw-firewall
+
+
+# --------------------------
+#   enable email
+# --------------------------
+
+  # - name: Install and configure email
+  #   include_role:
+  #     name: email
+
+
+# --------------------------
+#   enable unattended-upgrades
+# --------------------------
+
+  # - name: Install and configure unattended upgrades
+  #   include_role:
+  #     name: unattended-upgrades
+
+
+
+# --------------------------
+#   enable restic backups
+# --------------------------
+
+  # - name: Install and configure restic backups
+  #   include_role:
+  #     name: restic-backups
+
+
+# --------------------------
+#   install and configure logwatch
+# --------------------------
+
+  # - name: logwatch
+  #   include_role:
+  #     name: logwatch
+  #
+
+
+
+# --------------------------
+#   Mediacenter
+# --------------------------
+
+  - name: Install kodi mediacenter
+    include_role:
+      name: mediacenter
+
+  - name: make sure we dont start in a graphical environment
+    command: systemctl set-default multi-user.target
+
+
+# --------------------------
+#   Mount media files over network
+# --------------------------
+
+
+  - name: mount network media shares
+    lineinfile:
+      dest: /etc/fstab
+      regexp: "^//gollum.local/videos /mnt/videos cifs"
+      line: "//gollum.local/videos /mnt/videos cifs x-systemd.automount,noauto,rw,iocharset=utf8,username=nas_admin,password=nas_admin_password,uid=pi,gid=pi,file_mode=0770,dir_mode=0770,vers=3.0 0 0"
+      state: present
+
+
+
+# --------------------------
+#   Finally reboot
+# --------------------------
+
+  # - name: finish with a reboot
+  #   import_tasks: includes/reboot.yml

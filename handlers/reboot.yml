@@ -1,0 +1,26 @@
+
+---
+
+- name: reboot
+  listen: "reboot and wait"
+  async: 1
+  poll: 0
+  ignore_errors: true
+  shell: sleep 5 && shutdown -r now
+
+- name: wait for remote
+  listen: "reboot and wait"
+  become: false
+  wait_for:
+    timeout: 300
+    delay: 15
+    connect_timeout: 5
+    host: "gimli.local"
+    port: 22
+  delegate_to: localhost
+
+- name: pause a bit
+  listen: "reboot and wait"
+  pause:
+    prompt: waiting a few more seconds to make sure server is really ready
+    seconds: 10

@@ -1,0 +1,39 @@
+---
+
+hostname: gimli
+hostname_fqdn: gimli.local
+
+required_packages:
+  - mc
+  - tmux
+  - openvpn
+
+firewall_apps:
+  - my-kodi
+
+external_disk: data
+
+mail_install_users:
+  - pi
+
+mail_account: gandi
+mail_server: mail.gandi.net
+mail_port: 587
+mail_from: "{{hostname}}@{{private_my_mail_domain}}"
+mail_username: "{{private_my_mail_username}}"
+mail_password: "{{private_my_mail_password}}"
+
+mail_root_email: "{{private_my_email}}"
+mail_default_email: "{{private_my_email}}"
+
+
+restic_version: "0.9.2"
+restic_arch: "linux_arm"
+
+b2_account_id:  "{{private_b2_account_id}}"
+b2_account_key: "{{private_b2_account_key}}"
+restic_password: "{{private_restic_password}}"
+restic_repository: "b2:ejsmit-restic"
+
+backup_scripts:
+ - date

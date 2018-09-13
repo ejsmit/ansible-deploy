@@ -1,3 +1,6 @@
 ---
 
 timezone: Europe/London
+
+required_packages:
+  - mc

@@ -1,6 +1,27 @@
 
+# requires playbook reboot and wait handler. 
+
+
+- name: change pi user password
+  user:
+    name: pi
+    password: "{{ pi_password_hash }}"
 
 - name: fix timezone
   copy:
     content: "{{timezone}}"
     dest: "/etc/timezone"
+  notify: reboot and wait
+
+- name: Run the equivalent of "apt dist-update"
+  apt:
+    update_cache: yes
+    upgrade: dist
+  notify: reboot and wait
+
+- name: install a few packages
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items: "{{required_packages}}"
+  notify: reboot and wait

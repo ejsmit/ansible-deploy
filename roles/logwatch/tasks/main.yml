@@ -4,3 +4,60 @@
   apt:
     name: logwatch
     state: latest
+
+
+
+- name: create conf/logfiles directory
+  file:
+    path: /etc/logwatch/conf/logfiles
+    state: directory
+    mode: 0755
+
+
+- name: create conf/services directory
+  file:
+    path: /etc/logwatch/conf/services
+    state: directory
+    mode: 0755
+
+- name: create scripts/services directory
+  file:
+    path: /etc/logwatch/scripts/services
+    state: directory
+    mode: 0755
+
+- name: install logwatch config
+  copy:
+    src: files/logwatch.conf
+    dest: /etc/logwatch/conf/logwatch.conf
+    mode: "0664"
+
+- name: install logwatch override config
+  copy:
+    src: files/override.conf
+    dest: /etc/logwatch/conf/override.conf
+    mode: "0664"
+
+- name: install logwatch ignore file
+  copy:
+    src: files/ignore.conf
+    dest: /etc/logwatch/conf/ignore.conf
+    mode: "0664"
+
+- name: install logwatch mybackup script
+  copy:
+    src: files/scripts.services.mybackup
+    dest: /etc/logwatch/scripts/services/mybackup
+    mode: "0755"
+
+- name: install logwatch mybackup service conf
+  copy:
+    src: files/conf.services.mybackup.conf
+    dest: /etc/logwatch/conf/services/mybackup.conf
+    mode: "0664"
+
+- name: install logwatch mybackup logfiles conf
+  copy:
+    src: files/conf.logfiles.mybackup.conf
+    dest: /etc/logwatch/conf/logfiles/mybackup.conf
+    mode: "0664"

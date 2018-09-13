@@ -5,8 +5,5 @@ if ! [ $(id -u) = 0 ]; then
    exit 1
 fi
 
-
-export B2_ACCOUNT_ID="{{b2_account_id}}"
-export B2_ACCOUNT_KEY="{{b2_account_key}}"
-
-/usr/local/bin/{{restic_binary}} -r "{{restic_repository}}"  -p "{{restic_password_file}}" "$@"
+source {{restic_environment_file}}
+/usr/local/bin/{{restic_binary}} "$@"

@@ -1,6 +1,9 @@
 #!/bin/bash
 
-BACKUP_DEST={{backup_destination}}
+source /etc/mybackup/backup.conf
+
+# Clear backup log file
+: >${BACKUP_LOG}
 
 # Clear backup directory
 mkdir -p ${BACKUP_DEST}
@@ -8,14 +11,7 @@ rm -rf ${BACKUP_DEST}/*
 
 
 # run scripts to copy files into BACKUP_DEST
+run-parts --report /etc/mybackup/scripts.d
 
-if [ -d /etc/mybackup/scripts.d ]; then
-  for i in /etc/mybackup/scripts.d/*.sh; do
-    if [ -r $i ]; then
-      . $i ${BACKUP_DEST}
-    fi
-  done
-  unset i
-fi
-
-/usr/local/bin/restic backup ${BACKUP_DEST}
+# now backup everything in BACKUP_DEST offsite
+/usr/local/bin/restic backup ${BACKUP_DEST} | tee -a ${BACKUP_LOG}

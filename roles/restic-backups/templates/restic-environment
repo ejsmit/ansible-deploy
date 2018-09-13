@@ -1,0 +1,5 @@
+
+export RESTIC_REPOSITORY="{{restic_repository}}"
+export RESTIC_PASSWORD_FILE="{{restic_password_file}}"
+export B2_ACCOUNT_ID="{{b2_account_id}}"
+export B2_ACCOUNT_KEY="{{b2_account_key}}"

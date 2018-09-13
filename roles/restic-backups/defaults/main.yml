@@ -13,8 +13,9 @@ restic_repository: b2:mybucket
 restic_password_file: /root/.restic-password
 restic_password: mypassword
 
+restic_environment_file: /root/.restic-environment
+
 backup_destination: /var/backup/mybackup
 
 backup_scripts:
-  - date
-  
+  - 00date

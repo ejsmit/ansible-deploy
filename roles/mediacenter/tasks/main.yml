@@ -1,0 +1,47 @@
+---
+
+- name: Install Kodi and all of its dependencies
+  apt:
+    name: kodi
+    state: latest
+
+- name: Set tvheadend username
+  debconf:
+    name=tvheadend
+    question="tvheadend/admin_username"
+    value="admin"
+    vtype="string"
+
+- name: Set tvheadend password
+  debconf:
+    name=tvheadend
+    question="tvheadend/admin_password"
+    value="tvheadend"
+    vtype="password"
+
+
+- name: install tvheadend and its dependencies
+  apt:
+    name: tvheadend
+    state: latest
+
+
+- name: install kodi addons
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - kodi-pvr-hts
+
+
+- name: copy systemd kodi service template
+  template:
+    src: 'kodi.service'
+    dest: '/etc/systemd/system/kodi.service'
+
+- name: enable kodi but dont start it yet
+  systemd:
+    daemon-reload: true
+    enabled: true
+    state: stopped
+    name: kodi.service

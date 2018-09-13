@@ -1,6 +1,9 @@
 #!/bin/bash
 
-
+if [ ! -f ~/.private/vault_password.txt ] ; then
+    echo 'ERROR: private files not available'
+    exit 1
+fi
 
 if [[ -z "$1" || -z "$2" ]] ; then
     echo 'ERROR: missing parameters'

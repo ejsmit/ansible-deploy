@@ -6,7 +6,11 @@ hostname_fqdn: gimli.local
 required_packages:
   - mc
   - tmux
-  - openvpn
+  - git
+  - python3
+  - python3-pip
+  - python3-setuptools
+  - psmisc
 
 firewall_apps:
   - my-kodi

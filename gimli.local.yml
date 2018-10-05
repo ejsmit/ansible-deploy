@@ -7,7 +7,7 @@
 
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
-    - vault_vars/smaug.local/main.yml
+    - vault_vars/gimli.local/main.yml
 
   handlers:
   - include: handlers/reboot.yml
@@ -25,63 +25,40 @@
 
 
 # --------------------------
-#   raspi-config settings
+#   hardware related
 # --------------------------
 
-  # - name: change graphics memory split
-  #   lineinfile:
-  #     dest: /boot/config.txt
-  #     regexp: "^gpu_mem="
-  #     line: "gpu_mem=256"
-  #     state: present
-  #   notify: reboot and wait
-  #
-  # - name: enable camera to enable advanced video codecs
-  #   lineinfile:
-  #     dest: /boot/config.txt
-  #     regexp: "^start_x="
-  #     line: "start_x=1"
-  #     state: present
-  #   notify: reboot and wait
-  #
+  - name: change graphics memory split
+    lineinfile:
+      dest: /boot/config.txt
+      regexp: "^gpu_mem="
+      line: "gpu_mem=256"
+      state: present
+    notify: reboot and wait
 
-# --------------------------
-#   firmware
-# --------------------------
+  - name: enable camera to enable advanced video codecs
+    lineinfile:
+      dest: /boot/config.txt
+      regexp: "^start_x="
+      line: "start_x=1"
+      state: present
+    notify: reboot and wait
 
+  - name: pctv firmware (1)
+    copy:
+      src: firmware/pctv/dvb-demod-si2168-02.fw
+      dest: /lib/firmware/dvb-demod-si2168-02.fw
+    notify: reboot and wait
 
-  # - name: pctv firmware (1)
-  #   copy:
-  #     src: firmware/pctv/dvb-demod-si2168-02.fw
-  #     dest: /lib/firmware/dvb-demod-si2168-02.fw
-  #   notify: reboot and wait
-  #
-  #
-  # - name: pctv firmware (2)
-  #   copy:
-  #     src: firmware/pctv/dvb-demod-si2168-b40-01.fw
-  #     dest: /lib/firmware/dvb-demod-si2168-b40-01.fw
-  #   notify: reboot and wait
+  - name: pctv firmware (2)
+    copy:
+      src: firmware/pctv/dvb-demod-si2168-b40-01.fw
+      dest: /lib/firmware/dvb-demod-si2168-b40-01.fw
+    notify: reboot and wait
 
-
-# --------------------------
-#   mount usb disk
-# --------------------------
-
-  # - name: Install and configure email
-  #   include_role:
-  #     name: mount-usb-disk
-  #
-
-
-  #
-  # - name: install a few packages
-  #   apt:
-  #     name: "{{item}}"
-  #     state: latest
-  #   with_items: "{{required_packages}}"
-  #   notify: reboot and wait
-  #
+  - name: Mount external disk
+    include_role:
+      name: mount-usb-disk
 
 
 # --------------------------
@@ -92,83 +69,48 @@
     meta: flush_handlers
 
 
-
 # --------------------------
-#   nightly reboots
-# --------------------------
-
-  # - cron:
-  #     name: "Auto reboot"
-  #     minute: "3"
-  #     hour: "3"
-  #     job: "/sbin/shutdown -r now"
-
-
-
-# --------------------------
-#   enable firewall
+#   various roles
 # --------------------------
 
-  # - name: Install and configure firewall
-  #   include_role:
-  #     name: ufw-firewall
+  - name: Install and configure firewall
+    include_role:
+      name: ufw-firewall
 
+  - name: Install and configure email
+    include_role:
+      name: email
 
-# --------------------------
-#   enable email
-# --------------------------
+  - name: Install and configure unattended upgrades
+    include_role:
+      name: unattended-upgrades
 
-  # - name: Install and configure email
-  #   include_role:
-  #     name: email
+  - name: Install and configure restic backups
+    include_role:
+      name: restic-backups
 
-
-# --------------------------
-#   enable unattended-upgrades
-# --------------------------
-
-  # - name: Install and configure unattended upgrades
-  #   include_role:
-  #     name: unattended-upgrades
-
-
-
-# --------------------------
-#   enable restic backups
-# --------------------------
-
-  # - name: Install and configure restic backups
-  #   include_role:
-  #     name: restic-backups
-
-
-# --------------------------
-#   install and configure logwatch
-# --------------------------
-
-  # - name: logwatch
-  #   include_role:
-  #     name: logwatch
-  #
-
-
-
-# --------------------------
-#   Mediacenter
-# --------------------------
+  - name: logwatch
+    include_role:
+      name: logwatch
 
   - name: Install kodi mediacenter
     include_role:
       name: mediacenter
 
+  - name: splash screen
+    include_role:
+      name: pi-splash
+
+  - name: Install nordvpn
+    include_role:
+      name: nordvpn
+
   - name: make sure we dont start in a graphical environment
     command: systemctl set-default multi-user.target
-
 
 # --------------------------
 #   Mount media files over network
 # --------------------------
-
 
   - name: mount network media shares
     lineinfile:
@@ -178,10 +120,10 @@
       state: present
 
 
-
 # --------------------------
-#   Finally reboot
+#   forced reboot
 # --------------------------
 
-  # - name: finish with a reboot
-  #   import_tasks: includes/reboot.yml
+  - debug: msg="Trigger Reboot"
+    notify: reboot and wait
+    changed_when: true

@@ -15,7 +15,7 @@
     timeout: 300
     delay: 15
     connect_timeout: 5
-    host: "gimli.local"
+    host: "{{inventory_hostname}}"
     port: 22
   delegate_to: localhost
 

@@ -33,6 +33,7 @@
       backup: yes
       regexp: '^slaac'
       line: 'slaac hwaddr'
+    notify: reboot and wait
 
 # --------------------------
 #   nightly reboots
@@ -45,6 +46,15 @@
       job: "/sbin/shutdown -r now"
       cron_file: reboot
       user: root
+
+
+# --------------------------
+#   reboot if we need to
+# --------------------------
+
+  - name: reboot if we need to
+    meta: flush_handlers
+
 
 
 # --------------------------

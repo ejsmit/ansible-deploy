@@ -1,0 +1,6 @@
+[Allow login1]
+Identity=unix-group:plugdev
+Action=org.freedesktop.login1*
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes

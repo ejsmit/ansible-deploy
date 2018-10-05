@@ -1,9 +1,34 @@
 ---
 
+- name: Create kodi group
+  group:
+    name: kodi
+    state: present
+
+- name: Add kodi user
+  user:
+    name: kodi
+    shell: /bin/bash
+    group: kodi
+    state: present
+    groups: audio,video,input,dialout,plugdev,netdev,users,cdrom,tty
+
+- name: install security policy files to enable power menu
+  copy:
+    src: files/power.pkla
+    dest: /etc/polkit-1/localauthority/50-local.d/power.pkla
+    mode: "0600"
+
+- name: change tty permissions to allow kodi to read from keyboard
+  file:
+    path: /dev/tty0
+    mode: '0660'
+
 - name: Install Kodi and all of its dependencies
   apt:
     name: kodi
     state: latest
+
 
 - name: Set tvheadend username
   debconf:
@@ -11,14 +36,17 @@
     question="tvheadend/admin_username"
     value="admin"
     vtype="string"
+  register: tvheadend_result
 
+# because password is masked ansible cannot figure out if we need this,
+# so do it only if we had to change the username
 - name: Set tvheadend password
   debconf:
     name=tvheadend
     question="tvheadend/admin_password"
     value="tvheadend"
     vtype="password"
-
+  when: tvheadend_result.changed == True
 
 - name: install tvheadend and its dependencies
   apt:
@@ -32,12 +60,15 @@
     state: latest
   with_items:
     - kodi-pvr-hts
+    - kodi-inputstream-adaptive
+    - kodi-inputstream-rtmp
 
 
 - name: copy systemd kodi service template
-  template:
-    src: 'kodi.service'
-    dest: '/etc/systemd/system/kodi.service'
+  copy:
+    src: files/kodi.service
+    dest: /etc/systemd/system/kodi.service
+    mode: "0644"
 
 - name: enable kodi but dont start it yet
   systemd:
@@ -45,3 +76,12 @@
     enabled: true
     state: stopped
     name: kodi.service
+
+- name: install various other media tools
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - mpv
+    - ffmpeg
+    - rtmpdump

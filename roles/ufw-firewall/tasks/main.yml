@@ -34,6 +34,10 @@
   with_items: "{{firewall_apps}}"
 
 
+# proto igmp not in ansible ufw module.
+# want to explicity deny this to prevent default policy deny logging
+- name: remove igmp broadcasts from logs
+  command: ufw deny in proto igmp to 224.0.0.1
 
 - name: firewall INCOMING policy
   ufw:

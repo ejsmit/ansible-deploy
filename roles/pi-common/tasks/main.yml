@@ -1,5 +1,5 @@
 
-# requires playbook reboot and wait handler. 
+# requires playbook reboot and wait handler.
 
 
 - name: change pi user password
@@ -25,3 +25,23 @@
     state: latest
   with_items: "{{required_packages}}"
   notify: reboot and wait
+
+- name: disable serial port
+  lineinfile:
+    dest: /boot/config.txt
+    regexp: "enable_uart="
+    line: "enable_uart=0"
+    state: present
+  notify: reboot and wait
+
+- name: remove serial getty
+  replace:
+    path: /boot/cmdline.txt
+    regexp: ' console=serial0,115200'
+    replace: ''
+
+- name: stop trigger happy hotkey service
+  systemd:
+    name: triggerhappy.service
+    state: stopped
+    enabled: false

@@ -63,16 +63,10 @@
   with_items: "{{backup_scripts}}"
 
 - name: install daily backup cron job
-  # copy:
-  #   content:
-  #     "2 30 * * *      root    /etc/mybackup/backup.sh
-  #     "
-  #   dest: /etc/cron.d/backup
-  #   mode: "0644"
   cron:
     name: "daily backup"
     minute: "30"
-    hour: "2"
+    hour: "5"
     job: "/etc/mybackup/backup.sh >/dev/null 2>&1"
     cron_file: mybackup
     user: root

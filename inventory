@@ -6,6 +6,9 @@ localhost             ansible_connection=local
 sauron.local
 
 
+[ubuntu]
+gandalf.local
+
 
 # name can be used by a variety of playbooks.  bootstrap playbook should rename
 # host to something more unique.
@@ -18,6 +21,7 @@ gollum.local
 smaug.local
 frodo.local
 gimli.local
+glaurung.local
 
 
 [ubuntucore-servers]

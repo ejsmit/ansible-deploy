@@ -1,4 +1,0 @@
-
-*Remove = SSHD Started
-*OnlyService = sshd
-*RemoveHeaders

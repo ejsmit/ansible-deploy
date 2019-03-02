@@ -1,0 +1,3 @@
+Package: logwatch
+Pin: release a=testing
+Pin-Priority: 1001

@@ -1,0 +1,65 @@
+# glaurung.local
+# assume raspbian base image
+
+- name: a playbook to configure glaurung.local
+  hosts: glaurung.local
+  become: true
+
+  vars_files:
+    - ~/.private/ansible/vars/me-myself-and-i.yml
+    - vault_vars/glaurung.local/main.yml
+
+  handlers:
+  - include: handlers/reboot.yml
+
+  tasks:
+
+
+  - include_role:
+      name: docker
+
+
+
+
+# --------------------------
+#   pi-common
+# --------------------------
+
+  # - name: common raspberry pi config
+  #   include_role:
+  #     name: pi-common
+
+
+
+# --------------------------
+#   reboot if we need to
+# --------------------------
+
+  # - name: reboot if we need to
+  #   meta: flush_handlers
+
+
+# --------------------------
+#   various roles
+# --------------------------
+
+  # - name: Install and configure email
+  #   include_role:
+  #     name: email
+  #
+  # - name: Install and configure unattended upgrades
+  #   include_role:
+  #     name: unattended-upgrades
+  #
+  # - name: logwatch
+  #   include_role:
+  #     name: logwatch
+
+
+# --------------------------
+#   forced reboot
+# --------------------------
+
+  # - debug: msg="Trigger Reboot"
+  #   notify: reboot and wait
+  #   changed_when: true

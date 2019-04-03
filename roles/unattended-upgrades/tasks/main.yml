@@ -8,7 +8,7 @@
   with_items:
     - unattended-upgrades
     - apt-listchanges
-#    - apticron
+
 
 
 - name: copy 50-unattended-upgrades (Raspbian)
@@ -58,9 +58,9 @@
     line: "which=both"
     state: present
 
-- name: configure apt-listchanges.conf - mail=root
+- name: configure apt-listchanges.conf - email_address=root
   lineinfile:
     dest: /etc/apt/listchanges.conf
-    regexp: "mail="
-    line: "mail=root"
+    regexp: "email_address="
+    line: "email_address=root"
     state: present

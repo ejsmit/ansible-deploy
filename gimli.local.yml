@@ -97,10 +97,6 @@
     include_role:
       name: mediacenter
 
-  - name: splash screen
-    include_role:
-      name: pi-splash
-
   - name: Install nordvpn
     include_role:
       name: nordvpn
@@ -111,6 +107,12 @@
 # --------------------------
 #   Mount media files over network
 # --------------------------
+
+  - name: create mountpoint
+    file:
+      path: /mnt/videos
+      state: directory
+      mode: 0777
 
   - name: mount network media shares
     lineinfile:

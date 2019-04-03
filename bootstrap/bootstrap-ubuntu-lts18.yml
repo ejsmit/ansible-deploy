@@ -1,0 +1,13 @@
+---
+# hostname specified on command line
+# goal: change host name, create dedicated user and make host accessible through network.
+
+- name: a playbook to bootstrap raspbian stretch
+  hosts: '{{ host }}'
+  remote_user: '{{ user }}'
+  become: true
+  tasks:
+
+    - name: Add new deploy user
+      include_role:
+        name: ../roles/deploy-user

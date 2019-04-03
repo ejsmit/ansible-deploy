@@ -5,5 +5,4 @@ timezone: Europe/London
 required_packages:
   - mc
 
-
-bootsplash: False
+disable_wifi_bt: false

@@ -1,10 +1,7 @@
 ---
 
-hostname: gimli
+hostname: glaurung
 hostname_fqdn: gimli.local
-
-disable_wifi_bt: true
-timezone: Europe/London
 
 required_packages:
   - mc

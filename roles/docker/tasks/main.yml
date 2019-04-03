@@ -1,0 +1,27 @@
+
+- name: remove old docker distributions
+  apt:
+    name: "{{item}}"
+    state: not present
+  with_items:
+    - docker.io
+    - docker
+
+
+- name: check if docker exists
+  command: command -v docker >/dev/null 2>&1
+  register: docker_exists
+  ignore_errors: yes
+
+
+- name: install docker
+  shell: curl -sSL https://get.docker.io/ | sh
+  when: docker_exists.rc != 0
+
+
+# + sudo -E sh -c docker version
+# now do the user thing....
+
+
+
+# Executing docker install script, commit: 40b1b76

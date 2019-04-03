@@ -1,8 +1,0 @@
-[Plymouth Theme]
-Name=Simple
-Description=Wallpaper only
-ModuleName=script
-
-[script]
-ImageDir=/etc/plymouth
-ScriptFile=/usr/share/plymouth/themes/simple/simple.script

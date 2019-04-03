@@ -7,11 +7,26 @@
     name: pi
     password: "{{ pi_password_hash }}"
 
-- name: fix timezone
+- name: get current timezone
+  command: cat /etc/timezone
+  register: current_timezone
+  changed_when: false
+
+- name: fix timezone if required
+  command: timedatectl set-timezone {{timezone}}
+  when: current_timezone.stdout != timezone
+
+- name: include testing repo in apt sources
   copy:
-    content: "{{timezone}}"
-    dest: "/etc/timezone"
-  notify: reboot and wait
+    src: files/testing.list
+    dest: /etc/apt/sources.list.d/testing.list
+    mode: "0644"
+
+- name: make sure stable has higher priority than testing
+  copy:
+    src: files/default.pref
+    dest: /etc/apt/preferences.d/default.pref
+    mode: "0644"
 
 - name: Run the equivalent of "apt dist-update"
   apt:
@@ -45,3 +60,33 @@
     name: triggerhappy.service
     state: stopped
     enabled: false
+
+- name: remove rainbow splash
+  lineinfile:
+    dest: /boot/config.txt
+    regexp: 'disable_splash'
+    line: 'disable_splash=1'
+    state: present
+
+- name: remove boot raspberry images
+  lineinfile:
+    dest: /boot/cmdline.txt
+    backrefs: True
+    state: present
+    regexp: '(^((?!logo.nologo).)*)$'
+    line: '\1 logo.nologo'
+
+- name: disable bluetooth & wifi
+  lineinfile:
+    dest: /boot/config.txt
+    state: present
+    regexp: '^dtoverlay='
+    line: 'dtoverlay=pi3-disable-wifi,pi3-disable-bt'
+  when: disable_wifi_bt == true
+
+- name: stop hciaurt when wifi isdisabled
+  systemd:
+    name: hciuart
+    state: stopped
+    enabled: false
+  when: disable_wifi_bt == true

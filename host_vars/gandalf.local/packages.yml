@@ -1,0 +1,82 @@
+---
+
+required_packages:
+  - mc
+  - tmux
+  - python
+  - python3
+  - python3-pip
+  - python3-setuptools
+  - gocryptfs
+
+
+
+ppa_repositories:
+  - ppa:nextcloud-devs/client
+  - ppa:pbek/qownnotes
+  - ppa:pogo-dev/stable
+  - ppa:atareao/lplayer
+
+dev_packages:
+  - build-essential
+  - git
+# go
+# anaconda
+# python3
+# R
+
+
+
+gui_packages:
+  - google-chrome-stable
+  - firefox
+  - opera-stable
+  - thunderbird
+  - xul-ext-lightning
+  - nextcloud-client
+  - sirikali
+  - keepassxc
+  - libreoffice
+  - yakuake
+  - latte-dock
+  - qownnotes
+  - ktorrent
+  - transmission
+#  - kmail
+#  - kdepim
+  - amarok
+  - clementine
+  - lplayer
+  - pogo
+  - gpodder
+  - kphotoalbum
+  - gwenview
+  - shotwell
+  - kdevelop
+  - mpv
+  - virt-manager
+  - wine
+  - multipass
+
+flatpak
+
+opera snap
+nextcloud snap
+
+
+#kde connect
+#git, git tools
+
+
+external_packages:
+  - name: skypeforlinux
+    url: https://go.skype.com/skypeforlinux-64.deb
+    filename: skypeforlinux-64.deb
+
+
+snap_packages: []
+
+
+snap_classic_packages:
+  - atom
+#  - skype

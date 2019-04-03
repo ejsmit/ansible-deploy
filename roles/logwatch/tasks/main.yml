@@ -1,10 +1,15 @@
 ---
 
+- name: use testing repos version of logwatch instead of stable
+  copy:
+    src: files/logwatch.pref
+    dest: /etc/apt/preferences.d/logwatch.pref
+    mode: "0640"
+
 - name: install logwatch
   apt:
     name: logwatch
     state: latest
-
 
 
 - name: create conf/logfiles directory
@@ -13,10 +18,15 @@
     state: directory
     mode: 0755
 
-
 - name: create conf/services directory
   file:
     path: /etc/logwatch/conf/services
+    state: directory
+    mode: 0755
+
+- name: create conf/html directory
+  file:
+    path: /etc/logwatch/conf/html
     state: directory
     mode: 0755
 
@@ -44,20 +54,27 @@
     dest: /etc/logwatch/conf/ignore.conf
     mode: "0664"
 
-- name: install logwatch mybackup script
+- name: install logwatch scripts
   copy:
-    src: files/scripts.services.mybackup
-    dest: /etc/logwatch/scripts/services/mybackup
+    src: files/scripts.services.{{item}}
+    dest: /etc/logwatch/scripts/services/{{item}}
     mode: "0755"
+  with_items:
+    - mybackup
 
-- name: install logwatch mybackup service conf
+- name: install logwatch services conf
   copy:
-    src: files/conf.services.mybackup.conf
-    dest: /etc/logwatch/conf/services/mybackup.conf
+    src: files/conf.services.{{item}}.conf
+    dest: /etc/logwatch/conf/services/{{item}}.conf
     mode: "0664"
+  with_items:
+    - mybackup
+    - secure
 
-- name: install logwatch mybackup logfiles conf
+- name: install logwatch logfiles conf
   copy:
-    src: files/conf.logfiles.mybackup.conf
-    dest: /etc/logwatch/conf/logfiles/mybackup.conf
+    src: files/conf.logfiles.{{item}}.conf
+    dest: /etc/logwatch/conf/logfiles/{{item}}.conf
     mode: "0664"
+  with_items:
+    - mybackup

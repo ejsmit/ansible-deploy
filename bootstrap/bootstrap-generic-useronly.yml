@@ -1,0 +1,11 @@
+---
+
+- name: a playbook to bootstrap a generic host with a deploy user
+  hosts: '{{host}}'
+  remote_user: '{{user}}'
+  become: true
+  tasks:
+
+    - name: Add new deploy user
+      include_role:
+        name: ../roles/deploy-user

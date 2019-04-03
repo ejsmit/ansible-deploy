@@ -1,0 +1,136 @@
+# gandalf.local
+# assume kde neon 1804 base image
+
+- name: a playbook to configure gandalf.local
+  hosts: gandalf.local
+  become: true
+
+  # vars_files:
+  #   - ~/.private/ansible/vars/me-myself-and-i.yml
+  #   - vault_vars/gimli.local/main.yml
+
+  handlers:
+  - include: handlers/reboot.yml
+
+  tasks:
+
+# packages
+
+    - name: add google apt key
+      apt_key:
+        url: https://dl.google.com/linux/linux_signing_key.pub
+        state: present
+
+    - name: add google apt repository
+      apt_repository:
+        repo: deb http://dl.google.com/linux/chrome/deb/ stable main
+        state: present
+        filename: google-chrome
+
+    - name: add opera apt key
+      apt_key:
+        url: https://deb.opera.com/archive.key
+        state: present
+
+    - name: add opera apt repository
+      apt_repository:
+        repo: deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free
+        state: present
+        filename: google-chrome
+
+
+
+    - name: add a few ppa repositories
+      apt_repository:
+        repo: "{{item}}"
+        state: present
+      with_items: "{{ppa_repositories}}"
+
+
+
+
+
+    - name: Run the equivalent of "apt dist-update"
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: install a few packages
+      apt:
+        name: "{{item}}"
+        state: latest
+      with_items: "{{required_packages}}"
+
+    - name: install dev packages
+      apt:
+        name: "{{item}}"
+        state: latest
+      with_items: "{{dev_packages}}"
+
+    - name: install gui packages
+      apt:
+        name: "{{item}}"
+        state: latest
+      with_items: "{{gui_packages}}"
+
+    - name: download external packages
+      get_url:
+        url: "{{item.url}}"
+        dest: /tmp/{{item.filename}}
+      with_items: "{{external_packages}}"
+
+    - name: install external packages
+      apt:
+        deb: /tmp/{{item.filename}}
+      with_items: "{{external_packages}}"
+
+    - name: install snaps
+      command: snap install {{item}}
+      with_items: "{{snap_packages}}"
+
+    - name: install classic snaps
+      command: snap install --classic {{item}}
+      with_items: "{{snap_classic_packages}}"
+
+
+# nextcloud & related
+
+    - name: create nextcloud dir
+      file:
+        path: /home/rsmit/nextcloud
+        state: directory
+        mode: 0775
+        owner: rsmit
+        group: rsmit
+
+    - name: create projects dir
+      file:
+        path: /home/rsmit/projects
+        state: directory
+        mode: 0775
+        owner: rsmit
+        group: rsmit
+
+    - name: create private dir
+      file:
+        path: /home/rsmit/.private
+        state: directory
+        mode: 0770
+        owner: rsmit
+        group: rsmit
+
+    - name: sync
+      become: yes
+      become_user: rsmit
+      command: nextcloudcmd -u rsmit -p "god save the queen" --non-interactive /home/rsmit/nextcloud https://gollum.local/remote.php/webdav/
+
+    - name: get dotfiles
+      become: yes
+      become_user: rsmit
+      git:
+        repo: 'https://github.com/ejsmit/dotfiles.git'
+        dest: /home/rsmit/projects/dotfiles
+
+    - name: install dotfiles
+      debug:
+        msg: and now install the dotfiles....

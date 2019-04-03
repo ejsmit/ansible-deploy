@@ -1,24 +1,17 @@
-# gollum.local
+# smaug.local
 # assume raspbian base image
 
-- name: a playbook to configure gollum.local, my private cloud sync server
+- name: a playbook to configure gollum.local
   hosts: gollum.local
   become: true
   vars_files:
+    - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/gollum.local/main.yml
-    - vault_vars/gollum.local/ssl.yml
-    - vault_vars/rootca-ssl.yml
+
+  handlers:
+  - include: handlers/reboot.yml
+
   tasks:
-
-
-# --------------------------
-#   password
-# --------------------------
-
-  - name: change pi user password
-    user:
-      name: pi
-      password: "{{ pi_password_hash }}"
 
 
 
@@ -35,30 +28,13 @@
       name: pi-packages
 
 
+
 # --------------------------
-#   install packages
+#   reboot if we need to
 # --------------------------
 
-
-  - name: Run the equivalent of "apt-get update"
-    apt:
-      update_cache: yes
-
-  - name: Upgrade all packages to the latest version
-    apt:
-      name: "*"
-      state: latest
-
-  - name: Install snapd
-    apt:
-      name: snapd
-      state: latest
-
-  - name: Install docker
-    apt:
-      name: docker.io
-      state: latest
-
+  - name: reboot if we need to
+    meta: flush_handlers
 
 
 # --------------------------
@@ -71,28 +47,33 @@
 
 
 
+
 # --------------------------
-#   install nextcloud
+#   various roles
 # --------------------------
 
-  - name: Install and configure nextcloud
+
+  - name: Install and configure email
     include_role:
-      name: snap-nextcloud
+      name: email
 
-
-# --------------------------
-#   install samba
-# --------------------------
-
-  - name: Install and configure samba on docker
+  - name: Install and configure unattended upgrades
     include_role:
-      name: docker-samba
+      name: unattended-upgrades
+
+  - name: Install and configure restic backups
+    include_role:
+      name: restic-backups
+
+  - name: Install and configure logwatch
+    include_role:
+      name: logwatch
 
 
 # --------------------------
-#   syncthing
+#   forced reboot
 # --------------------------
 
-  # - name: Install and configure syncthing
-  #   include_role:
-  #     name: core-syncthing
+  - debug: msg="Trigger Reboot"
+    notify: reboot and wait
+    changed_when: true

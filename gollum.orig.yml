@@ -1,0 +1,98 @@
+# gollum.local
+# assume raspbian base image
+
+- name: a playbook to configure gollum.local, my private cloud sync server
+  hosts: gollum.local
+  become: true
+  vars_files:
+    - vault_vars/gollum.local/main.yml
+    - vault_vars/gollum.local/ssl.yml
+    - vault_vars/rootca-ssl.yml
+  tasks:
+
+
+# --------------------------
+#   password
+# --------------------------
+
+  - name: change pi user password
+    user:
+      name: pi
+      password: "{{ pi_password_hash }}"
+
+
+
+# --------------------------
+#   pi roles
+# --------------------------
+
+  - name: common raspberry pi config
+    include_role:
+      name: pi-common
+
+  - name: raspberry pi packages
+    include_role:
+      name: pi-packages
+
+
+# --------------------------
+#   install packages
+# --------------------------
+
+
+  - name: Run the equivalent of "apt-get update"
+    apt:
+      update_cache: yes
+
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+
+  - name: Install snapd
+    apt:
+      name: snapd
+      state: latest
+
+  - name: Install docker
+    apt:
+      name: docker.io
+      state: latest
+
+
+
+# --------------------------
+#   Mount disk
+# --------------------------
+
+  - name: mount external disk
+    include_role:
+      name: mount-usb-disk
+
+
+
+# --------------------------
+#   install nextcloud
+# --------------------------
+
+  - name: Install and configure nextcloud
+    include_role:
+      name: snap-nextcloud
+
+
+# --------------------------
+#   install samba
+# --------------------------
+
+  - name: Install and configure samba on docker
+    include_role:
+      name: docker-samba
+
+
+# --------------------------
+#   syncthing
+# --------------------------
+
+  # - name: Install and configure syncthing
+  #   include_role:
+  #     name: core-syncthing

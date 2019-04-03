@@ -4,29 +4,49 @@ hostname: gollum
 hostname_fqdn: gollum.local
 
 
-homedir: "/home/{{ansible_user}}"
+# hardware
+disable_wifi_bt: true
 external_disk: myData
 
-https_cert_path: /var/snap/nextcloud/common
-https_cert:  "{{ssl_certificate_name}}"
-https_key:   "{{ssl_certificate_key_name}}"
-https_chain: "{{ssl_ca_certificate_name}}"
+# packages
+host_required_packages: []
 
 
-nextcloud_user: admin
-nextcloud_pass: "{{admin_password}}"
-nextcloud_data_directory: /media/{{external_disk}}/nextcloud/data
 
 
-samba_shares_list:
-  - music
-  - videos
-samba_mount: /media/{{external_disk}}/samba
 
-samba_music: -s "music;{{samba_mount}}/music;no;yes;no;nas_media,nas_admin;;nas_admin;"
-samba_videos: -s "videos;{{samba_mount}}/videos;no;yes;no;nas_media,nas_admin;;nas_admin"
-samba_shares: "{{samba_music}} {{samba_videos}}"
-samba_users: -u "nas_media;nas_media_password" -u "nas_admin;nas_admin_password"
+
+#
+# homedir: "/home/{{ansible_user}}"
+#
+#
+# https_cert_path: /var/snap/nextcloud/common
+# https_cert:  "{{ssl_certificate_name}}"
+# https_key:   "{{ssl_certificate_key_name}}"
+# https_chain: "{{ssl_ca_certificate_name}}"
+#
+#
+#
+#
+#
+#
+# nextcloud_user: admin
+# nextcloud_pass: "{{admin_password}}"
+# nextcloud_data_directory: /media/{{external_disk}}/nextcloud/data
+#
+
+
+
+
+# samba_shares_list:
+#   - music
+#   - videos
+# samba_mount: /media/{{external_disk}}/samba
+#
+# samba_music: -s "music;{{samba_mount}}/music;no;yes;no;nas_media,nas_admin;;nas_admin;"
+# samba_videos: -s "videos;{{samba_mount}}/videos;no;yes;no;nas_media,nas_admin;;nas_admin"
+# samba_shares: "{{samba_music}} {{samba_videos}}"
+# samba_users: -u "nas_media;nas_media_password" -u "nas_admin;nas_admin_password"
 # samba_ports: keep defaults 445
 
 

@@ -3,16 +3,6 @@
 hostname: gollum
 hostname_fqdn: gollum.local
 
-required_packages:
-  - mc
-  - tmux
-  - git
-  - python3
-  - python3-pip
-  - python3-setuptools
-  - psmisc
-
-
 
 homedir: "/home/{{ansible_user}}"
 external_disk: myData

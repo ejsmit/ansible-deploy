@@ -1,0 +1,31 @@
+- name: include testing repo in apt sources
+  copy:
+    src: files/testing.list
+    dest: /etc/apt/sources.list.d/testing.list
+    mode: "0644"
+
+- name: make sure stable has higher priority than testing
+  copy:
+    src: files/default.pref
+    dest: /etc/apt/preferences.d/default.pref
+    mode: "0644"
+
+- name: Run the equivalent of "apt dist-update"
+  apt:
+    update_cache: yes
+    upgrade: dist
+  notify: reboot and wait
+
+- name: install group packages
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items: "{{group_required_packages}}"
+  notify: reboot and wait
+
+- name: install host packages
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items: "{{host_required_packages}}"
+  notify: reboot and wait

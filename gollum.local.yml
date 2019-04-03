@@ -21,13 +21,18 @@
       password: "{{ pi_password_hash }}"
 
 
+
 # --------------------------
-#   pi-common
+#   pi roles
 # --------------------------
 
   - name: common raspberry pi config
     include_role:
       name: pi-common
+
+  - name: raspberry pi packages
+    include_role:
+      name: pi-packages
 
 
 # --------------------------

@@ -6,7 +6,7 @@
   become: true
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
-    - vault_vars/smaug.local/main.yml
+    - vault_vars/smaug.yml
 
   handlers:
   - include: handlers/reboot.yml

@@ -7,7 +7,7 @@
 
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
-    - vault_vars/gimli.local/main.yml
+    - vault_vars/gimli.yml
 
   handlers:
   - include: handlers/reboot.yml
@@ -26,6 +26,7 @@
   - name: raspberry pi packages
     include_role:
       name: pi-packages
+
 
 # --------------------------
 #   hardware related
@@ -100,9 +101,9 @@
     include_role:
       name: mediacenter
 
-  - name: Install nordvpn
-    include_role:
-      name: nordvpn
+  # - name: Install nordvpn
+  #   include_role:
+  #     name: nordvpn
 
   - name: make sure we dont start in a graphical environment
     command: systemctl set-default multi-user.target

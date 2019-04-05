@@ -27,7 +27,7 @@
 
 
 # --------------------------
-#   ipv6 mac based address
+#   host specific networking
 # --------------------------
 
   - name: ipv6 hardware based address
@@ -39,17 +39,15 @@
       line: 'slaac hwaddr'
     notify: reboot and wait
 
-# --------------------------
-#   nightly reboots
-# --------------------------
-
-  - cron:
-      name: "Auto reboot"
-      minute: "3"
-      hour: "3"
-      job: "/sbin/shutdown -r now"
-      cron_file: reboot
-      user: root
+  - name: force static ip address. Raspbian uses dhcpcd.conf
+    blockinfile:
+      path: /etc/dhcpcd.conf
+      block: |
+        interface {{ internal_interface }}
+            static ip_address={{ static_ipv4_address }}
+            static routers={{ static_gateway }}
+            static domain_name_servers=127.0.0.1
+    notify: reboot and wait
 
 
 # --------------------------
@@ -84,6 +82,29 @@
   - name: Install and configure logwatch
     include_role:
       name: logwatch
+
+
+# --------------------------
+#   nightly reboots
+# --------------------------
+
+  - cron:
+      name: "Auto reboot"
+      minute: "3"
+      hour: "3"
+      job: "/sbin/shutdown -r now"
+      cron_file: reboot
+      user: root
+
+
+# --------------------------
+#   install pihole
+# --------------------------
+
+  - name: Install and configure pihole
+    include_role:
+      name: pihole
+
 
 # --------------------------
 #   forced reboot

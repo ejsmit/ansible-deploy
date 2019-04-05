@@ -1,0 +1,48 @@
+
+
+- name: Check if pihole binary exists
+  stat:
+    path: /usr/local/bin/pihole
+  register: pihole_result
+
+
+# now for a big block to only run if pihole does not exist
+- name: install pihole
+  block:
+
+    - name: "Download Pi-Hole installer"
+      get_url:
+        url: https://install.pi-hole.net
+        dest: ~/install-pihole.sh
+        mode: 0740
+
+    - name: Create pihole configuration directory
+      file:
+        name: "{{ pihole_config_dir }}"
+        state: directory
+        mode: 0755
+
+    - name: Create pihole configuration
+      template:
+        src: setupVars.conf
+        dest: "{{ pihole_setupVars }}"
+        owner: root
+        group: root
+        mode: 0644
+
+    # - name: Install Pi-Hole
+    #   shell: "~/install-pihole.sh --unattended"
+    #   register: dbg_install_pihole
+
+
+  # end install block
+  when: pihole_result.stat.exists == false
+
+
+- name: add custom dns cnames configuration
+  template:
+    src: 90-pihole-custom-dns.conf
+    dest: /etc/dnsmasq.d/90-pihole-custom-dns.conf
+    owner: root
+    group: root
+    mode: 0644

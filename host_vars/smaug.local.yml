@@ -3,11 +3,20 @@
 hostname: smaug
 hostname_fqdn: smaug.local
 
+internal_interface: eth0
+
+static_ipv4_address: 192.168.0.2/24
+static_gateway: 192.168.0.1
+
+local_domain: home
+local_dns_cnames:
+  - chat.smit.org.uk,groupchat.smit.org.uk,smaug.home
+  - nextcloud.smit.org.uk,gollum.home
+
 host_required_packages: []
 
 firewall_apps:
   - my-pihole
-
 
 backup_scripts:
   - 00date

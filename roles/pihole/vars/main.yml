@@ -1,0 +1,5 @@
+
+pihole_config_dir: /etc/pihole
+pihole_setupVars: /etc/pihole/setupVars.conf
+
+pihole_ipv6_address: "{{ ansible_all_ipv6_addresses | ipv6('fd00::/8') | first }}"

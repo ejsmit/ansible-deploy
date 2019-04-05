@@ -1,0 +1,10 @@
+
+
+
+
+internal_interface: eth0
+
+static_ipv4_address: 192.168.0.2/24
+static_gateway: 192.168.0.1
+
+local_domain: home

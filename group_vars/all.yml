@@ -17,6 +17,12 @@ mail_root_email: "{{private_my_email}}"
 mail_default_email: "{{private_my_email}}"
 
 
+# gandi-certbot
+gandi_api_token: "{{private_gandi_api_token}}"
+certbot_admin_email: "{{private_certbot_admin_email}}"
+certbot_domains: "{{private_certbot_domains}}"
+
+
 # backup setup
 b2_account_id:  "{{private_b2_account_id}}"
 b2_account_key: "{{private_b2_account_key}}"

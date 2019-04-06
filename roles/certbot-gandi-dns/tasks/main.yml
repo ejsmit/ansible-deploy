@@ -1,0 +1,66 @@
+
+
+- name: install certbot and some requirements
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - python-requests
+    - python-zope.interface
+    - certbot
+
+
+- name: Install certbot gandi plugin
+  pip:
+    name: certbot-plugin-gandi
+    state: present
+
+- name: Create letsencrypt directory for certbot
+  file:
+    name: /etc/letsencrypt
+    state: directory
+    mode: 0755
+
+- name: create gandi.ini with gandi api token
+  copy:
+    content: certbot_plugin_gandi:dns_api_key={{ gandi_api_token }}
+    dest: /etc/letsencrypt/gandi.ini
+    mode: "0600"
+    owner: root
+    group: root
+
+
+- name: Check if certificate already exists.  (only check first cert)
+  stat:
+    path: /etc/letsencrypt/live/{{ certbot_domains | first | replace('*.', '') }}/cert.pem
+  register: letsencrypt_cert
+
+
+- name: Generate new certificate if they don't exist.
+  command: >
+    certbot certonly  --noninteractive --agree-tos -a certbot-plugin-gandi:dns
+    --certbot-plugin-gandi:dns-credentials /etc/letsencrypt/gandi.ini
+    --email {{ certbot_admin_email }}
+    -d {{ certbot_domains | join(',') }}
+    --server https://acme-v02.api.letsencrypt.org/directory
+  when: not letsencrypt_cert.stat.exists
+
+
+- name: disable certbot systemd timer
+  systemd:
+    name: certbot.timer
+    status: stopped
+    enabled: false
+
+
+- name: Add cron job for certbot renewal.  Weekly sunday morning
+  cron:
+    name: Certbot automatic renewal.
+    job: >
+      certbot renew -q -a certbot-plugin-gandi:dns
+      --certbot-plugin-gandi:dns-credentials /etc/letsencrypt/gandi.ini
+      --server https://acme-v02.api.letsencrypt.org/directory
+    hour: 1
+    weekday: 0
+    user: root
+    cron_file: gandi-certbot

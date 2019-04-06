@@ -83,6 +83,11 @@
     include_role:
       name: logwatch
 
+  - name: Install and configure certbot
+    include_role:
+      name: certbot-gandi-dns
+
+
 
 # --------------------------
 #   nightly reboots

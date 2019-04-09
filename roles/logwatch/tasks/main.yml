@@ -4,7 +4,7 @@
   copy:
     src: files/logwatch.pref
     dest: /etc/apt/preferences.d/logwatch.pref
-    mode: "0640"
+    mode: "0644"
 
 - name: install logwatch
   apt:

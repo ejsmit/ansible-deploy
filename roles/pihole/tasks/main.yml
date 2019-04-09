@@ -30,6 +30,10 @@
         group: root
         mode: 0644
 
+# password:
+# echo -n P@ssw0rd | sha256sum | awk '{printf "%s",$1 }' | sha256sum
+
+
     # - name: Install Pi-Hole
     #   shell: "~/install-pihole.sh --unattended"
     #   register: dbg_install_pihole

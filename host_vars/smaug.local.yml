@@ -21,3 +21,4 @@ firewall_apps:
 backup_scripts:
   - 00date
   - 90pihole
+  - 90letsencrypt

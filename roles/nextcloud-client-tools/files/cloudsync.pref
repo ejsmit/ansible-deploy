@@ -1,0 +1,7 @@
+Package: rclone
+Pin: release a=testing
+Pin-Priority: 1001
+
+Package: gocryptfs
+Pin: release a=testing
+Pin-Priority: 1001

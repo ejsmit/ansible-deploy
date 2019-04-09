@@ -1,0 +1,12 @@
+
+/usr/bin/certbot renew   \
+      --no-self-upgrade \
+      -a certbot-plugin-gandi:dns \
+      --certbot-plugin-gandi:dns-credentials /etc/letsencrypt/gandi.ini \
+      --server https://acme-v02.api.letsencrypt.org/directory
+
+cd /etc/letsencrypt
+tar cJf ~/letsencrypt.tar.xz live/ --dereference
+cd ~
+rclone copy ~/letsencrypt.tar.xz  nextcloud-{{nextcloud_user}}:letsencrypt/ --no-check-certificate --verbose
+rm ~/letsencrypt.tar.xz

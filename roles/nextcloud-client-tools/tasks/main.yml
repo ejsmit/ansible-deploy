@@ -1,0 +1,25 @@
+
+
+- name: use testing repos version of rclone/gocryptfs
+  copy:
+    src: files/cloudsync.pref
+    dest: /etc/apt/preferences.d/cloudsync.pref
+    mode: "0644"
+
+
+- name: install rclone and gocryptfs
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - fuse
+    - rclone
+    - gocryptfs
+
+- name: create rclone config for nextcloud for root user
+  template:
+    src: rclone.conf
+    dest: /root/.config/rclone/rclone.conf
+    owner: root
+    group: root
+    mode: 0644

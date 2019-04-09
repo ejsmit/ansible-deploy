@@ -4,3 +4,5 @@
 
 certbot_admin_email: email@example.com
 certbot_domains: []
+
+nextcloud_user: user

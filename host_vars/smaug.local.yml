@@ -8,6 +8,9 @@ internal_interface: eth0
 static_ipv4_address: 192.168.0.2/24
 static_gateway: 192.168.0.1
 
+
+
+
 local_domain: home
 local_dns_cnames:
   - chat.smit.org.uk,groupchat.smit.org.uk,smaug.home
@@ -32,9 +35,6 @@ backup_scripts:
 xmpp_server: true
 xmpp_console_client: true
 
-prosody_ssl_domain: smit.org.uk
-prosody_chat_domain: chat.smit.org.uk
-prosody_conference_domain: groupchat.smit.org.uk
 
 prosody_users:
   - elrond

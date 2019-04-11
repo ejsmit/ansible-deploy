@@ -11,3 +11,8 @@ ports=53|80,443/tcp|5353,67,68,546,547/udp
 title=Pi-Hole firewall rules
 description=Pi-Hole firewall rules
 ports=9981/tcp
+
+[my-xmpp]
+title=Jabber xmpp port
+description=Jabber xmpp port
+ports=5222,5269/tcp

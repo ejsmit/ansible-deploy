@@ -7,6 +7,7 @@
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/smaug.local.yml
+    - vault_vars/nextcloud.yml
 
   handlers:
   - include: handlers/reboot.yml
@@ -83,9 +84,17 @@
     include_role:
       name: logwatch
 
+  - name: Install and configure nextcloud sync tools
+    include_role:
+      name: nextcloud-client-tools
+
   - name: Install and configure certbot
     include_role:
       name: certbot-gandi-dns
+
+  - name: Install and configure prosody xmpp server and client
+    include_role:
+      name: xmpp
 
 
 

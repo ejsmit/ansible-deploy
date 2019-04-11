@@ -14,5 +14,7 @@ group_required_packages:
 mail_install_users:
   - pi
 
+regular_username: pi
+
 # backup settings
 restic_arch: "linux_arm"

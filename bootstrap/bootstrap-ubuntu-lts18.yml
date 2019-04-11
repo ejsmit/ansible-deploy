@@ -6,6 +6,9 @@
   hosts: '{{ host }}'
   remote_user: '{{ user }}'
   become: true
+
+  vars_files:
+    - vault_vars/deploy-user.yml  
   tasks:
 
     - name: Add new deploy user

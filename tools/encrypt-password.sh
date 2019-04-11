@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# generates both password and hash.  Delete the one you dont want.  In some
+# places you need the actual password, and other can work with a hash.
 
 if [ $# -ne 3 ];
     then echo "illegal number of parameters"
@@ -10,10 +12,9 @@ fi
 
 
 echo "$1: '$2' in $3"
-read -p "Press enter to continue"
 
 hash=`/usr/bin/python -c "from passlib.hash import sha512_crypt; print sha512_crypt.using(rounds=5000).hash('$2')"`
-#echo $hash
+
 
 ansible-vault encrypt_string "$hash" --name $1_password_hash  \
     --vault-password-file ~/.private/vault_password.txt  >> $3

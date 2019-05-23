@@ -1,27 +1,44 @@
 ---
 
-
-- name: install nextcloud
-  command: snap install nextcloud
-
-- name: allow the use of external disks
-  command: snap connect nextcloud:removable-media :removable-media
-
-- name: Auto first run configure wizard
-  command: snap run nextcloud.manual-install {{nextcloud_user}} "{{nextcloud_pass}}"
+- name: check if nextcloud already installed
+  shell: snap list nextcloud
+  register: snap_exists
+  ignore_errors: true
 
 
-- name: add trusted host {{hostname}}
-  command: snap run nextcloud.occ config:system:set trusted_domains 1 --value={{hostname}}
+- name: install nextcloud snap
+  block:
 
-- name: add trusted host {{hostname_fqdn}}
-  command: snap run nextcloud.occ config:system:set trusted_domains 2 --value={{hostname_fqdn}}
+    - name: install nextcloud
+      command: snap install nextcloud
+
+    - name: allow the use of external disks
+      command: snap connect nextcloud:removable-media :removable-media
+
+    - name: Auto first run configure wizard
+      command: snap run nextcloud.manual-install {{nextcloud_user}} "{{nextcloud_pass}}"
+
+    - name: add trusted host {{hostname}}
+      command: snap run nextcloud.occ config:system:set trusted_domains 1 --value={{hostname}}
+
+    - name: add trusted host {{hostname_fqdn}}
+      command: snap run nextcloud.occ config:system:set trusted_domains 2 --value={{hostname_fqdn}}
+
+
+  when: snap_exists.rc > 0
+
+
+# Start and stop it to make sure all config is created.
 
 - name: start  nextcloud
   command: snap start nextcloud
 
 - name: stop  nextcloud
   command: snap stop nextcloud
+
+
+
+
 
 - name: Update data directory to point to external disk
   lineinfile:
@@ -47,20 +64,6 @@
 
 
 
-- name: Write SSL CA Root Certificate
-  copy:
-    content: "{{ssl_ca_certificate}}"
-    dest: "{{https_cert_path}}/{{https_chain}}"
-
-- name: Write SSL Certificate Key
-  copy:
-    content: "{{ssl_certificate_key}}"
-    dest: "{{https_cert_path}}/{{https_key}}"
-
-- name: Write SSL Certificate
-  copy:
-    content: "{{ssl_certificate}}"
-    dest: "{{https_cert_path}}/{{https_cert}}"
 
 
 - name: enable https support

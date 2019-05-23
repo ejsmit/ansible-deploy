@@ -8,6 +8,7 @@
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/gimli.local.yml
+    - vault_vars/nextcloud.yml
 
   handlers:
   - include: handlers/reboot.yml
@@ -77,6 +78,13 @@
 #   various roles
 # --------------------------
 
+  - name: Install and configure dotfiles
+    block:
+    - name: install dotfiles
+      include_role:
+        name: dotfiles
+    become_user: "{{default_user}}"
+
   - name: Install and configure firewall
     include_role:
       name: ufw-firewall
@@ -88,6 +96,10 @@
   - name: Install and configure unattended upgrades
     include_role:
       name: unattended-upgrades
+
+  - name: Install nextcloud client tools
+    include_role:
+      name: nextcloud-client-tools
 
   - name: Install and configure restic backups
     include_role:
@@ -124,6 +136,19 @@
       regexp: "^//gollum.local/videos /mnt/videos cifs"
       line: "//gollum.local/videos /mnt/videos cifs x-systemd.automount,noauto,rw,iocharset=utf8,username=nas_admin,password=nas_admin_password,uid=pi,gid=pi,file_mode=0770,dir_mode=0770,vers=3.0 0 0"
       state: present
+
+
+# --------------------------
+#   nightly reboots
+# --------------------------
+
+  - cron:
+      name: "Auto reboot"
+      minute: "33"
+      hour: "5"
+      job: "/sbin/shutdown -r now"
+      cron_file: reboot
+      user: root
 
 
 # --------------------------

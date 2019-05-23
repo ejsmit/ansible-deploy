@@ -1,5 +1,4 @@
-# smaug.local
-# assume raspbian base image
+
 
 - name: a playbook to configure gollum.local
   hosts: gollum.local
@@ -7,12 +6,12 @@
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/gollum.local.yml
+    - vault_vars/nextcloud.yml
 
   handlers:
   - include: handlers/reboot.yml
 
   tasks:
-
 
 
 # --------------------------
@@ -52,6 +51,12 @@
 #   various roles
 # --------------------------
 
+  - name: Install and configure dotfiles
+    block:
+    - name: install dotfiles
+      include_role:
+        name: dotfiles
+    become_user: "{{default_user}}"
 
   - name: Install and configure email
     include_role:
@@ -61,6 +66,10 @@
     include_role:
       name: unattended-upgrades
 
+  - name: Install and configure nextcloud client tools
+    include_role:
+      name: nextcloud-client-tools
+
   - name: Install and configure restic backups
     include_role:
       name: restic-backups
@@ -68,6 +77,21 @@
   - name: Install and configure logwatch
     include_role:
       name: logwatch
+
+
+# --------------------------
+#   docker and samba
+# --------------------------
+
+  - name: Install docker
+    include_role:
+      name: docker
+
+  - name: Install samba
+    include_role:
+      name: docker-samba
+
+
 
 
 # --------------------------

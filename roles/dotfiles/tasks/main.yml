@@ -1,0 +1,25 @@
+---
+
+- name: Create projects folder
+  file:
+    path: "~/projects"
+    state: directory
+    mode: "0755"
+
+- name: Checkout dotfiles project from github
+  git:
+    repo: https://github.com/ejsmit/dotfiles.git
+    dest: "~/projects/dotfiles"
+    depth: 1
+  register: dotfiles_updated
+
+- name: Deploy dotfiles
+  command: "~/projects/dotfiles/bootstrap.sh --force"
+  when: dotfiles_updated.changed
+
+- name: Update tmux theme
+  lineinfile:
+    dest: "~/.tmux.conf"
+    regexp: "set -g*.themepack '*.'"
+    line: "set -g @themepack '{{tmux_theme}}'"
+    state: present

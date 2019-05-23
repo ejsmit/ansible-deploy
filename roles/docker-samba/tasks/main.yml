@@ -1,18 +1,18 @@
 ---
 
-# limited ability to install stuff, e.g. the python modules to use the fancy
-# docker tasks.   For now stuck with basic command line.
-
-# maybe I will one day try to figure this out, but for now it works.
 
 
-- name: download samba container
-  command: docker pull {{samba_container}}
+- name: Pull samba docker image
+  docker_image:
+    name: "{{samba_container}}"
+    source: pull
+
 
 - name: copy systemd samba template
   template:
     src: 'docker-samba.service'
     dest: '/etc/systemd/system/docker-samba.service'
+
 
 - name: ensure share mount directory exists
   file:
@@ -21,6 +21,7 @@
     mode: 0775
     owner: root
     group: root
+
 
 - name: ensure samba shares directories exist
   file:

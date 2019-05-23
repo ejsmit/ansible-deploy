@@ -9,12 +9,19 @@
 
 - name: install rclone and gocryptfs
   apt:
-    name: "{{item}}"
+    name: "{{packages}}"
     state: latest
-  with_items:
-    - fuse
-    - rclone
-    - gocryptfs
+  vars:
+    packages:
+      - fuse
+      - rclone
+      - gocryptfs
+
+- name: create rclone config directory
+  file:
+    path: /root/.config/rclone
+    state: directory
+    mode: 0750
 
 - name: create rclone config for nextcloud for root user
   template:
@@ -23,3 +30,27 @@
     owner: root
     group: root
     mode: 0644
+
+
+# offline certificates update from nextcloud
+# cert renew is 01:00 on day 0.  This runs an hour later.
+
+- name: script to copy letsencrypt certs from nextcloud
+  template:
+    src: update_certs.sh
+    dest: /usr/local/bin/update_certs.sh
+    owner: root
+    group: root
+    mode: "0755"
+  when: letsencrypt_from_nextcloud_update == true
+
+- name: Add cron job for certificate offline update
+  cron:
+    name: Letsencrypt
+    job: /usr/local/bin/update_certs.sh
+    hour: "2"
+    minute: "0"
+    weekday: "0"
+    user: root
+    cron_file: letsencrypt-nextcloud
+  when: letsencrypt_from_nextcloud_update == true

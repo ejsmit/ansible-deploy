@@ -3,7 +3,10 @@
 group_required_packages:
   - mc
   - tmux
+  - xsel
   - git
+  - wget
+  - acl
   - python
   - python-pip
   - python3
@@ -14,7 +17,7 @@ group_required_packages:
 mail_install_users:
   - pi
 
-regular_username: pi
+default_user: pi
 
 # backup settings
 restic_arch: "linux_arm"

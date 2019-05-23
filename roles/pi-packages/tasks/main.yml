@@ -10,7 +10,7 @@
     dest: /etc/apt/preferences.d/default.pref
     mode: "0644"
 
-- name: Run the equivalent of "apt dist-update"
+- name: Run the equivalent of "apt dist-upgrade"
   apt:
     update_cache: yes
     upgrade: dist
@@ -18,14 +18,12 @@
 
 - name: install group packages
   apt:
-    name: "{{item}}"
+    name: "{{group_required_packages}}"
     state: latest
-  with_items: "{{group_required_packages}}"
   notify: reboot and wait
 
 - name: install host packages
   apt:
-    name: "{{item}}"
+    name: "{{host_required_packages}}"
     state: latest
-  with_items: "{{host_required_packages}}"
   notify: reboot and wait

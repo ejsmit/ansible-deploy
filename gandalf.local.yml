@@ -27,18 +27,6 @@
         state: present
         filename: google-chrome
 
-    - name: add opera apt key
-      apt_key:
-        url: https://deb.opera.com/archive.key
-        state: present
-
-    - name: add opera apt repository
-      apt_repository:
-        repo: deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free
-        state: present
-        filename: google-chrome
-
-
 
     - name: add a few ppa repositories
       apt_repository:
@@ -119,18 +107,18 @@
         owner: rsmit
         group: rsmit
 
-    - name: sync
-      become: yes
-      become_user: rsmit
-      command: nextcloudcmd -u rsmit -p "god save the queen" --non-interactive /home/rsmit/nextcloud https://gollum.local/remote.php/webdav/
-
-    - name: get dotfiles
-      become: yes
-      become_user: rsmit
-      git:
-        repo: 'https://github.com/ejsmit/dotfiles.git'
-        dest: /home/rsmit/projects/dotfiles
-
-    - name: install dotfiles
-      debug:
-        msg: and now install the dotfiles....
+    # - name: sync
+    #   become: yes
+    #   become_user: rsmit
+    #   command: nextcloudcmd -u rsmit -p "god save the queen" --non-interactive /home/rsmit/nextcloud https://gollum.local/remote.php/webdav/
+    #
+    # - name: get dotfiles
+    #   become: yes
+    #   become_user: rsmit
+    #   git:
+    #     repo: 'https://github.com/ejsmit/dotfiles.git'
+    #     dest: /home/rsmit/projects/dotfiles
+    #
+    # - name: install dotfiles
+    #   debug:
+    #     msg: and now install the dotfiles....

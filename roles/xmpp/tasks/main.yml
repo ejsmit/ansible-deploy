@@ -22,31 +22,17 @@
         path: "/etc/prosody/conf.d/{{prosody_ssl_domain}}.cfg.lua"
         state: link
 
-    - name: Copy certificate from letsencrypt
-      command: >
-          cp /etc/letsencrypt/live/{{prosody_ssl_domain}}/fullchain.pem
-          /etc/prosody/certs/{{prosody_ssl_domain}}.crt
-      when: prosody_installed.changed
-
-    - name: fix certificate permissions
-      file:
-        path: "/etc/prosody/certs/{{prosody_ssl_domain}}.crt"
+    - name: Create script to update certificates
+      template:
+        src: update_prosody_certs.sh
+        dest: /usr/local/bin/update_prosody_certs.sh
         owner: root
         group: root
-        mode: "0644"
+        mode: "0755"
 
-    - name: Copy key from letsencrypt
-      command: >
-          cp /etc/letsencrypt/live/{{prosody_ssl_domain}}/privkey.pem
-          /etc/prosody/certs/{{prosody_ssl_domain}}.key
-      when: prosody_installed.changed
+    - name: run script to update certs
+      command: /usr/local/bin/update_prosody_certs.sh
 
-    - name: fix key permissions
-      file:
-        path: "/etc/prosody/certs/{{prosody_ssl_domain}}.key"
-        owner: root
-        group: prosody
-        mode: "0640"
 
     - name: enable and start prosody server
       service:
@@ -59,6 +45,16 @@
       with_items: "{{ prosody_users }}"
       when: prosody_installed.changed
 
+    - name: Add cron job for certificate  update
+      cron:
+        name: prosody-certs
+        job: /usr/local/bin/update_prosody_certs.sh
+        hour: 2
+        minute: 30
+        weekday: 0
+        user: root
+        cron_file: prosody-certs
+
   when: xmpp_server == true
 
 
@@ -70,12 +66,20 @@
         name: mcabber
         state: latest
 
+    - name: create config directory
+      file:
+        path: "/home/{{default_user}}/.config/mcabber"
+        state: directory
+        owner: "{{default_user}}"
+        group: "{{default_user}}"
+        mode: "0700"
+
     - name: Create mcabber config file
       template:
         src: mcabberrc
-        dest: "/home/{{regular_username}}/.config/mcabber/mcabberrc"
-        owner: "{{regular_username}}"
-        group: "{{regular_username}}"
-        mode: "0644"
+        dest: "/home/{{default_user}}/.config/mcabber/mcabberrc"
+        owner: "{{default_user}}"
+        group: "{{default_user}}"
+        mode: "0600"
 
   when: xmpp_console_client == true

@@ -3,11 +3,12 @@
 
 - name: install unattended upgrade packages
   apt:
-    name:  "{{item}}"
+    name:  "{{packages}}"
     state: latest
-  with_items:
-    - unattended-upgrades
-    - apt-listchanges
+  vars:
+    packages:
+      - unattended-upgrades
+      - apt-listchanges
 
 
 

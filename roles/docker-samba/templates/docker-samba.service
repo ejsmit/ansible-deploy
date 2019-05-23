@@ -12,7 +12,7 @@ ExecStartPre=-/usr/bin/docker rm samba
 ExecStartPre=/usr/bin/docker pull {{samba_container}}
 ExecStart=/usr/bin/docker run --name samba {{samba_ports}}    \
     -v {{samba_mount}}:{{samba_mount}} {{samba_container}}  \
-    -p {{samba_users}} \
+    -p -r {{samba_users}} \
     {{samba_shares}}
 ExecStop=/usr/bin/docker stop samba
 

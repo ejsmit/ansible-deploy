@@ -9,10 +9,26 @@ disable_wifi_bt: true
 external_disk: myData
 
 # packages
-host_required_packages: []
+host_required_packages:
+  - snapd
+
+# samba config
+samba_shares_list:
+  - music
+  - videos
+samba_mount: /media/{{external_disk}}/samba
+
+samba_music: -s "music;{{samba_mount}}/music;no;yes;no;nas_media,nas_admin;;nas_admin;"
+samba_videos: -s "videos;{{samba_mount}}/videos;no;yes;no;nas_media,nas_admin;;nas_admin"
+samba_shares: "{{samba_music}} {{samba_videos}}"
+samba_users: -u "nas_media;nas_media_password" -u "nas_admin;nas_admin_password"
 
 
 
+
+# misc role config
+letsencrypt_from_nextcloud_update: true
+tmux_theme: powerline/double/magenta
 
 
 
@@ -25,37 +41,9 @@ host_required_packages: []
 # https_key:   "{{ssl_certificate_key_name}}"
 # https_chain: "{{ssl_ca_certificate_name}}"
 #
-#
-#
-#
-#
+
 #
 # nextcloud_user: admin
 # nextcloud_pass: "{{admin_password}}"
 # nextcloud_data_directory: /media/{{external_disk}}/nextcloud/data
 #
-
-
-
-
-# samba_shares_list:
-#   - music
-#   - videos
-# samba_mount: /media/{{external_disk}}/samba
-#
-# samba_music: -s "music;{{samba_mount}}/music;no;yes;no;nas_media,nas_admin;;nas_admin;"
-# samba_videos: -s "videos;{{samba_mount}}/videos;no;yes;no;nas_media,nas_admin;;nas_admin"
-# samba_shares: "{{samba_music}} {{samba_videos}}"
-# samba_users: -u "nas_media;nas_media_password" -u "nas_admin;nas_admin_password"
-# samba_ports: keep defaults 445
-
-
-
-
-
-#
-# gitea_user: git
-# gitea_user_home: "{{external_disk}}/git"
-#
-# gitea_version: 1.4.1
-# gitea_platform: linux-arm-7

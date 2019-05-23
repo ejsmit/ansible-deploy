@@ -12,9 +12,15 @@ external_disk: data
 host_required_packages: []
 
 
+
+
 # various role config
 firewall_apps:
   - my-kodi
 
 backup_scripts:
  - 00date
+
+letsencrypt_from_nextcloud_update: true
+
+tmux_theme: powerline/double/yellow

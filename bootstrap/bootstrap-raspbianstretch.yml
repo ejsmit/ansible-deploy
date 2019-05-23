@@ -10,8 +10,8 @@
     - orig_hostname: raspberrypi
 
   vars_files:
-    - vault_vars/deploy-user.yml
-    
+    - ../vault_vars/deploy-user.yml
+
   tasks:
 
     - name: change hostname

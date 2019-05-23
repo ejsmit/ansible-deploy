@@ -23,6 +23,8 @@ local_srv_hosts:
 
 host_required_packages: []
 
+tmux_theme: powerline/double/blue
+
 firewall_apps:
   - my-pihole
   - my-xmpp
@@ -37,7 +39,6 @@ xmpp_console_client: true
 
 
 prosody_users:
-  - elrond
   - gandalf
   - sauron
   - radagast

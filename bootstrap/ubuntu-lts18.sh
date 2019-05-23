@@ -14,7 +14,6 @@ fi
 
 target=$1
 username=$2
-scriptpath=dirname "$0"
 
 # enable passwordless login
 ssh-keygen -R ${target} >/dev/null
@@ -29,6 +28,6 @@ ansible $target -i "$target," -m ping -u $username
 read -p "Press enter to continue"
 
 # Now run the playbook
-ansible-playbook $scriptpath/bootstrap-ubuntu-lts18.yml -i "$target,"  --ask-become-pass     \
+ansible-playbook bootstrap/bootstrap-ubuntu-lts18.yml -i "$target,"  --ask-become-pass     \
       -e host=$target  -e new_hostname=$hostname  -e user=$username     \
       --vault-password-file ~/.private/vault_password.txt

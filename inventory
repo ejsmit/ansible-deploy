@@ -12,11 +12,11 @@ gandalf.local
 
 # name can be used by a variety of playbooks.  bootstrap playbook should rename
 # host to something more unique.
-[raspberrypi-generic]
+[raspberrypi_generic]
 raspberrypi.local
 
 
-[raspberrypi-servers]
+[raspberrypi_servers]
 gollum.local
 smaug.local
 frodo.local
@@ -24,11 +24,11 @@ gimli.local
 glaurung.local
 
 
-[ubuntucore-servers]
+[ubuntucore_servers]
 #example.local
 
-[python3-hosts]
+[python3_hosts]
 #example.local
 
-[python3-hosts:vars]
+[python3_hosts:vars]
 ansible_python_interpreter=/usr/bin/python3

@@ -64,6 +64,13 @@
 #   various roles
 # --------------------------
 
+  - name: Install and configure dotfiles
+    block:
+    - name: install dotfiles
+      include_role:
+        name: dotfiles
+    become_user: "{{default_user}}"
+    
   - name: Install and configure firewall
     include_role:
       name: ufw-firewall

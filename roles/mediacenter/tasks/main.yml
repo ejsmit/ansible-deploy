@@ -53,12 +53,13 @@
 
 - name: install kodi addons
   apt:
-    name: "{{item}}"
+    name: "{{packages}}"
     state: latest
-  with_items:
-    - kodi-pvr-hts
-    - kodi-inputstream-adaptive
-    - kodi-inputstream-rtmp
+  vars:
+    packages:
+      - kodi-pvr-hts
+      - kodi-inputstream-adaptive
+      - kodi-inputstream-rtmp
 
 - name: copy systemd kodi service template
   copy:
@@ -82,9 +83,10 @@
 
 - name: install various other media tools
   apt:
-    name: "{{item}}"
+    name: "{{packages}}"
     state: latest
-  with_items:
-    - mpv
-    - ffmpeg
-    - rtmpdump
+  vars:
+    packages:
+      - mpv
+      - ffmpeg
+      - rtmpdump

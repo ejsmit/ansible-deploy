@@ -1,3 +1,4 @@
+#!/bin/bash
 
 /usr/bin/certbot renew   \
       --no-self-upgrade \

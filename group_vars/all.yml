@@ -22,6 +22,8 @@ gandi_api_token: "{{private_gandi_api_token}}"
 certbot_admin_email: "{{private_certbot_admin_email}}"
 certbot_domains: "{{private_certbot_domains}}"
 
+letsencrypt_from_nextcloud_update: false
+
 
 # backup setup
 b2_account_id:  "{{private_b2_account_id}}"

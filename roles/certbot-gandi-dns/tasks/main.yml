@@ -3,12 +3,13 @@
 
 - name: install certbot and some requirements
   apt:
-    name: "{{item}}"
+    name: "{{packages}}"
     state: latest
-  with_items:
-    - python3-requests
-    - python3-zope.interface
-    - certbot
+  vars:
+    packages:
+      - python3-requests
+      - python3-zope.interface
+      - certbot
 
 - name: Install certbot gandi plugin
   pip:
@@ -65,8 +66,12 @@
 - name: Add cron job for certbot renewal.  Weekly sunday morning
   cron:
     name: Certbot automatic renewal.
-    job: /usr/local/bin/certbot-gandi-renew
-    hour: 1
-    weekday: 0
+    job: /usr/local/bin/gandi-certbot-renew
+    hour: "1"
+    minute: "0"
+    weekday: "0"
     user: root
     cron_file: gandi-certbot
+
+- name: manually run renew cron script to backup latest certs
+  command: /usr/local/bin/gandi-certbot-renew

@@ -3,7 +3,9 @@
 
 - name: a playbook to configure smaug.local
   hosts: smaug.local
+  remote_user: deploy
   become: true
+
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/smaug.local.yml
@@ -14,94 +16,28 @@
 
   tasks:
 
-# --------------------------
-#   pi roles
-# --------------------------
-
-  - name: common raspberry pi config
-    include_role:
-      name: pi-common
-
-  - name: raspberry pi packages
-    include_role:
-      name: pi-packages
-
-
-# --------------------------
-#   host specific networking
-# --------------------------
-
-  - name: ipv6 hardware based address
-    lineinfile:
-      dest: /etc/dhcpcd.conf
-      state: present
-      backup: yes
-      regexp: '^slaac'
-      line: 'slaac hwaddr'
-    notify: reboot and wait
-
-  - name: force static ip address. Raspbian uses dhcpcd.conf
-    blockinfile:
-      path: /etc/dhcpcd.conf
-      block: |
-        interface {{ internal_interface }}
-            static ip_address={{ static_ipv4_address }}
-            static routers={{ static_gateway }}
-            static domain_name_servers=127.0.0.1
-    notify: reboot and wait
-
-
-# --------------------------
-#   reboot if we need to
-# --------------------------
-
-  - name: reboot if we need to
-    meta: flush_handlers
-
 
 
 # --------------------------
 #   various roles
 # --------------------------
 
-  - name: Install and configure dotfiles
-    block:
-    - name: install dotfiles
-      include_role:
-        name: dotfiles
-    become_user: "{{default_user}}"
-    
-  - name: Install and configure firewall
-    include_role:
-      name: ufw-firewall
+#  - name: Install and configure dotfiles
+#    block:
+#    - name: install dotfiles
+#      include_role:
+#        name: dotfiles
+#    become_user: "{{default_user}}"
 
-  - name: Install and configure email
-    include_role:
-      name: email
-
-  - name: Install and configure unattended upgrades
-    include_role:
-      name: unattended-upgrades
 
   - name: Install and configure restic backups
     include_role:
       name: restic-backups
 
-  - name: Install and configure logwatch
-    include_role:
-      name: logwatch
-
-  - name: Install and configure nextcloud sync tools
-    include_role:
-      name: nextcloud-client-tools
-
   - name: Install and configure certbot
     include_role:
       name: certbot-gandi-dns
 
-  - name: Install and configure prosody xmpp server and client
-    include_role:
-      name: xmpp
 
 
 
@@ -111,7 +47,7 @@
 
   - cron:
       name: "Auto reboot"
-      minute: "3"
+      minute: "15"
       hour: "3"
       job: "/sbin/shutdown -r now"
       cron_file: reboot
@@ -119,12 +55,14 @@
 
 
 # --------------------------
-#   install pihole
+#   pihole prep
 # --------------------------
 
-  - name: Install and configure pihole
+
+  - name: Prepare for pihole installation
     include_role:
       name: pihole
+
 
 
 # --------------------------

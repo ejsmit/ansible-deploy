@@ -1,0 +1,85 @@
+# gandalf.local
+# Kubuntu
+
+- name: a playbook to configure gandalf.local
+  hosts: gandalf.local
+  become: true
+
+  # vars_files:
+  #   - ~/.private/ansible/vars/me-myself-and-i.yml
+  #   - vault_vars/gimli.local/main.yml
+
+  handlers:
+  - include: handlers/reboot.yml
+
+  tasks:
+
+# packages
+
+  # - name: add google apt key
+  #   apt_key:
+  #     url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+  #     state: present
+  #
+  # - name: add google apt repository
+  #   apt_repository:
+  #     repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+  #     state: present
+  #     filename: google-chrome
+
+
+  - name: add a few ppa repositories
+    apt_repository:
+      repo: "{{item}}"
+      state: present
+    with_items: "{{ppa_repositories}}"
+
+
+  - name: Run the equivalent of "apt dist-update"
+    apt:
+      update_cache: yes
+      upgrade: dist
+
+  - name: install group packages
+    apt:
+      name: "{{group_required_packages}}"
+      state: latest
+    notify: reboot and wait
+
+  - name: install dev packages
+    apt:
+      name: "{{item}}"
+      state: latest
+    with_items: "{{dev_packages}}"
+
+  - name: install gui packages
+    apt:
+      name: "{{item}}"
+      state: latest
+    with_items: "{{gui_packages}}"
+
+  - name: download external packages
+    get_url:
+      url: "{{item.url}}"
+      dest: /tmp/{{item.filename}}
+    with_items: "{{external_packages}}"
+
+  - name: install external packages
+    apt:
+      deb: /tmp/{{item.filename}}
+    with_items: "{{external_packages}}"
+
+  - name: install snaps
+    command: snap install {{item}}
+    with_items: "{{snap_packages}}"
+
+  - name: install classic snaps
+    command: snap install --classic {{item}}
+    with_items: "{{snap_classic_packages}}"
+
+
+# Install Docker
+
+  # - name: Install docker
+  #   include-role:
+  #     name: docker

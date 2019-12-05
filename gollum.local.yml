@@ -2,7 +2,9 @@
 
 - name: a playbook to configure gollum.local
   hosts: gollum.local
+  remote_user: deploy
   become: true
+
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/gollum.local.yml
@@ -13,91 +15,77 @@
 
   tasks:
 
-
-# --------------------------
-#   pi roles
-# --------------------------
-
-  - name: common raspberry pi config
-    include_role:
-      name: pi-common
-
-  - name: raspberry pi packages
-    include_role:
-      name: pi-packages
-
-
-
-# --------------------------
-#   reboot if we need to
-# --------------------------
-
-  - name: reboot if we need to
-    meta: flush_handlers
-
-
 # --------------------------
 #   Mount disk
 # --------------------------
 
-  - name: mount external disk
-    include_role:
-      name: mount-usb-disk
-
-
+  # - name: mount external disk
+  #   include_role:
+  #     name: mount-usb-disk
 
 
 # --------------------------
 #   various roles
 # --------------------------
 
-  - name: Install and configure dotfiles
-    block:
-    - name: install dotfiles
-      include_role:
-        name: dotfiles
-    become_user: "{{default_user}}"
-
-  - name: Install and configure email
-    include_role:
-      name: email
-
-  - name: Install and configure unattended upgrades
-    include_role:
-      name: unattended-upgrades
-
-  - name: Install and configure nextcloud client tools
-    include_role:
-      name: nextcloud-client-tools
-
-  - name: Install and configure restic backups
-    include_role:
-      name: restic-backups
-
-  - name: Install and configure logwatch
-    include_role:
-      name: logwatch
-
+  # - name: Install and configure dotfiles
+  #   block:
+  #   - name: install dotfiles
+  #     include_role:
+  #       name: dotfiles
+  #   become_user: "{{default_user}}"
+  #
+  #
+  # - name: Install and configure nextcloud client tools
+  #   include_role:
+  #     name: nextcloud-client-tools
+  #
+  # - name: Install and configure restic backups
+  #   include_role:
+  #     name: restic-backups
+  #
 
 # --------------------------
-#   docker and samba
+#   docker, nfs and samba
 # --------------------------
 
-  - name: Install docker
+  # - name: Install docker
+  #   include_role:
+  #     name: docker
+
+  # - name: Install docker-management
+  #   include_role:
+  #     name: docker-management
+
+  # - name: Install samba
+  #   include_role:
+  #     name: docker-samba-pi
+
+  # - name: Install postgresql
+  #   include_role:
+  #     name: docker-postgresql
+
+  # - name: Install role kubernetes
+  #   include_role:
+  #     name: kubernetes
+
+  # - name: Install role kubernetes-management
+  #   include_role:
+  #     name: kubernetes-management
+
+  # - name: Install role redis
+  #   include_role:
+  #     name: kubernetes-redis
+
+  - name: Install role nextcloud
     include_role:
-      name: docker
-
-  - name: Install samba
-    include_role:
-      name: docker-samba
-
-
+      name: kubernetes-nextcloud
 
 
 # --------------------------
 #   forced reboot
 # --------------------------
 
-  - debug: msg="Trigger Reboot"
-    notify: reboot and wait
-    changed_when: true
+  # - debug: msg="Trigger Reboot"
+  #   notify: reboot and wait
+  #   changed_when: true

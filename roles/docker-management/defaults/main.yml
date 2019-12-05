@@ -1,0 +1,8 @@
+---
+
+# uncomment to install watchtower
+# docker_watchtower: True
+
+# tag to use when pulling from dockerhub - choose one
+# docker_watchtower_tag: latest
+docker_watchtower_tag: armhf-latest

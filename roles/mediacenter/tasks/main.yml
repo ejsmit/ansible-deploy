@@ -67,6 +67,14 @@
     dest: /etc/systemd/system/kodi.service
     mode: "0644"
 
+- name: Create kodi settings directory
+  file:
+    path: /home/pi/.kodi/userdata
+    state: directory
+    owner: pi
+    group: pi
+    mode: 0755
+
 - name: copy advanced settings
   copy:
     src: files/advancedsettings.xml

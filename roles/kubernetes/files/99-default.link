@@ -1,0 +1,9 @@
+
+# /etc/systemd/network/99-default.link
+# https://github.com/systemd/systemd/issues/3374
+
+[Match]
+Path=/devices/virtual/net/*
+[Link]
+NamePolicy=kernel database onboard slot path
+MACAddressPolicy=none

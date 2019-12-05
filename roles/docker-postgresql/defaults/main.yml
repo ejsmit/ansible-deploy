@@ -1,0 +1,15 @@
+---
+
+
+postgresql_image: "postgres:12-alpine"
+
+postgresql_data: /mnt/disk2/data
+postgresql_ports:
+  - "5432:5432"
+postgresql_volumes:
+  - "{{postgresql_data}}:/var/lib/postgresql/data"
+
+
+postgresql_user: postgres
+postgresql_password: postgres
+postgresql_db: postgres

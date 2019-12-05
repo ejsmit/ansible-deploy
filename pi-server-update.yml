@@ -1,0 +1,33 @@
+
+- name: a playbook to update a raspberry pi
+  hosts: "{{ host | default('raspberrypi_servers') }}"
+  remote_user: deploy
+  become: true
+
+
+
+  handlers:
+  - include: handlers/reboot.yml
+
+  tasks:
+
+  - debug: msg="play_hosts={{play_hosts}}"
+  - pause: prompt="Press enter to start..."
+
+
+# --------------------------
+#   pi roles
+# --------------------------
+
+  - name: raspberry pi packages
+    include_role:
+      name: pi-packages
+
+
+# --------------------------
+#   forced reboot
+# --------------------------
+
+  - debug: msg="Trigger Reboot"
+    notify: reboot and wait
+    changed_when: true

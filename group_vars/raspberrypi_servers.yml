@@ -3,19 +3,19 @@
 group_required_packages:
   - mc
   - tmux
-  - xsel
   - git
   - wget
+  - curl
   - acl
   - python
   - python-pip
   - python3
   - python3-pip
-  - python3-setuptools
-
-# mail settings
-mail_install_users:
-  - pi
+  - python-apt
+  - python3-apt
+  - ca-certificates
+  - apt-transport-https
+  - software-properties-common
 
 default_user: pi
 

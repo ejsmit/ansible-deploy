@@ -1,2 +1,2 @@
 
-deploy_password_hash: "change this to something better"
+deploy_password_hash: "change this to a real hash"

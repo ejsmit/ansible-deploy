@@ -1,8 +1,0 @@
----
-
-xmpp_server: false
-xmpp_console_client: false
-
-prosody_ssl_domain: example.org
-prosody_chat_domain: example.org
-prosody_conference_domain: conferences.example.org

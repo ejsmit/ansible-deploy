@@ -10,19 +10,12 @@ mail_server: mail.gandi.net
 mail_port: 587
 
 mail_from: "{{hostname}}@{{private_my_mail_domain}}"
+mail_domain: "{{private_my_mail_domain}}"
 mail_username: "{{private_my_mail_username}}"
 mail_password: "{{private_my_mail_password}}"
 
 mail_root_email: "{{private_my_email}}"
 mail_default_email: "{{private_my_email}}"
-
-
-# gandi-certbot
-gandi_api_token: "{{private_gandi_api_token}}"
-certbot_admin_email: "{{private_certbot_admin_email}}"
-certbot_domains: "{{private_certbot_domains}}"
-
-letsencrypt_from_nextcloud_update: false
 
 
 # backup setup
@@ -31,10 +24,11 @@ b2_account_key: "{{private_b2_account_key}}"
 restic_password: "{{private_restic_password}}"
 restic_repository: "b2:ejsmit-restic"
 
-restic_version: "0.9.4"
+restic_version: "0.9.5"
 restic_arch: "linux_arm"
 
 
-prosody_ssl_domain: smit.org.uk
-prosody_chat_domain: chat.smit.org.uk
-prosody_conference_domain: groupchat.smit.org.uk
+# certbot
+gandi_api_token: "{{private_gandi_api_token}}"
+certbot_admin_email: "{{private_certbot_admin_email}}"
+certbot_domains: "{{private_certbot_domains}}"

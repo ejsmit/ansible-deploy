@@ -1,0 +1,15 @@
+---
+
+- name: Update login screen users (1/2)
+  ini_file:
+    path: /etc/sddm.conf
+    section: Users
+    option: HideUsers
+    value: deploy
+
+- name: Update login screen users (2/2)
+  ini_file:
+    path: /etc/sddm.conf
+    section: Users
+    option: HideShells
+    value: /usr/sbin/nologin,/sbin/nologin,/bin/false

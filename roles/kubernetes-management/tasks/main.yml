@@ -1,0 +1,128 @@
+
+
+- name: Kubernetes Management prerequisites
+  include_tasks: prereqs.yml
+
+
+
+# start block for become default user
+- block:
+# dashes 4 indent inside block
+
+
+    - name: Install Kubernetes Dashboard
+      command: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta7/aio/deploy/recommended.yaml
+
+    - name: Create new security token with full access rights
+      command: kubectl create serviceaccount dashboard-admin-sa
+    - command: kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin --serviceaccount=default:dashboard-admin-sa
+    - debug: msg="kubectl describe the secret to find the token for access to the dashboard"
+
+
+
+    - name: check if helm exists
+      shell: which helm >/dev/null 2>&1
+      register: helm_exists
+      ignore_errors: yes
+      failed_when: false
+
+    - name: Install the latest helm 3 release
+      shell: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+    - name: add stable charts
+      command: helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+      when: helm_exists.rc > 0
+
+    - name: update helm repo
+      command: helm repo update
+
+    - name: get list of helm installations
+      command: helm list
+      register: helm_list
+      ignore_errors: yes
+
+    - name: install metallb load balancer using helm
+      command: >
+        helm install my-metallb stable/metallb
+        --set arpAddresses=192.168.0.11-192.168.0.20
+      when: "'metallb' not in helm_list.stdout"
+
+
+    - name: Copy the metallb-config file
+      copy:
+        src: files/metallb-config.yml
+        dest: $HOME/k8s/metallb-config.yml
+
+    - name: Install metallb-config into kubernetes
+      command: kubectl apply -f $HOME/k8s/metallb-config.yml
+
+
+
+    - name: Copy the local storage file
+      copy:
+        src: files/local-storage.yml
+        dest: $HOME/k8s/local-storage.yml
+
+    - name: Install local storage into kubernetes
+      command: kubectl apply -f $HOME/k8s/local-storage.yml
+
+
+
+    - name: Copy the helm traefik values file
+      copy:
+        src: files/traefik-values.yml
+        dest: $HOME/traefik-values.yml
+
+    - name: update traefik using helm
+      command: >
+        helm upgrade my-traefik
+        -f $HOME/traefik-values.yml
+        stable/traefik
+      when: "'traefik' in helm_list.stdout"
+
+    - name: install traefik using helm
+      command: >
+        helm install my-traefik
+        -f $HOME/traefik-values.yml
+        stable/traefik
+      when: "'traefik' not in helm_list.stdout"
+
+
+
+    - name: Copy the traefik whoami demo file
+      copy:
+        src: files/k8s-traefik-demo.yml
+        dest: $HOME/k8s/k8s-traefik-demo.yml
+
+    - name: Install trafik whoami demo into kubernetes
+      command: kubectl apply -f $HOME/k8s/k8s-traefik-demo.yml
+
+
+
+    - name: Kubernetes Dashboard
+      command: kubectl apply -f $HOME/k8s/k8s-traefik-demo.yml
+
+
+
+
+
+# end block for become default user (2 indent)
+  become_user: "{{default_user}}"
+
+
+
+
+
+
+# - name: Check if Kubernetes Dashboard UI service already exists.
+#   shell: kubectl get services --namespace kube-system | grep -q kubernetes-dashboard
+#   changed_when: false
+#   failed_when: false
+#   register: kubernetes_dashboard_service
+#   when: kubernetes_enable_web_ui | bool
+#
+# - name: Enable the Kubernetes Web Dashboard UI (if configured).
+#   command: "kubectl create -f {{ kubernetes_web_ui_manifest_file }}"
+#   when:
+#     - kubernetes_enable_web_ui | bool
+#     - kubernetes_dashboard_service is failed

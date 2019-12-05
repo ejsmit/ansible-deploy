@@ -3,47 +3,19 @@
 hostname: smaug
 hostname_fqdn: smaug.local
 
-internal_interface: eth0
-
-static_ipv4_address: 192.168.0.2/24
-static_gateway: 192.168.0.1
 
 
 
 
+# pihole custom dns settings
 local_domain: home
 local_dns_cnames:
-  - chat.smit.org.uk,groupchat.smit.org.uk,smaug.home
   - nextcloud.smit.org.uk,gollum.home
-local_srv_hosts:
-  - _xmpp-client._tcp.chat.smit.org.uk,smaug.home,5222
-  - _xmpp-server._tcp.chat.smit.org.uk,smaug.home,5269
-  - _xmpp-server._tcp.groupchat.smit.org.uk,smaug.home,5269
 
 
 host_required_packages: []
-
-tmux_theme: powerline/double/blue
-
-firewall_apps:
-  - my-pihole
-  - my-xmpp
 
 backup_scripts:
   - 00date
   - 90pihole
   - 90letsencrypt
-
-xmpp_server: true
-xmpp_console_client: true
-
-
-prosody_users:
-  - gandalf
-  - sauron
-  - radagast
-  - smaug
-  - gimli
-  - gollum
-  - phone
-  - fire

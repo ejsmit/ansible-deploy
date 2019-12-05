@@ -1,0 +1,49 @@
+
+
+- name: Update alternatives to use legacy iptables (1/2)
+  command: update-alternatives --set iptables /usr/sbin/iptables-legacy
+
+- name: Update alternatives to use legacy iptables (2/2)
+  command: update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+
+- name: Turn swap off
+  shell: dphys-swapfile swapoff && dphys-swapfile uninstall
+
+- name: Permanently disable swap
+  service:
+    name: dphys-swapfile
+    enabled: false
+
+
+
+- name: cgroup command line
+  lineinfile:
+    dest: /boot/cmdline.txt
+    backrefs: True
+    state: present
+    regexp: '(^((?!cgroup_enable=memory swapaccount=1).)*)$'
+    line: '\1 cgroup_enable=memory swapaccount=1'
+  notify: reboot and wait
+
+- name: Create a docker daemon.json config file
+  copy:
+    src: files/daemon.json
+    dest: /etc/docker/daemon.json
+  notify: reboot and wait
+
+
+- name: Fix MAC creation error on veth interfaces
+  copy:
+    src: files/99-default.link
+    dest: "/etc/systemd/network/99-default.link"
+    mode: 0644
+  notify: reboot and wait
+
+
+- name: Create k8s directory for yml files
+  file:
+    name: /home/{{default_user}}/k8s
+    state: directory
+    mode: 0755
+    owner: "{{default_user}}"
+    group: "{{default_user}}"

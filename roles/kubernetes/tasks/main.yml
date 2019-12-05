@@ -1,0 +1,117 @@
+
+
+- name: Configuration Prerequisites
+  include_tasks: prereqs.yml
+
+
+# rpi-update for firmware
+
+
+
+
+- name: reboot if we need to
+  meta: flush_handlers
+
+
+- name: Add Kubernetes GPG key
+  apt_key: url=https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+- name: Add Kubernetes APT repository
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+
+
+- name: Install Kubernetes software packages
+  apt:
+    name: "{{k8s_packages}}"
+    update_cache: yes
+    state: present
+
+- name: mark kubernetes as hold to prevent it from being upgraded
+  dpkg_selections:
+    name: "{{item}}"
+    selection: hold
+  with_items: "{{k8s_packages}}"
+
+
+
+
+
+- name: Check if Kubernetes has already been initialized.
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: result_k8s_conf
+
+
+- name: Fix MAC creation error on veth interfaces
+  copy:
+    src: files/12-after-docker.conf
+    dest: "/etc/systemd/system/kubelet.service.d/12-after-docker.conf"
+
+
+- name: pull kubernetes imges
+  command:  kubeadm config images pull
+  when: not result_k8s_conf.stat.exists
+
+
+- name: initialize kubernetes
+#   command: kubeadm init --pod-network-cidr={{k8s_pod_network_cidr}} --ignore-preflight-errors='SystemVerification'
+  command: kubeadm init  --ignore-preflight-errors='SystemVerification'
+  when: not result_k8s_conf.stat.exists
+
+- name: Create k8s config for root
+  file:
+    path: $HOME/.kube
+    state: directory
+
+- name: Copy the kubectl admin.conf to root
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: $HOME/.kube/config
+    remote_src: true
+
+
+- name: Create k8s config for default user
+  file:
+    path: /home/{{default_user}}/.kube
+    state: directory
+    owner: "{{default_user}}"
+    group: "{{default_user}}"
+
+- name: Copy the kubectl admin.conf to default user
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/{{default_user}}/.kube/config
+    remote_src: true
+    owner: "{{default_user}}"
+    group: "{{default_user}}"
+
+- pause:
+   prompt: waiting a few more seconds to make sure kubernetes has started
+   seconds: 30
+
+# - name: Configure Flannel networking.
+#   command:  kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+#   register: flannel_result
+#   changed_when: "'created' in flannel_result.stdout"
+
+- name: Configure Weave Net networking with NO_MASQ_LOCAL=1
+  shell:  kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.NO_MASQ_LOCAL=1"
+  register: weave_result
+  changed_when: "'created' in weave_result.stdout"
+
+- name: Download weave client
+  get_url:
+    url: https://git.io/weave
+    dest: /usr/local/bin/weave
+    mode: '0755'
+
+
+
+- pause:
+   prompt: waiting a few more seconds to make sure kubernetes has started
+   seconds: 30
+
+- name: Taint master to allow it to be used as node
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-
+  when: not result_k8s_conf.stat.exists

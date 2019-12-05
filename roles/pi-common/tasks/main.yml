@@ -57,7 +57,7 @@
     dest: /boot/config.txt
     state: present
     regexp: '^dtoverlay='
-    line: 'dtoverlay=pi3-disable-wifi,pi3-disable-bt'
+    line: 'dtoverlay=disable-wifi,disable-bt'
   when: disable_wifi_bt == true
 
 - name: stop hciaurt when wifi isdisabled

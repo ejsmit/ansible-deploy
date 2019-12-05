@@ -44,5 +44,5 @@ The main script to configure the system.   Don't blindly run this more than once
 the main use is initial configuration of my own systems, so parts of it will cause
 problems if run again.
 
-Requires a hostname as first parameter. (actually it is the name of a yml file without the
-.yml extension) and a optional username if deploy should not be used.
+Requires a yaml as first parameter.  A possible second argument to specify a single host
+if the playbook does not limit itself to a single host.

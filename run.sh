@@ -1,20 +1,22 @@
 #!/bin/sh
 
-if [ ! -f ~/.private/vault_password.txt ] ; then
+if [ ! -f ~/.private/ansible/vault_password.txt ] ; then
     echo 'ERROR: private files not available'
     exit 1
 fi
 
 if [ -z "$1" ] ; then
     echo 'ERROR: no target supplied'
-    echo "     $0   hostname [user]"
+    echo "     $0   ymlfile [hostname]"
+    echo "     not all playbooks allow hostname to be specified"
     exit 1
 fi
+
 ymlfile=$1
 
-user=deploy
-[ "$2" ] && user=$2
+hostname=""
+[ "$2" ] && hostname="-e host=$2"
 
 # use -v or -vvv for debugging
-ansible-playbook $ymlfile.yml -v -i inventory -u $user  \
-      --vault-password-file ~/.private/vault_password.txt
+ansible-playbook $ymlfile -v -i inventory $hostname \
+      --vault-password-file ~/.private/ansible/vault_password.txt

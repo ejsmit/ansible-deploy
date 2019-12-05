@@ -16,10 +16,3 @@
 - name: Deploy dotfiles
   command: "~/projects/dotfiles/bootstrap.sh --force"
   when: dotfiles_updated.changed
-
-- name: Update tmux theme
-  lineinfile:
-    dest: "~/.tmux.conf"
-    regexp: "set -g*.themepack '*.'"
-    line: "set -g @themepack '{{tmux_theme}}'"
-    state: present

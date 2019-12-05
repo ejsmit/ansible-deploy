@@ -3,61 +3,52 @@
 
 - name: a playbook to configure glaurung.local
   hosts: glaurung.local
+  remote_user: deploy
   become: true
 
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/glaurung.local.yml
-
+    - vault_vars/nextcloud.yml
+    
   handlers:
   - include: handlers/reboot.yml
 
   tasks:
 
 
-  - include_role:
-      name: docker
 
-
+  # - name: Install and configure dotfiles
+  #   block:
+  #     - name: install dotfiles
+  #       include_role:
+  #         name: dotfiles
+  #   become_user: "{{default_user}}"
 
 
 # --------------------------
-#   pi roles
+#   Docker, etc.
 # --------------------------
 
-  - name: common raspberry pi config
+  # - name: Install role docker
+  #   include_role:
+  #     name: docker
+
+  # - name: Install role docker-management
+  #   include_role:
+  #     name: docker-management
+
+  # - name: install role kubernetes
+  #   include_role:
+  #     name: kubernetes
+
+  # - name: install role kubernetes-management
+  #   include_role:
+  #     name: kubernetes-management
+
+  - name: install role kubernetes-redis
     include_role:
-      name: pi-common
-
-  - name: raspberry pi packages
-    include_role:
-      name: pi-packages
-
-
-
-# --------------------------
-#   reboot if we need to
-# --------------------------
-
-  # - name: reboot if we need to
-  #   meta: flush_handlers
-
-
-# --------------------------
-#   various roles
-# --------------------------
-
-  # - name: Install and configure email
-  #   include_role:
-  #     name: email
-  #
-  # - name: Install and configure unattended upgrades
-  #   include_role:
-  #     name: unattended-upgrades
-  #
-  # - name: logwatch
-  #   include_role:
-  #     name: logwatch
+      name: kubernetes-redis
 
 
 # --------------------------

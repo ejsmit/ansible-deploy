@@ -1,10 +1,22 @@
 ---
 
 hostname: glaurung
-hostname_fqdn: gimli.local
-
-host_required_packages: []
+hostname_fqdn: glaurung.local
 
 
-mail_install_users:
-  - pi
+host_required_packages:
+  - build-essential
+  - snapd
+  - lsof
+  - ipvsadm
+  - bridge-utils
+
+
+# hardware
+disable_wifi_bt: false
+
+
+
+# docker
+docker_watchtower: True
+docker_watchtower_tag: armhf-latest

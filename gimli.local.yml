@@ -3,6 +3,7 @@
 
 - name: a playbook to configure gimli.local
   hosts: gimli.local
+  remote_user: deploy
   become: true
 
   vars_files:
@@ -15,18 +16,6 @@
 
   tasks:
 
-
-# --------------------------
-#   pi roles
-# --------------------------
-
-  - name: common raspberry pi config
-    include_role:
-      name: pi-common
-
-  - name: raspberry pi packages
-    include_role:
-      name: pi-packages
 
 
 # --------------------------
@@ -78,24 +67,12 @@
 #   various roles
 # --------------------------
 
-  - name: Install and configure dotfiles
-    block:
-    - name: install dotfiles
-      include_role:
-        name: dotfiles
-    become_user: "{{default_user}}"
-
-  - name: Install and configure firewall
-    include_role:
-      name: ufw-firewall
-
-  - name: Install and configure email
-    include_role:
-      name: email
-
-  - name: Install and configure unattended upgrades
-    include_role:
-      name: unattended-upgrades
+  # - name: Install and configure dotfiles
+  #   block:
+  #   - name: install dotfiles
+  #     include_role:
+  #       name: dotfiles
+  #   become_user: "{{default_user}}"
 
   - name: Install nextcloud client tools
     include_role:
@@ -105,17 +82,9 @@
     include_role:
       name: restic-backups
 
-  - name: logwatch
-    include_role:
-      name: logwatch
-
   - name: Install kodi mediacenter
     include_role:
       name: mediacenter
-
-  # - name: Install nordvpn
-  #   include_role:
-  #     name: nordvpn
 
   - name: make sure we dont start in a graphical environment
     command: systemctl set-default multi-user.target
@@ -144,7 +113,7 @@
 
   - cron:
       name: "Auto reboot"
-      minute: "33"
+      minute: "47"
       hour: "5"
       job: "/sbin/shutdown -r now"
       cron_file: reboot

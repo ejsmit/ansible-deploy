@@ -1,0 +1,23 @@
+
+
+# start block for become default user
+- block:
+# dashes 4 indent inside block
+
+
+
+
+    - name: Copy the redis yml file
+      copy:
+        src: files/k8s-redis.yml
+        dest: $HOME/k8s/k8s-redis.yml
+
+
+    - name: Install redis in kubernetes
+      command: kubectl apply -f $HOME/k8s/k8s-redis.yml
+
+
+
+
+# end block for become default user (2 indent)
+  become_user: "{{default_user}}"

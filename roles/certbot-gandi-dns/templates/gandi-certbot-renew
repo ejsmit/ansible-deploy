@@ -6,6 +6,7 @@
       --certbot-plugin-gandi:dns-credentials /etc/letsencrypt/gandi.ini \
       --server https://acme-v02.api.letsencrypt.org/directory
 
+
 cd /etc/letsencrypt
 tar cJf ~/letsencrypt.tar.xz live/ --dereference
 cd ~

@@ -1,0 +1,71 @@
+# glaurung.local
+# assume raspbian base image
+
+- name: a playbook to configure generic raspberry pi
+  hosts: '{{ host }}'
+  remote_user: deploy
+  become: true
+
+  vars_files:
+    - ~/.private/ansible/vars/me-myself-and-i.yml
+    - vault_vars/{{ host }}.yml
+    - vault_vars/nextcloud.yml
+
+
+  handlers:
+  - include: handlers/reboot.yml
+
+  tasks:
+
+  - debug: msg="play_hosts={{play_hosts}}"
+  - pause: prompt="Press enter to start..."
+
+
+# --------------------------
+#   pi roles
+# --------------------------
+
+  - name: common raspberry pi config
+    include_role:
+      name: pi-common
+
+  - name: raspberry pi packages
+    include_role:
+      name: pi-packages
+
+# --------------------------
+#   reboot if we need to
+# --------------------------
+
+  - name: reboot if we need to
+    meta: flush_handlers
+
+
+# --------------------------
+#   various roles
+# --------------------------
+
+  - name: Install and configure email
+    include_role:
+      name: email
+
+  - name: Install and configure unattended upgrades
+    include_role:
+      name: unattended-upgrades
+
+  - name: logwatch
+    include_role:
+      name: logwatch
+
+  - name: Install and configure nextcloud sync tools
+    include_role:
+      name: nextcloud-client-tools
+
+
+# --------------------------
+#   forced reboot
+# --------------------------
+
+  - debug: msg="Trigger Reboot"
+    notify: reboot and wait
+    changed_when: true

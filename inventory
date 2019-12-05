@@ -6,7 +6,7 @@ localhost             ansible_connection=local
 sauron.local
 
 
-[ubuntu]
+[kubuntu]
 gandalf.local
 
 
@@ -19,7 +19,7 @@ raspberrypi.local
 [raspberrypi_servers]
 gollum.local
 smaug.local
-frodo.local
+#frodo.local
 gimli.local
 glaurung.local
 
@@ -28,7 +28,7 @@ glaurung.local
 #example.local
 
 [python3_hosts]
-#example.local
+gandalf.local
 
 [python3_hosts:vars]
 ansible_python_interpreter=/usr/bin/python3

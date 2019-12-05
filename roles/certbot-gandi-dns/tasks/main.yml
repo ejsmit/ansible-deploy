@@ -3,19 +3,19 @@
 
 - name: install certbot and some requirements
   apt:
-    name: "{{packages}}"
-    state: latest
-  vars:
-    packages:
+    name:
       - python3-requests
       - python3-zope.interface
       - certbot
+    state: latest
+
 
 - name: Install certbot gandi plugin
   pip:
     name: certbot-plugin-gandi
     state: present
     executable: /usr/bin/pip3
+
 
 - name: Create letsencrypt directory for certbot
   file:
@@ -30,7 +30,6 @@
     mode: "0600"
     owner: root
     group: root
-
 
 - name: Check if certificate already exists.  (only check first cert)
   stat:
@@ -55,6 +54,7 @@
     state: stopped
     enabled: false
 
+
 - name: create renew script
   template:
     src: gandi-certbot-renew
@@ -73,5 +73,32 @@
     user: root
     cron_file: gandi-certbot
 
+
 - name: manually run renew cron script to backup latest certs
   command: /usr/local/bin/gandi-certbot-renew
+
+
+
+
+# offline certificates update from nextcloud
+# cert renew is 01:00 on day 0.  This runs an hour later.
+
+# - name: script to copy letsencrypt certs from nextcloud
+#   template:
+#     src: update_certs.sh
+#     dest: /usr/local/bin/update_certs.sh
+#     owner: root
+#     group: root
+#     mode: "0755"
+#   when: letsencrypt_from_nextcloud_update == true
+#
+# - name: Add cron job for certificate offline update
+#   cron:
+#     name: Letsencrypt
+#     job: /usr/local/bin/update_certs.sh
+#     hour: "2"
+#     minute: "0"
+#     weekday: "0"
+#     user: root
+#     cron_file: letsencrypt-nextcloud
+#   when: letsencrypt_from_nextcloud_update == true

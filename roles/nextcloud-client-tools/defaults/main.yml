@@ -2,5 +2,3 @@
 
 nextcloud_user: username
 nextcloud_password: password
-
-letsencrypt_from_nextcloud_update: false

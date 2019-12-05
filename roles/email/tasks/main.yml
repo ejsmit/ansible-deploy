@@ -23,11 +23,10 @@
 - name: install config file for users
   template:
     src: msmtprc
-    dest: /home/{{item}}/.msmtprc
+    dest: /home/{{default_user}}/.msmtprc
     mode: '0600'
-    owner: "{{item}}"
-    group: "{{item}}"
-  with_items:  "{{mail_install_users}}"
+    owner: "{{default_user}}"
+    group: "{{default_user}}"
 
 
 - name: install aliases

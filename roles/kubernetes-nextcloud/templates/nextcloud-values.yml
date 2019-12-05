@@ -1,0 +1,71 @@
+
+replicaCount: 1
+
+nextcloud:
+  host: nextcloud.smit.org.uk
+  username: admin
+  password: "{{nextcloud_admin_password}}"
+  datadir: /var/www/html/data
+
+  mail:
+    enabled: true
+    fromAddress: "nextcloud"
+    domain: {{mail_domain}}
+    smtp:
+      host: "{{mail_server}}"
+      secure: tls
+      port: "{{mail_port}}"
+      authtype: LOGIN
+      name: "{{mail_username}}"
+      password: "{{mail_password}}"
+
+  extraEnv:
+    - name: REDIS_HOST
+      value: my-redis-master
+
+  configs:
+    https.config.php: |-
+       <?php
+       $CONFIG = array (
+         'overwriteprotocol' => 'https',
+       );
+
+
+internalDatabase:
+  enabled: false
+
+externalDatabase:
+  enabled: true
+  type: postgresql
+  host: gollum
+  user: nextcloud
+  password: nextcloud
+  database: nextcloud
+
+
+# This installs redis as well.  I prefer to install my own, so have to enable
+# manually using extraEnv above
+redis:
+  enabled: false
+
+
+cronjob:  
+  enabled: true
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
+
+ingress:
+  enabled: true
+  annotations:
+    traefik.frontend.redirect.permanent: 'true'
+    traefik.frontend.redirect.regex: https://(.*)/.well-known/(card|cal)dav
+    traefik.frontend.redirect.replacement: https://$1/remote.php/dav/
+  tls:
+    - secretName: letsencrypt-certs
+      hosts:
+        - nextcloud.smit.org.uk
+
+persistence:
+  enabled: true
+  storageClass: my-local-storage
+  size: 20Gi

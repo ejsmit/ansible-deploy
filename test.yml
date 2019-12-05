@@ -1,0 +1,18 @@
+
+- name: a playbook to configure generic raspberry pi
+  hosts: 'glaurung.local'
+  remote_user: deploy
+  become: true
+  gather_facts: no
+
+  vars_files:
+    - vault_vars/glaurung.local.yml
+    - vault_vars/nextcloud.yml
+
+
+  tasks:
+
+
+    - debug:  msg={{nextcloud_user}}
+    - debug:  msg={{nextcloud_password}}
+    - debug:  msg={{nextcloud_admin_password}}

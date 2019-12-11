@@ -1,0 +1,104 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-wallabag-db-environment
+data:
+  MYSQL_ROOT_PASSWORD: wallarootpass
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-wallabag-db-5gi-pv
+  labels:
+    app: wallabag-mariadb
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: my-local-storage
+  local:
+    path: /media/bigdata/kubernetes/wallabag-db
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - gollum
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-wallabag-db-5gi-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: my-local-storage
+  selector:
+    matchLabels:
+      app: wallabag-mariadb
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-wallabag-mariadb
+  labels:
+    app: wallabag-mariadb
+spec:
+  selector:
+    matchLabels:
+      app: wallabag-mariadb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wallabag-mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: ejsmit/mariadb:10.3
+          args:
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
+            - --character-set-client-handshake=FALSE"
+          ports:
+          - containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: my-wallabag-db-environment
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: mydata
+      volumes:
+        - name: mydata
+          persistentVolumeClaim:
+            claimName: my-wallabag-db-5gi-pvc
+
+
+
+---
+apiVersion: v1
+kind: Service        # Type of Kubernetes resource
+metadata:
+  name: my-wallabag-mariadb-service # Name of the Kubernetes resource
+  labels:            # Labels that will be applied to this resource
+    app: wallabag-mariadb
+spec:
+  ports:
+  - port: 3306       # Map incoming connections on port 6379 to the target port 6379 of the Pod
+    targetPort: 3306
+  selector:          # Map any Pod with the specified labels to this service
+    app: wallabag-mariadb

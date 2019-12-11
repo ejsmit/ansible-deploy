@@ -1,0 +1,31 @@
+
+
+
+
+# start block for become default user
+- block:
+# dashes 4 indent inside block
+
+
+
+
+    - name: Copy the wallabag database yml file
+      copy:
+        src: files/k8s-wallabag-mariadb.yml
+        dest: $HOME/k8s/k8s-wallabag-mariadb.yml
+
+    - name: Install wallabag database in kubernetes
+      command: kubectl apply -f $HOME/k8s/k8s-wallabag-mariadb.yml
+
+    - name: Copy the wallabag yml file
+      copy:
+        src: files/k8s-wallabag.yml
+        dest: $HOME/k8s/k8s-wallabag.yml
+
+    - name: Install wallabag in kubernetes
+      command: kubectl apply -f $HOME/k8s/k8s-wallabag.yml
+
+
+
+# end block for become default user (2 indent)
+  become_user: "{{default_user}}"

@@ -1,14 +1,4 @@
-# - name: include testing repo in apt sources
-#   copy:
-#     src: files/testing.list
-#     dest: /etc/apt/sources.list.d/testing.list
-#     mode: "0644"
 
-# - name: make sure stable has higher priority than testing
-#   copy:
-#     src: files/default.pref
-#     dest: /etc/apt/preferences.d/default.pref
-#     mode: "0644"
 
 - name: Run the equivalent of "apt dist-upgrade"
   apt:
@@ -16,14 +6,11 @@
     upgrade: dist
   notify: reboot and wait
 
-- name: install group packages
+- name: install new packages
   apt:
-    name: "{{group_required_packages}}"
+    name: "{{all_requried_packages + os_required_packages + host_required_packages}}"
     state: latest
   notify: reboot and wait
 
-- name: install host packages
-  apt:
-    name: "{{host_required_packages}}"
-    state: latest
-  notify: reboot and wait
+- name: Reboot if any packages were installed.
+  meta: flush_handlers

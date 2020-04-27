@@ -1,4 +1,5 @@
 
 
-host_required_packages: []
-group_required_packages: []
+host_packages: []
+all_packages: []
+os_packages: []

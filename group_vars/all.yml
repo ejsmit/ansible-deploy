@@ -2,33 +2,51 @@
 
 timezone: Europe/London
 
+# Packages to install
+all_packages:
+  - python3
+  - python3-pip
+  - python3-apt
+  - mc
+  - acl
+  - lua5.2
+  - tmux
+  - git
+  - wget
+  - curl
+  - ca-certificates
+  - apt-transport-https
+  - software-properties-common
 
 
-# mail setup.
+# role: email
 mail_account: gandi
 mail_server: mail.gandi.net
 mail_port: 587
-
 mail_from: "{{hostname}}@{{private_my_mail_domain}}"
 mail_domain: "{{private_my_mail_domain}}"
 mail_username: "{{private_my_mail_username}}"
 mail_password: "{{private_my_mail_password}}"
-
 mail_root_email: "{{private_my_email}}"
 mail_default_email: "{{private_my_email}}"
 
 
-# backup setup
+# role: restic-backup
 b2_account_id:  "{{private_b2_account_id}}"
 b2_account_key: "{{private_b2_account_key}}"
 restic_password: "{{private_restic_password}}"
-restic_repository: "b2:ejsmit-restic"
+restic_repository: "b2:ejsmit-{{hostname}}-restic"
 
-restic_version: "0.9.5"
-restic_arch: "linux_arm"
-
-
-# certbot
+# role: certbot-gandi-dns
 gandi_api_token: "{{private_gandi_api_token}}"
 certbot_admin_email: "{{private_certbot_admin_email}}"
 certbot_domains: "{{private_certbot_domains}}"
+
+# role: dotfiles
+dotfiles_project: ejsmit/dotfiles
+fresh_install_url: https://raw.githubusercontent.com/ejsmit/fresh/master/install.sh
+
+
+# some defaults in case they are not later overridden.  Ignore them here.
+host_packages: []
+os_packages: []

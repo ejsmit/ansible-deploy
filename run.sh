@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Assumes the use of deploy username and saved password
+
 if [ ! -f ~/.private/ansible/vault_password.txt ] ; then
     echo 'ERROR: private files not available'
     exit 1

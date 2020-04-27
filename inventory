@@ -2,33 +2,54 @@
 localhost             ansible_connection=local
 
 
-[winubuntu]
+[wsl]
 sauron.local
 
 
 [kubuntu]
 gandalf.local
+radagast.local
+morgoth.local
 
 
-# name can be used by a variety of playbooks.  bootstrap playbook should rename
-# host to something more unique.
-[raspberrypi_generic]
-raspberrypi.local
-
-
-[raspberrypi_servers]
+[raspbian]
 gollum.local
 smaug.local
-#frodo.local
+# gimli.local
+thorin.local
+
+
+
+
+
+
+# used to determine default software packages to install
+
+[servers]
+morgoth.local
+gollum.local
+smaug.local
 gimli.local
-glaurung.local
+thorin.local
+
+[desktops]
+radagast.local
+gandalf.local
 
 
-[ubuntucore_servers]
-#example.local
+
+# Force python 3 on clients
 
 [python3_hosts]
 gandalf.local
+radagast.local
+morgoth.local
 
 [python3_hosts:vars]
-ansible_python_interpreter=/usr/bin/python3
+#ansible_python_interpreter=/usr/bin/python3
+
+
+# New image.  bootstrap playbook should rename host to something more unique.
+
+[raspberrypi_generic]
+raspberrypi.local

@@ -2,5 +2,4 @@
 
 
 ansible-vault encrypt  $1 \
-    --vault-password-file ~/.private/vault_password.txt
-    
+    --vault-password-file ~/.private/ansible/vault_password.txt

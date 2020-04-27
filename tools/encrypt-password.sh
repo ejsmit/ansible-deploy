@@ -17,7 +17,7 @@ hash=`/usr/bin/python -c "from passlib.hash import sha512_crypt; print sha512_cr
 
 
 ansible-vault encrypt_string "$hash" --name $1_password_hash  \
-    --vault-password-file ~/.private/vault_password.txt  >> $3
+    --vault-password-file ~/.private/ansible/vault_password.txt  >> $3
 
 ansible-vault encrypt_string "$2" --name $1_password  \
-    --vault-password-file ~/.private/vault_password.txt  >> $3
+    --vault-password-file ~/.private/ansible/vault_password.txt  >> $3

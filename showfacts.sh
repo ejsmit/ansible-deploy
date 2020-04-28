@@ -9,4 +9,4 @@ hostname=$1
 user=deploy
 
 # use -v or -vvv for debugging
-ansible $hostname -v -i inventory -u $user -m setup | less
+ansible $hostname -v  -u $user -m setup | less

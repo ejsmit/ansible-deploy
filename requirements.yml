@@ -1,0 +1,11 @@
+---
+roles:
+  - name: nickjj.docker
+    version: v1.9.2
+  - name: geerlingguy.docker
+    version: 2.7.0
+
+
+collections:
+  - name: geerlingguy.k8s
+    version: 0.9.3

@@ -2,10 +2,14 @@
 
 ## Requirements
 
+- ansible latest version, install from ppa, not from default package repo.
 - python
 - ssh-copy-id
 - ~/.private/vault_password.txt,  dir 700, files 600, even better if encrypted
 directory using encfs, gocryptfs, cryfs, etc.
+- `ansible-galaxy install -r requirements.yml` (not implemented at time of writing this)
+- `ansible-galaxy role install -r requirements.yml`
+- `ansible-galaxy collection install -r requirements.yml`
 
 ## bootstrap
 

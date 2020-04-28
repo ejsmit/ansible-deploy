@@ -20,5 +20,5 @@ hostname=""
 [ "$2" ] && hostname="-e host=$2"
 
 # use -v or -vvv for debugging
-ansible-playbook $ymlfile -v -i inventory $hostname \
+ansible-playbook $ymlfile -v  $hostname \
       --vault-password-file ~/.private/ansible/vault_password.txt

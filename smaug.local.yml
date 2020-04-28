@@ -1,5 +1,8 @@
 # smaug.local
 # assume raspbian base image
+# assume pi-server-setup completed successfully.
+
+
 
 - name: a playbook to configure smaug.local
   hosts: smaug.local
@@ -14,56 +17,22 @@
   handlers:
   - include: handlers/reboot.yml
 
+  roles:
+    - nextcloud-client-tools
+    - certbot-gandi-dns
+    - restic-backups
+    - pihole
+
   tasks:
 
 
-
-# --------------------------
-#   various roles
-# --------------------------
-
-#  - name: Install and configure dotfiles
-#    block:
-#    - name: install dotfiles
-#      include_role:
-#        name: dotfiles
-#    become_user: "{{default_user}}"
-
-
-  - name: Install and configure restic backups
-    include_role:
-      name: restic-backups
-
-  - name: Install and configure certbot
-    include_role:
-      name: certbot-gandi-dns
-
-
-
-
-# --------------------------
-#   nightly reboots
-# --------------------------
-
   - cron:
-      name: "Auto reboot"
+      name: "Auto nightly reboot"
       minute: "15"
       hour: "3"
       job: "/sbin/shutdown -r now"
       cron_file: reboot
       user: root
-
-
-# --------------------------
-#   pihole prep
-# --------------------------
-
-
-  - name: Prepare for pihole installation
-    include_role:
-      name: pihole
-
-
 
 # --------------------------
 #   forced reboot

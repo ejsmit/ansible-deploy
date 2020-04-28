@@ -2,13 +2,11 @@
 
 - name: Install email packages
   apt:
-    name: "{{packages}}"
-    state: latest
-  vars:
-    packages:
+    name:
       - msmtp
       - msmtp-mta
       - bsd-mailx
+    state: latest
 
 
 - name: install root config file

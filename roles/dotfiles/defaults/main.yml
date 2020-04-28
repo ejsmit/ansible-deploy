@@ -1,0 +1,8 @@
+
+
+# group/arch
+default_user: user
+
+# group/all
+dotfiles_project: githubuser/project
+fresh_install_url: get.freshshell.com

@@ -1,18 +1,24 @@
 ---
 
-- name: Create projects folder
-  file:
-    path: "~/projects"
-    state: directory
-    mode: "0755"
 
-- name: Checkout dotfiles project from github
-  git:
-    repo: https://github.com/ejsmit/dotfiles.git
-    dest: "~/projects/dotfiles"
-    depth: 1
-  register: dotfiles_updated
+# start block for become default user
+- block:
+# dashes 4 indent inside block
 
-- name: Deploy dotfiles
-  command: "~/projects/dotfiles/bootstrap.sh --force"
-  when: dotfiles_updated.changed
+    - name: Has dotfiles already been installed
+      stat:
+        path: ~/.fresh/build/bin/fresh
+      register: dotfiles_exists
+
+    - name: Update existing dotfiles
+      command: ~/bin/fresh update
+      when: dotfiles_exists.stat.exists
+
+    - name: Deploy dotfiles
+      shell: FRESH_LOCAL_SOURCE={{ dotfiles_project | quote }} FORCE_YES_I_KNOW_I_AM_STUPID_AND_THIS_IS_DANGEROUS=true bash -c "`curl -sL {{ fresh_install_url }}`"
+      when: not dotfiles_exists.stat.exists
+
+
+
+# end block for become default user (2 indent)
+  become_user: "{{default_user}}"

@@ -1,30 +1,21 @@
 ---
 
-- name: Check if restic binary exists
-  stat:
-    path: /usr/local/bin/{{restic_binary}}
-  register: restic_result
+- name: Install restic backup
+  apt:
+    name: restic
+    state: latest
 
-- name: Download restic from github if it does not exist
-  get_url:
-    url: "https://github.com/restic/restic/releases/download/v{{restic_version}}/{{restic_binary}}.bz2"
-    dest: "/usr/local/bin/"
-  when: restic_result.stat.exists == False
-
-- name: extract restic
-  command: bunzip2 -f /usr/local/bin/{{restic_binary}}.bz2
-  when: restic_result.stat.exists == False
-
-- name: chmod +x restic
-  file:
-    dest: /usr/local/bin/{{restic_binary}}
-    mode: "0755"
-  when: restic_result.stat.exists == False
 
 - name: create restic script
   template:
-    src: restic
-    dest: /usr/local/bin/restic
+    src: restic-backup.sh
+    dest: /usr/local/bin/restic-backup.sh
+    mode: "0755"
+
+- name: create restic restore latest to home script
+  template:
+    src: restic-restore-latest-to-home.sh
+    dest: /usr/local/bin/restic-restore-latest-to-home.sh
     mode: "0755"
 
 - name: install restic password file
@@ -46,9 +37,10 @@
     mode: 0755
 
 - name: install backup script
-  template:
+  copy:
     src: backup.sh
     dest: /etc/mybackup/backup.sh
+    mode: 0755
 
 - name: install backup conf
   template:
@@ -67,11 +59,12 @@
     name: "daily backup"
     minute: "30"
     hour: "5"
+    weekday: "{{backup_day_of_week}}"
     job: "/etc/mybackup/backup.sh >/dev/null 2>&1"
     cron_file: mybackup
     user: root
 
-- name: install weekly purge cron script
+- name: install weekly prune cron script
   copy:
     src: files/restic-backup-prune.sh
     dest: /etc/cron.weekly/

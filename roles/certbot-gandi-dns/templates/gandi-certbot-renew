@@ -10,5 +10,5 @@
 cd /etc/letsencrypt
 tar cJf ~/letsencrypt.tar.xz live/ --dereference
 cd ~
-rclone copy ~/letsencrypt.tar.xz  nextcloud-{{nextcloud_user}}:letsencrypt/ --no-check-certificate --verbose
+rclone copy ~/letsencrypt.tar.xz  nextcloud-{{nextcloud_user}}:letsencrypt/
 rm ~/letsencrypt.tar.xz

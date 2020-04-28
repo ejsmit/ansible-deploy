@@ -1,14 +1,12 @@
 ---
 
+
+# group/all (from private)
 mail_account: accountname
 mail_server: mail.isp.com
 mail_port: 587
 mail_from: me@my.email.address
 mail_username: me@my.email.address
 mail_password: lots_of_random_characters
-
 mail_root_email: me@my.email.address
 mail_default_email: me@my.email.address
-
-mail_install_users:
-  - username

@@ -14,4 +14,4 @@ rm -rf ${BACKUP_DEST}/*
 run-parts --report /etc/mybackup/scripts.d
 
 # now backup everything in BACKUP_DEST offsite
-/usr/local/bin/restic backup ${BACKUP_DEST} | tee -a ${BACKUP_LOG}
+/usr/local/bin/restic-backup.sh backup ${BACKUP_DEST} | tee -a ${BACKUP_LOG}

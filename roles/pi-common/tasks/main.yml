@@ -30,6 +30,8 @@
     path: /boot/cmdline.txt
     regexp: ' console=serial0,115200'
     replace: ''
+  notify: reboot and wait
+
 
 - name: stop trigger happy hotkey service
   systemd:
@@ -59,6 +61,7 @@
     regexp: '^dtoverlay='
     line: 'dtoverlay=disable-wifi,disable-bt'
   when: disable_wifi_bt == true
+  notify: reboot and wait
 
 - name: stop hciaurt when wifi isdisabled
   systemd:
@@ -66,3 +69,6 @@
     state: stopped
     enabled: false
   when: disable_wifi_bt == true
+
+- name: reboot if we need to
+  meta: flush_handlers

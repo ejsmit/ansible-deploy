@@ -8,7 +8,7 @@
 
 - name: install new packages
   apt:
-    name: "{{all_requried_packages + os_required_packages + host_required_packages}}"
+    name: "{{all_packages + os_packages + host_packages}}"
     state: latest
   notify: reboot and wait
 

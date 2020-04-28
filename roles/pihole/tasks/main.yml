@@ -1,5 +1,14 @@
 
 
+# dont actually install it here.  I only make sure my ipv6 address
+# is not constantly randomised, and then I restore the latest
+# configuration backups.
+
+# You then have to install and configure pihole yourself using the previous
+# configration as guide.   some files can just be copied over, others
+# you need to log into the user interface to change it.
+
+
 
 
 - name: ipv6 hardware based address
@@ -12,12 +21,5 @@
   notify: reboot and wait
 
 
-
-
-- name: add custom dns cnames configuration
-  template:
-    src: 90-pihole-custom-dns.conf
-    dest: /etc/dnsmasq.d/90-pihole-custom-dns.conf
-    owner: root
-    group: root
-    mode: 0644
+- name: restore latest pihole backup
+  command: /usr/local/bin/restic-restore-latest-to-home.sh

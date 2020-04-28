@@ -1,8 +1,9 @@
 ---
 
-
-
+# group/all (from private)
 certbot_admin_email: email@example.com
 certbot_domains: []
+gandi_api_token: ABCDEFGHIJ
 
+# vault/nextcloud
 nextcloud_user: user

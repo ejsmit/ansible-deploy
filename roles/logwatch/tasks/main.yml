@@ -31,6 +31,9 @@
     state: directory
     mode: 0755
 
+
+
+
 - name: install logwatch config
   copy:
     src: files/logwatch.conf
@@ -48,6 +51,9 @@
     src: files/ignore.conf
     dest: /etc/logwatch/conf/ignore.conf
     mode: "0664"
+
+
+
 
 - name: install logwatch scripts
   copy:

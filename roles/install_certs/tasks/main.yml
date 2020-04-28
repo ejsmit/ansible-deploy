@@ -1,0 +1,24 @@
+
+
+
+- name: create install cert scripts
+  template:
+    src: install_certs
+    dest: /usr/local/bin/install_certs
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Add cron job for cert install.  Weekly monday morning
+  cron:
+    name: Install certificates from nextcloud.
+    job: /usr/local/bin/install_certs
+    hour: "1"
+    minute: "0"
+    weekday: "1"
+    user: root
+    cron_file: install_certs
+
+
+- name: manually run script to install certs
+  command: /usr/local/bin/install_certs

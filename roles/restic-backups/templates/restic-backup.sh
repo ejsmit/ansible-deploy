@@ -6,4 +6,4 @@ if ! [ $(id -u) = 0 ]; then
 fi
 
 source {{restic_environment_file}}
-/usr/local/bin/{{restic_binary}} "$@"
+restic --no-cache "$@"

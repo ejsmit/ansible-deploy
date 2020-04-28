@@ -3,16 +3,14 @@
 
 - name: install unattended upgrade packages
   apt:
-    name:  "{{packages}}"
-    state: latest
-  vars:
-    packages:
+    name:
       - unattended-upgrades
       - apt-listchanges
+    state: latest
 
 
 - name: copy 50-unattended-upgrades (Raspbian)
-  template:
+  file:
     src: '50unattended-upgrades-raspbian'
     dest: '/etc/apt/apt.conf.d/50unattended-upgrades'
   when: ansible_lsb.id == 'Raspbian'

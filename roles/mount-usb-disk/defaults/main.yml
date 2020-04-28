@@ -1,3 +1,4 @@
 ---
 
+# override per host when needed
 external_disk: "data"

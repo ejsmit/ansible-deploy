@@ -1,21 +1,23 @@
 ---
 
-restic_version: "0.9.1"
-restic_arch: "linux_arm"
 
-restic_binary: restic_{{restic_version}}_{{restic_arch}}
-
-
-b2_account_id:  123456789
-b2_account_key: 1234567890abcdef
-
-restic_repository: b2:mybucket
-restic_password_file: /root/.restic-password
-restic_password: mypassword
-
-restic_environment_file: /root/.restic-environment
-
-backup_destination: /var/backup/mybackup
-
+# override per host
 backup_scripts:
   - 00date
+
+# usually no need to override, except by host if required
+backup_day_of_week: "*"
+
+# group/arch
+default_user: user
+
+# group/all (from private)
+restic_password: mypassword
+b2_account_id:  123456789
+b2_account_key: 1234567890abcdef
+restic_repository: b2:mybucket
+
+# some defaults - no need to ever override
+restic_environment_file: /root/.restic-environment
+restic_password_file: /root/.restic-password
+backup_destination: /var/backup/mybackup

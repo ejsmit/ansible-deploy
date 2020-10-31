@@ -1,6 +1,6 @@
 
 - name: a playbook to update a raspberry pi
-  hosts: "{{ host | default('raspberrypi') }}"
+  hosts: "{{ host | default('servers') }}"
   remote_user: deploy
   become: true
 
@@ -10,13 +10,14 @@
   roles:
     - deb-packages
 
-
   tasks:
+
+
 
 # --------------------------
 #   forced reboot
 # --------------------------
 
-  - debug: msg="Trigger Reboot"
-    notify: reboot and wait
-    changed_when: true
+  # - debug: msg="Trigger Reboot"
+  #   notify: reboot and wait
+  #   changed_when: true

@@ -6,6 +6,6 @@
 
 # End of https://www.gitignore.io/api/ansible
 
-# Downloaded roles& collections. My own roles are versioned in roles/ and collections/
+# Downloaded roles & collections. My own roles are versioned in roles/ and collections/
 /ansible_roles/
 /ansible_collections/

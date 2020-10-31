@@ -1,3 +1,8 @@
+[all:vars]
+
+# see bottom of file to use python2
+
+
 [local]
 localhost             ansible_connection=local
 
@@ -9,47 +14,27 @@ sauron.local
 [kubuntu]
 gandalf.local
 radagast.local
-morgoth.local
 
 
 [raspbian]
 gollum.local
 smaug.local
-# gimli.local
-thorin.local
+# thorin.local
 
 
 
-
-
-
-# used to determine default software packages to install
 
 [servers]
-morgoth.local
 gollum.local
 smaug.local
-gimli.local
-thorin.local
+# thorin.local
+
 
 [desktops]
 radagast.local
 gandalf.local
 
 
-
-# Force python 3 on clients
-
-[python3_hosts]
-gandalf.local
-radagast.local
-morgoth.local
-
-[python3_hosts:vars]
-#ansible_python_interpreter=/usr/bin/python3
-
-
 # New image.  bootstrap playbook should rename host to something more unique.
-
 [raspberrypi_generic]
 raspberrypi.local

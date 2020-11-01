@@ -5,7 +5,6 @@
   apt:
     name:
       - unattended-upgrades
-      - apt-listchanges
     state: latest
 
 
@@ -38,27 +37,4 @@
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     regexp: 'APT::Periodic::AutocleanInterval'
     line: 'APT::Periodic::AutocleanInterval "7";'
-    state: present
-
-
-
-- name: configure listchanges.conf - frontend=pager
-  lineinfile:
-    dest: /etc/apt/listchanges.conf
-    regexp: "frontend="
-    line: "frontend=pager"
-    state: present
-
-- name: configure apt-listchanges.conf - which=both
-  lineinfile:
-    dest: /etc/apt/listchanges.conf
-    regexp: "which="
-    line: "which=both"
-    state: present
-
-- name: configure apt-listchanges.conf - email_address=root
-  lineinfile:
-    dest: /etc/apt/listchanges.conf
-    regexp: "email_address="
-    line: "email_address=root"
     state: present

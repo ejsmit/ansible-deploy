@@ -9,7 +9,7 @@
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vault_vars/{{ host }}.yml
-    - vault_vars/nextcloud.yml
+
 
 
   handlers:
@@ -18,12 +18,13 @@
   roles:
     - pi-common
     - deb-packages
-    - dotfiles
     - email
-    - unattended-upgrades
-    - logwatch
+    - pi-unattended-upgrades
+    - dotfiles
 
   tasks:
+
+# nothing here for now....
 
 
 # --------------------------

@@ -1,6 +1,6 @@
 
 - name: a playbook to update a raspberry pi
-  hosts: "{{ host | default('servers') }}"
+  hosts: "{{ host | default('pi-servers') }}"
   remote_user: deploy
   become: true
 
@@ -9,6 +9,7 @@
 
   roles:
     - deb-packages
+    - dotfiles
 
   tasks:
 

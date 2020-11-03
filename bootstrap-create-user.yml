@@ -1,0 +1,8 @@
+---
+
+- name: a playbook to bootstrap a generic host with a deploy user
+  hosts: '{{host}}'
+  become: true
+
+  roles:
+    - deploy-user

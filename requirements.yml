@@ -1,11 +1,10 @@
 ---
 roles:
-  - name: nickjj.docker
-    version: v1.9.2
   - name: geerlingguy.docker
-    version: 2.7.0
-
+#    version: 2.7.0
+  - name: geerlingguy.docker_arm
+#    version: 3.1.0
 
 collections:
   - name: geerlingguy.k8s
-    version: 0.9.3
+#    version: 0.9.3

@@ -24,7 +24,7 @@ smaug.local
 
 
 
-[pi-servers]
+[pi_servers]
 gollum.local
 smaug.local
 # thorin.local

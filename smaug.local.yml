@@ -1,9 +1,6 @@
 # smaug.local
 # assume raspbian base image
 # assume pi-server-setup completed successfully.
-
-
-
 - name: a playbook to configure smaug.local
   hosts: smaug.local
   remote_user: deploy
@@ -11,8 +8,6 @@
 
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
-    - vault_vars/smaug.local.yml
-    - vault_vars/nextcloud.yml
 
   handlers:
   - include: handlers/reboot.yml

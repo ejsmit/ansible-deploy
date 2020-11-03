@@ -4,17 +4,6 @@ hostname: smaug
 hostname_fqdn: smaug.local
 
 
-
-
-
-# pihole custom dns settings
-local_domain: home
-local_dns_cnames:
-  - nextcloud.smit.org.uk,gollum.home
-
-
-host_required_packages: []
-
 backup_scripts:
   - 00date
   - 90pihole

@@ -1,0 +1,33 @@
+---
+
+- name: change hostname
+  command: hostnamectl set-hostname {{new_hostname}}
+
+- name: update hosts file
+  replace:
+    path: /etc/hosts
+    regexp: '{{orig_hostname}}'
+    replace: '{{new_hostname}}'
+
+
+- name: reboot
+  async: 1
+  poll: 0
+  ignore_errors: true
+  shell: sleep 5 && shutdown -r now
+
+
+# cannot use my preferred wait_for_connection because the host is renamed
+# and we now need to specify a new name to wait for.
+- name: wait for remote
+  ansible.builtin.wait_for:
+    timeout: 300
+    delay: 15
+    connect_timeout: 5
+    host: "{{new_hostname}}.local"
+    port: 22
+
+- name: pause a bit
+  pause:
+    prompt: waiting a few more seconds to make sure server is really ready
+    seconds: 5

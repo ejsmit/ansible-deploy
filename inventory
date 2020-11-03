@@ -23,11 +23,16 @@ smaug.local
 
 
 
-
 [pi_servers]
 gollum.local
 smaug.local
 # thorin.local
+
+
+[nextcloud]
+smaug.local
+gollum.local
+
 
 
 [desktops]
@@ -35,6 +40,6 @@ radagast.local
 gandalf.local
 
 
-# New image.  bootstrap playbook should rename host to something more unique.
+# bootstrap playbook should rename host to something more unique.
 [raspberrypi_generic]
 raspberrypi.local

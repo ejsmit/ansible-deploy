@@ -1,0 +1,22 @@
+
+
+# - debug: msg="{{item.name}}"
+
+- name: check if target file exists
+  stat:
+    path: "{{item.target}}"
+  register: installer_target_exists
+
+
+- name: "download installer for {{item.name}}"
+  get_url:
+    url: "{{item.url}}"
+    dest: "{{item.dest}}"
+  when: installer_target_exists.stat.exists == false
+
+
+- name: "run installer"
+  shell: "{{item.command}}"
+  when: installer_target_exists.stat.exists == false
+
+# now remove the installer

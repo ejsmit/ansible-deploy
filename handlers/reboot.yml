@@ -8,16 +8,19 @@
   ignore_errors: true
   shell: sleep 5 && shutdown -r now
 
+# - name: wait for remote
+#   wait_for:
+#     timeout: 300
+#     delay: 15
+#     connect_timeout: 5
+#     host: "{{inventory_hostname}}"
+#     port: 22
+#   delegate_to: localhost
+
 - name: wait for remote
   listen: "reboot and wait"
-  become: false
-  wait_for:
-    timeout: 300
+  wait_for_connection:
     delay: 15
-    connect_timeout: 5
-    host: "{{inventory_hostname}}"
-    port: 22
-  delegate_to: localhost
 
 - name: pause a bit
   listen: "reboot and wait"

@@ -8,6 +8,7 @@
 
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
+    - vars/nextcloud-client.vault.yml
 
   handlers:
   - include: handlers/reboot.yml

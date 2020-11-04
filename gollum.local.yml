@@ -7,79 +7,30 @@
 
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
-    - vault_vars/gollum.local.yml
-    - vault_vars/nextcloud.yml
+    - vars/minio.vault.yml
+    - vars/samba.vault.yml
+    - vars/nextcloud-client.vault.yml
+    - vars/docker.yml
 
   handlers:
   - include: handlers/reboot.yml
 
+  collections:
+    - ejsmit.containers
+
+  roles:
+    - mount-usb-disk
+    - nextcloud-client-tools
+    - install_certs
+    - geerlingguy.docker_arm
+    # - docker-common
+    # - docker-samba-pi
+    # - docker-nextcloud
+    # - docker-wallabag
+    # - docker-minio
+
+
   tasks:
-
-# --------------------------
-#   Mount disk
-# --------------------------
-
-  # - name: mount external disk
-  #   include_role:
-  #     name: mount-usb-disk
-
-
-# --------------------------
-#   various roles
-# --------------------------
-
-  # - name: Install and configure dotfiles
-  #   block:
-  #   - name: install dotfiles
-  #     include_role:
-  #       name: dotfiles
-  #   become_user: "{{default_user}}"
-  #
-  #
-  # - name: Install and configure nextcloud client tools
-  #   include_role:
-  #     name: nextcloud-client-tools
-  #
-  # - name: Install and configure restic backups
-  #   include_role:
-  #     name: restic-backups
-  #
-
-# --------------------------
-#   docker, nfs and samba
-# --------------------------
-
-  # - name: Install docker
-  #   include_role:
-  #     name: docker
-
-  # - name: Install docker-management
-  #   include_role:
-  #     name: docker-management
-
-  # - name: Install samba
-  #   include_role:
-  #     name: docker-samba-pi
-
-  # - name: Install postgresql
-  #   include_role:
-  #     name: docker-postgresql
-
-  # - name: Install role kubernetes
-  #   include_role:
-  #     name: kubernetes
-
-  # - name: Install role kubernetes-management
-  #   include_role:
-  #     name: kubernetes-management
-
-  # - name: Install role redis
-  #   include_role:
-  #     name: kubernetes-redis
-
-  - name: Install role nextcloud
-    include_role:
-      name: kubernetes-nextcloud
 
 
 # --------------------------

@@ -4,9 +4,7 @@ hostname: gandalf
 hostname_fqdn: gandalf.local
 
 
+host_packages:
+  - xserver-xorg-input-synaptics
 
-
-
-
-# mail_install_users:
-#   - pi
+docker_users: "{{ [default_user] }}"

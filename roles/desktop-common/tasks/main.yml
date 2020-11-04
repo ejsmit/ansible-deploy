@@ -1,0 +1,58 @@
+
+- name: add a few ppa repositories
+  apt_repository:
+    repo: "{{item}}"
+    state: present
+  with_items: "{{desktop_packages_ppa}}"
+
+- name: Run the equivalent of "apt dist-upgrade"
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: make sure prereqs are installed
+  apt:
+    name:
+      - snapd
+    state: latest
+
+
+
+
+- name: install packages
+  apt:
+    name: "{{desktop_packages}}"
+    state: latest
+
+- name: install snaps
+  snap:
+    name: "{{item.name}}"
+    channel: "{{item.channel | default('stable') }}"
+    classic: "{{item.classic | default('yes') }}"
+  loop: "{{desktop_packages_snaps}}"
+
+- include_tasks: package-installer.yml
+  loop: "{{desktop_packages_deb}}"
+
+
+# start block for become default user
+- block:
+# dashes 4 indent inside block
+    - include_tasks: package-installer.yml
+      with_items: "{{desktop_packages_installer_user}}"
+# end block for become default user (2 indent)
+  become_user: "{{default_user}}"
+
+
+
+- name: check dns config
+  stat:
+    path: "/etc/resolv.conf"
+  register: resolv_conf
+
+- name: relink resolv.conf to the correct config
+  file:
+    src: "../run/systemd/resolve/resolv.conf"
+    dest: /etc/resolv.conf
+    state: link
+  when: resolv_conf.stat.islnk is defined and resolv_conf.stat.lnk_target == '../run/systemd/resolve/stub-resolv.conf'

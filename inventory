@@ -29,12 +29,6 @@ smaug.local
 # thorin.local
 
 
-[nextcloud]
-smaug.local
-gollum.local
-
-
-
 [desktops]
 radagast.local
 gandalf.local

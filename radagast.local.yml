@@ -2,7 +2,7 @@
 # Kubuntu
 
 - name: a playbook to configure gandalf.local
-  hosts: gandalf.local
+  hosts: radagast.local
   remote_user: deploy
   become: true
 

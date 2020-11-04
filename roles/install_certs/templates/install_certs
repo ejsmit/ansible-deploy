@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rclone copy nextcloud-{{nextcloud_user}}:letsencrypt/ ~  --verbose
+rclone copy nextcloud-{{nextcloud_user}}:letsencrypt/ ~
 
 cd /etc/letsencrypt
 tar xJf ~/letsencrypt.tar.xz

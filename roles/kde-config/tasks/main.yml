@@ -13,3 +13,31 @@
     section: Users
     option: HideShells
     value: /usr/sbin/nologin,/sbin/nologin,/bin/false
+
+
+
+# start block for become default user
+- block:
+# dashes 4 indent inside block
+
+
+
+    - name: Latte-dock auto startup
+      copy:
+        src: /usr/share/applications/org.kde.latte-dock.desktop
+        dest: ~/.config/autostart/
+        owner: "{{default_user}}"
+        group: "{{default_user}}"
+
+    - name: yakuake auto startup
+      copy:
+        src: /usr/share/applications/org.kde.yakuake.desktop
+        dest: ~/.config/autostart/
+        owner: "{{default_user}}"
+        group: "{{default_user}}"
+
+
+
+
+# end block for become default user (2 indent)
+  become_user: "{{default_user}}"

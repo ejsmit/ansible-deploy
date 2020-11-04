@@ -45,12 +45,16 @@ desktop_packages:
   - cantata
 # other
   - qemu-user
-  - ansible
+  # - ansible
   - virt-manager
   - ssh-askpass
   - virt-viewer
   - qemu-kvm
   - bridge-utils
+
+# calibre
+
+
 
 
 desktop_packages_snaps:
@@ -71,6 +75,9 @@ desktop_packages_snaps:
   #   options: --classic
   # - name: android-studio
   #   options: --classic
+
+  # - name: scrcpy
+
 
 
 

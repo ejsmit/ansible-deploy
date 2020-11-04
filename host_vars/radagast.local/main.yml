@@ -1,0 +1,9 @@
+---
+
+hostname: radagast
+hostname_fqdn: radagast.local
+
+
+host_packages: []
+
+docker_users: "{{ [default_user] }}"

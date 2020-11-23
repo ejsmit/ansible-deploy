@@ -1,0 +1,24 @@
+
+
+nextcloud_network: nextcloud_net
+
+nextcloud_datadir: /media/disk1/nextcloud
+nextcloud_backupsdir: /media/disk2/dailybackups
+
+
+
+nextcloud_mysql_image: ejsmit/mariadb:10.4
+nextcloud_mysql_data_volume: /media/disk3/nextcloud-db
+nextcloud_mysql_root_password: thisisarootpassword
+nextcloud_mysql_database: nextcloud
+nextcloud_mysql_user: nextcloud
+nextcloud_mysql_password: thisisanextcloudpassword
+
+nextcloud_mail_domain: example.org
+
+
+
+nextcloud_redis_image: redis:latest
+
+
+nextcloud_image: nextcloud:19-apache

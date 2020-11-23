@@ -13,5 +13,4 @@ echo "$1: '$2' in $3"
 read -p "Press enter to continue"
 
 echo "$1_name: `basename $2`"  >> $3
-cat $2 |  ansible-vault encrypt_string  --stdin-name $1 \
-    --vault-password-file ~/.private/ansible/vault_password.txt  >> $3
+cat $2 |  ansible-vault encrypt_string  --stdin-name $1   >> $3

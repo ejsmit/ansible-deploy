@@ -13,11 +13,8 @@ fi
 
 echo "$1: '$2' in $3"
 
-hash=`/usr/bin/python -c "from passlib.hash import sha512_crypt; print sha512_crypt.using(rounds=5000).hash('$2')"`
+hash=`mkpasswd -m sha-512 $2`
 
+ansible-vault encrypt_string "$hash" --name $1_password_hash  >> $3
 
-ansible-vault encrypt_string "$hash" --name $1_password_hash  \
-    --vault-password-file ~/.private/ansible/vault_password.txt  >> $3
-
-ansible-vault encrypt_string "$2" --name $1_password  \
-    --vault-password-file ~/.private/ansible/vault_password.txt  >> $3
+ansible-vault encrypt_string "$2" --name $1_password  >> $3

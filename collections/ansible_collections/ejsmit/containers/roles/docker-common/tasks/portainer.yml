@@ -1,0 +1,27 @@
+- name: Create a portainer data volume
+  docker_volume:
+    name: "{{portainer_data_volume}}"
+
+
+
+- name: Portainer management interface
+  docker_container:
+    name: "portainer"
+    image: "{{ portainer_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    networks:
+      - name: frontend_net
+    volumes:
+      - "{{portainer_data_volume}}:/data"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    # ports:
+    #   - 9000:9000
+    labels:
+      traefik.enable: "true"
+      traefik.http.middlewares.portainerpath.stripprefix.prefixes: "/portainer,/portainer/"
+      traefik.http.routers.portainer.rule: "PathPrefix(`/portainer`) && Host(`{{portainer_hostname}}`)"
+      traefik.http.routers.portainer.middlewares: portainerpath
+      traefik.http.routers.portainer.entrypoints: http
+      traefik.http.services.portainer.loadbalancer.server.port: "9000"

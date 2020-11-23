@@ -17,14 +17,14 @@ radagast.local
 
 
 [raspbian]
-gollum.local
+gollum.home
 smaug.local
 # thorin.local
 
 
 
 [pi_servers]
-gollum.local
+gollum.home
 smaug.local
 # thorin.local
 

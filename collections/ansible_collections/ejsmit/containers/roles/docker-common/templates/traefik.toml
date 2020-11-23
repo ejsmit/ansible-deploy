@@ -1,0 +1,28 @@
+
+[log]
+  level = "INFO"
+
+[api]
+  insecure = true
+  #debug = true
+
+[providers]
+  [providers.file]
+    watch = true
+    directory = "/configuration/"
+
+[entryPoints]
+  [entryPoints.traefik]
+  address = ":8080"
+
+  [entryPoints.http]
+  address = ":80"
+
+  [entryPoints.https]
+  address = ":443"
+
+
+
+[providers.docker]
+  exposedByDefault = false
+  network = "frontend_net"

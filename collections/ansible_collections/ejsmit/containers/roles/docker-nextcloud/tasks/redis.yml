@@ -1,0 +1,11 @@
+
+
+- name: redis container for nextcloud
+  docker_container:
+    name: "nextcloud-redis"
+    image: "{{ nextcloud_redis_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    networks:
+      - name: "{{nextcloud_network}}"

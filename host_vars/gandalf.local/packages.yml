@@ -7,12 +7,14 @@ desktop_packages_ppa:
   - ppa:pbek/qownnotes
   - ppa:phoerious/keepassxc
   # - ppa:ansible/ansible
+  - ppa:mank319/go-for-it
 
 
 desktop_packages:
 # system
   - duplicity
   - deja-dup
+  - kbackup
   - yakuake
   - latte-dock
   - snapd
@@ -24,6 +26,12 @@ desktop_packages:
   - software-properties-common
   - lua5.2
   - seahorse     # useful want skype gebruik gnome-keyring
+  - htop
+  - powertop
+  - kate
+  - kwrite
+  - xrdp
+  - whois # for mkpasswd
 # dev
   - build-essential
   - git
@@ -34,15 +42,20 @@ desktop_packages:
   - firefox
   - xul-ext-lightning
   - nextcloud-client
+  - nextcloud-client-dolphin
   - keepassxc
   - libreoffice
   - qownnotes
   - kwalletcli
+  - go-for-it
 # media
   - gpodder
   - vlc
   - mpv
   - cantata
+  - digikam
+  # - kdenlive
+  # - audacity
 # other
   - qemu-user
   - ansible
@@ -51,6 +64,10 @@ desktop_packages:
   - virt-viewer
   - qemu-kvm
   - bridge-utils
+  - plasma-workspace-wallpapers
+  - hplip-gui
+  - skanlite
+
 
 
 desktop_packages_snaps:
@@ -73,7 +90,7 @@ desktop_packages_snaps:
   #   options: --classic
 
 
-
+# scrcpy
 
 
 

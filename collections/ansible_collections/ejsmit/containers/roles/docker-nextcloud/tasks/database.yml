@@ -1,0 +1,49 @@
+
+- name: ensure data directory exists
+  file:
+    path: "{{ nextcloud_mysql_data_volume }}"
+    state: directory
+    mode: 0775
+    owner: root
+    group: root
+
+
+- name: mariadb container for nextcloud
+  docker_container:
+    name: "nextcloud-db"
+    image: "{{ nextcloud_mysql_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    networks:
+      - name: "{{nextcloud_network}}"
+    volumes:
+      - "{{ nextcloud_mysql_data_volume }}:/var/lib/mysql"
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--innodb_file_per_table=1"
+      - "--transaction_isolation=READ-COMMITTED"
+      - "--binlog_format=ROW"
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ nextcloud_mysql_root_password }}"
+      MYSQL_DATABASE: "{{ nextcloud_mysql_database }}"
+      MYSQL_USER: "{{ nextcloud_mysql_user }}"
+      MYSQL_PASSWORD: "{{ nextcloud_mysql_password }}"
+      TZ: "{{ timezone }}"
+
+- name: install backup script
+  template:
+    src: nextcloud-db-backup.sh
+    dest: /usr/local/bin/nextcloud-db-backup.sh
+    mode: '0755'
+
+
+- name: schedule daily nextcloud database backup
+  cron:
+    name: "nextcloud nightly database backup"
+    minute: "30"
+    hour: "3"
+    job: "/usr/local/bin/nextcloud-db-backup.sh"
+    cron_file: nextcloud-db-backup
+    user: root

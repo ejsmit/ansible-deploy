@@ -1,7 +1,7 @@
 
 
-- name: a playbook to configure gollum.local
-  hosts: gollum.local
+- name: a playbook to configure gollum.home
+  hosts: gollum.home
   remote_user: deploy
   become: true
 
@@ -10,6 +10,7 @@
     - vars/minio.vault.yml
     - vars/samba.vault.yml
     - vars/nextcloud-client.vault.yml
+    - vars/nextcloud-admin.vault.yml
     - vars/docker.yml
 
   handlers:
@@ -23,9 +24,9 @@
     - nextcloud-client-tools
     - install_certs
     - geerlingguy.docker_arm
-    # - docker-common
+    - docker-common
     # - docker-samba-pi
-    # - docker-nextcloud
+    - docker-nextcloud
     # - docker-wallabag
     # - docker-minio
 

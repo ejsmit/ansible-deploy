@@ -53,4 +53,3 @@ fresh_install_url: https://raw.githubusercontent.com/ejsmit/fresh/master/install
 
 # some defaults in case they are not later overridden.  Ignore them here.
 host_packages: []
-os_packages: []

@@ -12,5 +12,4 @@ fi
 echo "$1: '$2' in $3"
 
 
-ansible-vault encrypt_string "$2" --name $1  \
-    --vault-password-file ~/.private/ansible/vault_password.txt  >> $3
+ansible-vault encrypt_string "$2" --name $1   >> $3

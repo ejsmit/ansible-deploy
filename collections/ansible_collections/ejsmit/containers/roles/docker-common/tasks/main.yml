@@ -1,0 +1,38 @@
+
+
+- name: Clean up docker once per week.
+  cron:
+    name: "Docker cleanup"
+    minute: "0"
+    hour: "2"
+    weekday: "0"
+    job: "docker system prune --all --force > /dev/null 2>&1"
+    cron_file: docker-prune
+    user: root
+
+
+- name: Create frontend network
+  docker_network:
+    name: frontend_net
+
+- name: Create backend network
+  docker_network:
+    name: backend_net
+
+
+
+- name: Traefik as a http reverse proxy
+  include_tasks: traefik.yml
+  when: traefik_enabled
+
+- name: Mail Proxy Container
+  include_tasks: mail.yml
+  when: mail_enabled
+
+- name: Watchtower for auto updates for containers
+  include_tasks: watchtower.yml
+  when: watchtower_enabled
+
+- name: Portainer management UI
+  include_tasks: portainer.yml
+  when: portainer_enabled

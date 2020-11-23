@@ -1,0 +1,15 @@
+
+- name: postfix mail proxy
+  docker_container:
+    name: "smtp"
+    image: "{{ mail_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    networks:
+      - name: "backend_net"
+    env:
+      SERVER_HOSTNAME: "{{mail_server_hostname}}"
+      SMTP_SERVER: "{{mail_server}}"
+      SMTP_USERNAME: "{{mail_username}}"
+      SMTP_PASSWORD: "{{mail_password}}"

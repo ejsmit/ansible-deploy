@@ -1,0 +1,62 @@
+
+- name: ensure traefik conf directory exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0775'
+    owner: root
+    group: root
+  loop:
+    - /srv/traefik
+    - /srv/traefik/conf
+
+- name: copy traefik config
+  template:
+    src: traefik.toml
+    dest: /srv/traefik/traefik.toml
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: copy traefik certificate config
+  template:
+    src: certificates.toml
+    dest: /srv/traefik/conf/certificates.toml
+    mode: '0644'
+    owner: root
+    group: root
+
+
+- name: traefik reverse proxy
+  docker_container:
+    name: traefik
+    image: "{{ traefik_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    networks:
+      - name: frontend_net
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/srv/traefik/traefik.toml:/traefik.toml"
+      - "/srv/traefik/conf:/configuration/"
+      - "/etc/letsencrypt/live/:/etc/letsencrypt/live/:ro"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+
+
+# - name: whoami test service
+#   docker_container:
+#     name: whoami
+#     image: containous/whoami
+#     state: started
+#     restart_policy: unless-stopped
+#     networks_cli_compatible: yes
+#     networks:
+#       - name: frontend_net
+#     labels:
+#       traefik.enable: "true"
+#       traefik.http.routers.whoami.rule: "Host(`whoami.smit.org.uk`)"
+#       traefik.http.routers.whoami.tls: "true"

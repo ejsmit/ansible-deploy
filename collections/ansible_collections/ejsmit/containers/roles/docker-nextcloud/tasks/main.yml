@@ -1,0 +1,54 @@
+
+
+- name: Create nextcloud network
+  docker_network:
+    name: "{{nextcloud_network}}"
+
+- name: ensure nextcloud directory exists
+  file:
+    path: "{{nextcloud_datadir}}"
+    state: directory
+    mode: 0775
+    owner: root
+    group: root
+
+- name: ensure nextcloud html directory exists
+  file:
+    path: "{{nextcloud_datadir}}/html"
+    state: directory
+    mode: 0775
+    owner: www-data
+    group: www-data
+
+- name: ensure nextcloud data directory exists
+  file:
+    path: "{{nextcloud_datadir}}/data"
+    state: directory
+    mode: 0775
+    owner: www-data
+    group: www-data
+
+- name: ensure nextcloud config directory exists
+  file:
+    path: "{{nextcloud_datadir}}/config"
+    state: directory
+    mode: 0775
+    owner: www-data
+    group: www-data
+
+- name: ensure nextcloud backups directory exists
+  file:
+    path: "{{nextcloud_backupsdir}}"
+    state: directory
+    mode: 0775
+    owner: root
+    group: root
+
+- name: Database Container
+  include_tasks: database.yml
+
+- name: Redis Container
+  include_tasks: redis.yml
+
+- name: Nextcloud container
+  include_tasks: nextcloud.yml

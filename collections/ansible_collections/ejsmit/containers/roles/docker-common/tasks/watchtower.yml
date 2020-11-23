@@ -1,0 +1,23 @@
+
+
+- name: Watchtower container auto updater
+  docker_container:
+    name: watchtower
+    image: "{{ watchtower_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    networks:
+      - name: "backend_net"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command:
+      - --schedule "0 0 4 * * *"
+      - --cleanup
+    env:
+      WATCHTOWER_NOTIFICATIONS: email
+      WATCHTOWER_NOTIFICATION_EMAIL_FROM: "{{mail_from}}"
+      WATCHTOWER_NOTIFICATION_EMAIL_TO: "{{mail_default_email}}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: "smtp"
+      WATCHTOWER_NOTIFICATION_EMAIL_DELAY: "30"
+      WATCHTOWER_NO_STARTUP_MESSAGE: "true"

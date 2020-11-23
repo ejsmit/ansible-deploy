@@ -1,0 +1,31 @@
+---
+
+- name: ensure share mount directory exists
+  file:
+    path: "{{ samba_data }}"
+    state: directory
+    mode: 0775
+    owner: root
+    group: root
+
+
+- name: ensure samba shares directories exist
+  file:
+    path: "{{ samba_data }}/{{item}}"
+    state: directory
+    mode: 775
+    owner: root
+    group: root
+  with_items: "{{ samba_shares_list }}"
+
+
+- name: Start samba file sharing
+  docker_container:
+    name: samba
+    image: "{{samba_image}}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    volumes: "{{samba_volumes}}"
+    ports: "{{samba_ports}}"
+    command: "-p -r {{samba_users}} {{samba_shares}}"

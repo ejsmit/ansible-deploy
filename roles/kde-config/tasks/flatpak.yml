@@ -1,0 +1,13 @@
+
+
+- name: Instal flatpak
+  apt:
+    name:
+      - flatpak
+    state: latest
+
+
+- name: add flathub as flatpak repo
+  command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+  

@@ -1,0 +1,28 @@
+
+- name: ensure data directory exists
+  file:
+    path: "{{ wallabag_mysql_data_volume }}"
+    state: directory
+    mode: 0775
+    owner: root
+    group: root
+
+
+- name: mariadb container for wallabag
+  docker_container:
+    name: "wallabag-db"
+    image: "{{ wallabag_mysql_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    networks:
+      - name: "{{wallabag_network}}"
+    volumes:
+      - "{{ wallabag_mysql_data_volume }}:/var/lib/mysql"
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--character-set-client-handshake=FALSE"
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ wallabag_mysql_root_password }}"
+      TZ: "{{ timezone }}"

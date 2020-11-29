@@ -1,0 +1,33 @@
+
+
+
+
+- name:  Wallabag container
+  docker_container:
+    name: wallabag
+    image: "{{ wallabag_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks_cli_compatible: yes
+    networks:
+      - name: "{{wallabag_network}}"
+      - name: frontend_net
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ wallabag_mysql_root_password }}"
+      SYMFONY__ENV__DOMAIN_NAME: "https://wallabag.{{letsencrypt_domain}}"
+      SYMFONY__ENV__DATABASE_DRIVER: pdo_mysql
+      SYMFONY__ENV__DATABASE_HOST: wallabag-db
+      SYMFONY__ENV__DATABASE_PORT: "3306"
+      SYMFONY__ENV__DATABASE_NAME: "{{ wallabag_mysql_database }}"
+      SYMFONY__ENV__DATABASE_USER: "{{ wallabag_mysql_user }}"
+      SYMFONY__ENV__DATABASE_PASSWORD: "{{ wallabag_mysql_password }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.wallabag.rule: "Host(`wallabag.{{letsencrypt_domain}}`)"
+      traefik.http.routers.wallabag.entrypoints: http
+      traefik.http.routers.wallabag.middlewares: https_redirect
+      traefik.http.routers.wallabag-s.rule: "Host(`wallabag.{{letsencrypt_domain}}`)"
+      traefik.http.routers.wallabag-s.entrypoints: https
+      traefik.http.routers.wallabag-s.tls: "true"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: https
+      traefik.http.middlewares.https_redirect.redirectscheme.permanent: "true"

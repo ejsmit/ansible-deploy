@@ -1,0 +1,12 @@
+
+
+wallabag_network: wallabag_net
+
+wallabag_mysql_image: ejsmit/mariadb:10.4
+wallabag_mysql_data_volume: /media/bigdata/wallabag-db
+wallabag_mysql_root_password: wallarootpass
+wallabag_mysql_database: wallabag
+wallabag_mysql_user: wallabag
+wallabag_mysql_password: wallapass
+
+wallabag_image: ghcr.io/ejsmit/wallabag:latest

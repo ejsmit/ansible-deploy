@@ -1,0 +1,14 @@
+
+
+- name: Create wallabag network
+  docker_network:
+    name: "{{wallabag_network}}"
+
+
+
+- name: Database Container
+  include_tasks: database.yml
+
+
+- name: wallabag container
+  include_tasks: wallabag.yml

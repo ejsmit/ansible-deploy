@@ -1,19 +1,22 @@
 ---
 
 hostname: thorin
-hostname_fqdn: thorin.local
+hostname_fqdn: thorin.home
 
 
 docker_users: "{{ [default_user] }}"
 
 
-
-
-librenms_mail_domain: "{{mail_domain}}"
-librenms_mail_server: "{{mail_server}}"
-librenms_mail_username: "{{mail_username}}"
-librenms_mail_password: "{{mail_password}}"
-
+#postgresql_python_library: python3-psycopg2
+# postgresql_locales:
+#   - 'en_GB.UTF-8'
+#
+# zabbix_server_database: pgsql
+# zabbix_server_database_long: postgresql
+# zabbix_server_dbport: 5432
+# zabbix_server_dbpassword: zabbixpassword
+# zabbix_timezone: Europe/London
+# zabbix_url: thorin.home
 
 
 # portainer host

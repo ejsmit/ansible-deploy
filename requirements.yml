@@ -1,10 +1,12 @@
 ---
 roles:
   - name: geerlingguy.docker
-#    version: 2.7.0
   - name: geerlingguy.docker_arm
-#    version: 3.1.0
+  - name: geerlingguy.postgresql
+  - name: geerlingguy.apache
 
 collections:
-  - name: geerlingguy.k8s
+#   - name: geerlingguy.k8s
 #    version: 0.9.3
+  - name: community.zabbix
+    version: 1.1.0

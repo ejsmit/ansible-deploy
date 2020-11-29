@@ -18,15 +18,18 @@ radagast.local
 
 [raspbian]
 gollum.home
-smaug.local
-# thorin.local
+smaug.home
+thorin.home
+
+[raspbian:vars]
+ansible_python_interpreter=/usr/bin/python3
 
 
 
 [pi_servers]
 gollum.home
-smaug.local
-# thorin.local
+smaug.home
+thorin.home
 
 
 [desktops]

@@ -11,7 +11,6 @@
     - vars/samba.vault.yml
     - vars/nextcloud-client.vault.yml
     - vars/nextcloud-admin.vault.yml
-    - vars/docker.yml
 
   handlers:
   - include: handlers/reboot.yml
@@ -25,9 +24,9 @@
     - install_certs
     - geerlingguy.docker_arm
     - docker-common
-    # - docker-samba-pi
+    - docker-samba-pi
     - docker-nextcloud
-    # - docker-wallabag
+    - docker-wallabag
     # - docker-minio
 
 

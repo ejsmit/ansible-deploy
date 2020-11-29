@@ -1,7 +1,7 @@
 ---
 
 hostname: smaug
-hostname_fqdn: smaug.local
+hostname_fqdn: smaug.home
 
 
 backup_scripts:

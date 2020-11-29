@@ -1,0 +1,63 @@
+# thorin.local
+# assume raspbian base image
+
+- name: a playbook to configure thorin.local
+  hosts: thorin.home
+  remote_user: deploy
+  become: true
+
+  vars_files:
+    - ~/.private/ansible/vars/me-myself-and-i.yml
+    - vars/nextcloud-client.vault.yml
+
+
+  handlers:
+  - include: handlers/reboot.yml
+
+  collections:
+    - ejsmit.containers
+
+
+  roles:
+    # - nextcloud-client-tools
+    # - install_certs
+    # - geerlingguy.docker_arm
+    # - geerlingguy.postgresql
+    # - geerlingguy.apache
+    # - docker-common
+    - docker-zabbix
+
+
+
+
+
+  tasks:
+
+  # - name: Install Zabbix Server
+  #   include_role:
+  #     name: community.zabbix.zabbix_server
+  #   vars:
+  #     ansible_distribution: Raspbian
+  # - name: Install Zabbix Web
+  #   include_role:
+  #     name: community.zabbix.zabbix_web
+  #   vars:
+  #     ansible_distribution: Raspbian
+
+
+  - cron:
+      name: "Auto nightly reboot"
+      minute: "20"
+      hour: "3"
+      job: "/sbin/shutdown -r now"
+      cron_file: reboot
+      user: root
+
+
+# --------------------------
+#   forced reboot
+# --------------------------
+
+  # - debug: msg="Trigger Reboot"
+  #   notify: reboot and wait
+  #   changed_when: true

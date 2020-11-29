@@ -5,7 +5,7 @@ traefik_enabled: true
 traefik_image: traefik:v2.3
 
 mail_enabled: true
-mail_image: ejsmit/postfix:latest
+mail_image: ghcr.io/ejsmit/postfix:latest
 mail_server_hostname: mail.example.org
 mail_server: isp_server
 mail_username: isp_username

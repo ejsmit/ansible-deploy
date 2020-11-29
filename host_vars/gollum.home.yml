@@ -46,8 +46,8 @@ minio_image: ejsmit/minio:latest
 
 
 
-#
-nextcloud_datadir: /media//nextcloud
+
+nextcloud_datadir: /media/{{external_disk}}/nextcloud
 nextcloud_backupsdir: /media/bigdata/dailybackups
 nextcloud_mysql_data_volume: /media/{{external_disk}}/nextcloud-db
 nextcloud_mysql_root_password: nextcloudrootpass
@@ -56,6 +56,12 @@ nextcloud_mysql_user: nextcloud
 nextcloud_mysql_password: nextcloud
 nextcloud_mail_domain: "{{mail_domain}}"
 
+
+wallabag_mysql_data_volume: /media/bigdata/wallabag-db
+wallabag_mysql_root_password: wallarootpass
+wallabag_mysql_database: wallabag
+wallabag_mysql_user: wallabag
+wallabag_mysql_password: wallapass
 
 
 

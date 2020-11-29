@@ -50,6 +50,8 @@ letsencrypt_domain: "{{ certbot_domains[0] }}"
 dotfiles_project: ejsmit/dotfiles
 fresh_install_url: https://raw.githubusercontent.com/ejsmit/fresh/master/install.sh
 
+docker_version_armv7: "*"
+
 
 # some defaults in case they are not later overridden.  Ignore them here.
 host_packages: []

@@ -1,0 +1,26 @@
+
+
+- name: ensure data directory exists
+  file:
+    path: "{{ minio_data_volume }}"
+    state: directory
+    mode: 0775
+    owner: root
+    group: root
+
+
+
+- name: minio container
+  docker_container:
+    name: "minio"
+    image: "{{ minio_image }}"
+    state: started
+    restart_policy: unless-stopped
+    volumes:
+      - "{{ minio_data_volume }}:/data"
+    ports:
+      - "{{ minio_port }}:9000"
+    command: "minio server /data"
+    env:
+      MINIO_ACCESS_KEY: "{{ minio_access_key }}"
+      MINIO_SECRET_KEY: "{{ minio_secret_key }}"

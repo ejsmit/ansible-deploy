@@ -41,7 +41,7 @@ watchtower_mail_to: admin@example.org
 
 
 minio_data_volume: /media/bigdata/minio
-minio_image: ejsmit/minio:latest
+
 
 
 

@@ -1,0 +1,9 @@
+
+
+minio_data_volume: /data
+minio_image: ghcr.io/ejsmit/minio:latest
+minio_port: 9000
+
+
+minio_access_key: accesskey
+minio_secret_key: secretkey

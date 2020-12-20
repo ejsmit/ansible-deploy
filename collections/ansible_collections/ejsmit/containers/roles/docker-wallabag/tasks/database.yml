@@ -26,3 +26,14 @@
     env:
       MYSQL_ROOT_PASSWORD: "{{ wallabag_mysql_root_password }}"
       TZ: "{{ timezone }}"
+  register: wallabag_db_status
+
+
+
+- name: wait for mariadb to become ready
+  shell: "docker logs wallabag-db --since=2m 2>&1 | grep 'port: 3306'"
+  register: result
+  until: result.rc == 0
+  when: wallabag_db_status.changed
+  retries: 45
+  delay: 20

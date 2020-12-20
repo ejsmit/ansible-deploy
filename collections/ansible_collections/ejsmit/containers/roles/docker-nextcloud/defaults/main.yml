@@ -10,7 +10,7 @@ nextcloud_backupsdir: /media/disk2/dailybackups
 nextcloud_admin_user: admin
 nextcloud_admin_password: adminpassword
 
-nextcloud_mysql_image: ejsmit/mariadb:10.4
+nextcloud_mysql_image: ghcr.io/ejsmit/mariadb:10.4
 nextcloud_mysql_data_volume: /media/disk3/nextcloud-db
 nextcloud_mysql_root_password: thisisarootpassword
 nextcloud_mysql_database: nextcloud

@@ -16,6 +16,7 @@
   roles:
     - deb-packages
     - dotfiles
+    - motd
     - desktop-common
     - kde-config
     - geerlingguy.docker

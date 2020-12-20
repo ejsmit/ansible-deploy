@@ -27,7 +27,7 @@
     - docker-samba-pi
     - docker-nextcloud
     - docker-wallabag
-    # - docker-minio
+    - docker-minio
 
 
   tasks:

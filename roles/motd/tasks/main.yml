@@ -1,0 +1,43 @@
+---
+
+# install libraries
+#
+# mark all exaisting scripts as non executable
+# install my own script
+
+
+- name: create banner
+  shell: figlet {{hostname}} -c | lolcat -f
+  delegate_to: localhost
+  register: figlet_banner
+  become: false
+
+- name: copy banner motd file
+  template:
+    src: motd
+    dest: /etc/motd_banner
+
+- name: copy motd file
+  copy:
+    src: motd
+    dest: /etc/motd
+
+- name: find all motd scripts
+  find:
+    path: /etc/update-motd.d/
+    file_type: file
+    recurse: yes
+    excludes: 99-my-motd
+  register: find_result
+
+- name: mark them as non-executable
+  file:
+    path: "{{ item.path }}"
+    mode: '644'
+  loop: "{{ find_result.files }}"
+
+- name: copy motd script
+  copy:
+    src: 99-my-motd
+    dest: /etc/update-motd.d/99-my-motd
+    mode: '755'

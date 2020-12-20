@@ -1,3 +1,22 @@
 
 
 default_user: rsmit
+
+
+# Packages to install
+all_packages:
+  - python3
+  - python3-pip
+  - python3-setuptools
+  - python3-apt
+  - mc
+  - acl
+  - lua5.2
+  - tmux
+  - git
+  - wget
+  - curl
+  - ca-certificates
+  - apt-transport-https
+  - software-properties-common
+  - build-essential

@@ -7,7 +7,7 @@ desktop_packages_ppa:
   - ppa:pbek/qownnotes
   - ppa:phoerious/keepassxc
   # - ppa:ansible/ansible
-  - ppa:mank319/go-for-it
+
 
 
 desktop_packages:
@@ -36,6 +36,7 @@ desktop_packages:
   - build-essential
   - git
   - git-cola
+  - qemu-user-static
   # - node - use docker
 # net/prod
   - thunderbird
@@ -65,7 +66,6 @@ desktop_packages:
   - qemu-kvm
   - bridge-utils
   - plasma-workspace-wallpapers
-  - hplip-gui
   - skanlite
 
 

@@ -2,7 +2,7 @@
 # assume raspbian base image
 # assume pi-server-setup completed successfully.
 - name: a playbook to configure smaug.local
-  hosts: smaug.local
+  hosts: smaug.home
   remote_user: deploy
   become: true
 

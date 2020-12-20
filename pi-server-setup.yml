@@ -19,6 +19,7 @@
     - email
     - pi-unattended-upgrades
     - dotfiles
+    - motd
 
   tasks:
 

@@ -7,5 +7,6 @@
     state: started
     restart_policy: unless-stopped
     networks_cli_compatible: yes
+    command: redis-server --requirepass {{nextcloud_redis_password}}
     networks:
       - name: "{{nextcloud_network}}"

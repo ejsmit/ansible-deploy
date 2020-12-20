@@ -32,6 +32,7 @@
       REDIS_HOST: nextcloud-redis
       OVERWRITEPROTOCOL: "https"
       TRUSTED_PROXIES: "traefik"
+      REDIS_HOST_PASSWORD: "{{nextcloud_redis_password}}"
     labels:
       traefik.enable: "true"
       traefik.http.middlewares.nextcloud-caldav.redirectregex.permanent: "true"

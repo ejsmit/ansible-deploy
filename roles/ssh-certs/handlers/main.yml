@@ -1,0 +1,11 @@
+---
+
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted
+
+- name: warn no host certificates
+  fail:
+    msg: "No SSH Host Certificates"
+  ignore_errors: true

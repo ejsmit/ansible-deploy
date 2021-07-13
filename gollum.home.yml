@@ -5,6 +5,9 @@
   remote_user: deploy
   become: true
 
+#  vars:
+#    samba_image: "ejsmit/samba:armhf"
+
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
     - vars/minio.vault.yml
@@ -19,15 +22,15 @@
     - ejsmit.containers
 
   roles:
-    - mount-usb-disk
-    - nextcloud-client-tools
-    - install_certs
-    - geerlingguy.docker_arm
+    # - mount-usb-disk
+    # - nextcloud-client-tools
+    # - install_certs
+    # - geerlingguy.docker_arm
     - docker-common
     - docker-samba-pi
-    - docker-nextcloud
-    - docker-wallabag
-    - docker-minio
+    # - docker-nextcloud
+    # - docker-wallabag
+    # - docker-minio
 
 
   tasks:

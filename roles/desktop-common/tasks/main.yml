@@ -1,9 +1,15 @@
 
-- name: add a few ppa repositories
+- name: import apt repository keys
+  apt_key:
+    url: "{{item}}"
+    state: present
+  with_items: "{{desktop_packages_keys}}"
+
+- name: add a few apt repositories
   apt_repository:
     repo: "{{item}}"
     state: present
-  with_items: "{{desktop_packages_ppa}}"
+  with_items: "{{desktop_packages_repos}}"
 
 - name: Run the equivalent of "apt dist-upgrade"
   apt:

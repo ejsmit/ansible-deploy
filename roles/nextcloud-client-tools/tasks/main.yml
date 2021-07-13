@@ -5,6 +5,7 @@
       - fuse
       - rclone
       - gocryptfs
+      - sshfs
     state: latest
 
 - name: create rclone config directory

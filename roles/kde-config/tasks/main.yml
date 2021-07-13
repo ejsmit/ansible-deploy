@@ -17,27 +17,41 @@
 
 
 # start block for become default user
-- block:
+# - block:
 # dashes 4 indent inside block
 
 
 
-    - name: Latte-dock auto startup
-      copy:
-        src: /usr/share/applications/org.kde.latte-dock.desktop
-        dest: ~/.config/autostart/
-        owner: "{{default_user}}"
-        group: "{{default_user}}"
+    # - name: Konsole profile copy
+    #   copy:
+    #     src: files/RassieSmit.profile
+    #     dest: ~/.local/share/konsole/RassieSmit.profile
+    #     force: no
+    #
+    # - name: yakuake config copy
+    #   copy:
+    #     src: files/yakuakerc
+    #     dest: ~/.config/yakuakerc
+    #     force: no
+    #
+    # - name: Update konsole default profile
+    #   ini_file:
+    #     path: ~/.config/konsolerc
+    #     section: Desktop Entry
+    #     option: DefaultProfile
+    #     value: RassieSmit.profile
 
-    - name: yakuake auto startup
-      copy:
-        src: /usr/share/applications/org.kde.yakuake.desktop
-        dest: ~/.config/autostart/
-        owner: "{{default_user}}"
-        group: "{{default_user}}"
+# For KDE 4
+# killall plasma-desktop && kstart plasma-desktop
+
+# For KDE 5 < 5.10
+# killall plasmashell && kstart plasma-desktop
+
+# For KDE > 5.10
+# kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell
 
 
 
 
 # end block for become default user (2 indent)
-  become_user: "{{default_user}}"
+#  become_user: "{{default_user}}"

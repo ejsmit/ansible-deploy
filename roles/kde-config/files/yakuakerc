@@ -1,0 +1,10 @@
+[Animation]
+Frames=10
+
+[Desktop Entry]
+DefaultProfile=RassieSmit.profile
+
+[Window]
+Height=60
+ShowSystrayIcon=false
+Width=60

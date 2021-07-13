@@ -1,9 +1,36 @@
 ---
 
+- name: Install starship  for custom prompts
+  shell: curl -fsSL https://starship.rs/install.sh | bash -s -- -y
+
 
 # start block for become default user
 - block:
 # dashes 4 indent inside block
+
+    - name: Create fonts directory
+      file:
+        path: ~/.local/share/fonts
+        state: directory
+
+    - name: Download Fira Code nerd font (for editors)
+      get_url:
+        url: https://github.com/ryanoasis/nerd-fonts/raw/2.1.0/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.otf
+        dest: ~/.local/share/fonts
+
+    - name: Download Hack mono nerd font (for terminals)
+      get_url:
+        url: https://github.com/ryanoasis/nerd-fonts/raw/2.1.0/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete%20Mono.ttf
+        dest: ~/.local/share/fonts
+
+    - name: update font cache
+      command: fc-cache -v -f
+
+    - name: Display font message
+      debug:
+        msg:
+          - This script installs the fonts.  It does not actually change the terminal font.
+          - Please include the correct role for that (currently it is kde-config)
 
     - name: Has dotfiles already been installed
       stat:
@@ -17,7 +44,6 @@
     - name: Deploy dotfiles
       shell: FRESH_LOCAL_SOURCE={{ dotfiles_project | quote }} FORCE_YES_I_KNOW_I_AM_STUPID_AND_THIS_IS_DANGEROUS=true bash -c "`curl -sL {{ fresh_install_url }}`"
       when: not dotfiles_exists.stat.exists
-
 
 
 # end block for become default user (2 indent)

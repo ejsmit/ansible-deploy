@@ -2,7 +2,7 @@
 
 
 traefik_enabled: true
-traefik_image: traefik:v2.3
+traefik_image: traefik:v2.4
 
 mail_enabled: true
 mail_image: ghcr.io/ejsmit/postfix:latest

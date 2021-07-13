@@ -5,10 +5,11 @@
   hosts: radagast.local
   remote_user: deploy
   become: true
+  connection: local
 
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
-
+    - vars/ssh-certs.vault.yml
 
   handlers:
   - include: handlers/reboot.yml
@@ -16,7 +17,8 @@
   roles:
     - deb-packages
     - dotfiles
+    - ssh-certs
     - motd
     - desktop-common
-    - kde-config
-    - geerlingguy.docker
+    # - kde-config
+    # - geerlingguy.docker

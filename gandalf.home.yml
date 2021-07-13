@@ -2,21 +2,22 @@
 # Kubuntu
 
 - name: a playbook to configure gandalf.local
-  hosts: gandalf.local
+  hosts: gandalf.home
   remote_user: deploy
   become: true
 
   vars_files:
     - ~/.private/ansible/vars/me-myself-and-i.yml
-
+    - vars/ssh-certs.vault.yml
 
   handlers:
   - include: handlers/reboot.yml
 
   roles:
     - deb-packages
+    - desktop-common
+    - ssh-certs
     - dotfiles
     - motd
-    - desktop-common
     - kde-config
     - geerlingguy.docker

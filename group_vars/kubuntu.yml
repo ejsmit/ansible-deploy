@@ -3,6 +3,7 @@
 default_user: rsmit
 
 
+
 # Packages to install
 all_packages:
   - python3

@@ -3,13 +3,15 @@
   hosts: "{{ host | default('pi_servers') }}"
   remote_user: deploy
   become: true
-
+  vars_files:
+    - vars/ssh-certs.vault.yml
   handlers:
   - include: handlers/reboot.yml
 
   roles:
     - deb-packages
     - dotfiles
+    - ssh-certs
 
   tasks:
 
@@ -19,6 +21,6 @@
 #   forced reboot
 # --------------------------
 
-  # - debug: msg="Trigger Reboot"
-  #   notify: reboot and wait
-  #   changed_when: true
+  - debug: msg="Trigger Reboot"
+    notify: reboot and wait
+    changed_when: true

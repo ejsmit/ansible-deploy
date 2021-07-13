@@ -1,0 +1,146 @@
+---
+
+desktop_packages_keys:
+  - https://packagecloud.io/shiftkey/desktop/gpgkey
+
+
+
+desktop_packages_repos:
+  - ppa:kubuntu-ppa/backports
+  - ppa:nextcloud-devs/client
+  - ppa:pbek/qownnotes
+  - ppa:phoerious/keepassxc
+  - deb [arch=amd64] https://packagecloud.io/shiftkey/desktop/any/ any main
+
+
+desktop_packages:
+# system
+  - duplicity
+  - deja-dup
+  - kbackup
+  - yakuake
+  - latte-dock
+  - snapd
+  - flatpak
+  - direnv
+  - ktorrent
+  - fuse
+  - gocryptfs
+  - software-properties-common
+  - lua5.2
+  - seahorse     # useful want skype gebruik gnome-keyring
+  - htop
+  - powertop
+  - kate
+  - kwrite
+  - xrdp
+  - whois # for mkpasswd
+# dev
+  - build-essential
+  - git
+  - git-cola
+  - git-gui
+  - gitg
+  - gitk
+  - github-desktop
+  - qemu-user-static
+  - gambas3
+  - nodejs
+  - npm
+  # - node - use docker
+# net/prod
+  - thunderbird
+  - firefox
+  # - xul-ext-lightning - now included in thunderbird?
+  - nextcloud-client
+  - nextcloud-client-dolphin
+  - keepassxc
+  - libreoffice
+  - qownnotes
+  - kwalletcli
+# media
+#  - gpodder
+  - vlc
+  - mpv
+  - cantata
+#  - digikam
+  # - kdenlive
+  # - audacity
+# other
+  - ansible
+  - virt-manager
+  - ssh-askpass
+  - virt-viewer
+  - bridge-utils
+  - plasma-workspace-wallpapers
+  - figlet
+  - lolcat
+
+
+
+desktop_packages_snaps:
+  - name: atom
+    classic: yes
+  - name: code
+    classic: yes
+  - name: sublime-text
+    classic: yes
+  - name: hugo
+    channel: extended
+  - name: kubectl
+    classic: yes
+  # - name: multipass
+  #   options: --classic
+  # - name: microk8s
+  #   options: --classic
+  # - name: android-studio
+  #   options: --classic
+  - name: powershell
+    classic: yes
+  - name: lxd
+
+# scrcpy
+
+
+
+desktop_packages_deb:
+  # - name: skypeforlinux
+  #   target: /usr/bin/skypeforlinux
+  #   url: https://go.skype.com/skypeforlinux-64.deb
+  #   dest: /tmp/skype.deb
+  #   command: DEBIAN_FRONTEND=noninteractive apt install /tmp/skype.deb
+  - name: googlechrome
+    target: /usr/bin/google-chrome
+    url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    dest: /tmp/chrome.deb
+    command: DEBIAN_FRONTEND=noninteractive apt install /tmp/chrome.deb
+
+
+desktop_packages_installer_user:
+  - name: miniforge
+    target: ~/miniforge3/bin/conda
+    url: https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+    dest: ~/miniforge.sh
+    command: bash ~/miniforge.sh -b -p $HOME/miniforge3
+
+
+
+
+
+
+
+
+
+
+#dwarf fortress
+#xterm
+#libsdl-ttf2.0
+
+
+
+  # - wine
+
+
+# python3-mutagen
+# python3-gst-1.0
+# python 3 PIL?

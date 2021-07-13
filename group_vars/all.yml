@@ -2,6 +2,9 @@
 
 timezone: Europe/London
 
+ssh_allowed_principals:
+  - user-rsmit
+  - user-pi
 
 # role: email
 mail_account: gandi

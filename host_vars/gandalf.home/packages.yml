@@ -1,13 +1,16 @@
 ---
 
+desktop_packages_keys:
+  - https://packagecloud.io/shiftkey/desktop/gpgkey
 
-desktop_packages_ppa:
+
+
+desktop_packages_repos:
   - ppa:kubuntu-ppa/backports
   - ppa:nextcloud-devs/client
   - ppa:pbek/qownnotes
   - ppa:phoerious/keepassxc
-  # - ppa:ansible/ansible
-
+  - deb [arch=amd64] https://packagecloud.io/shiftkey/desktop/any/ any main
 
 
 desktop_packages:
@@ -37,18 +40,21 @@ desktop_packages:
   - git
   - git-cola
   - qemu-user-static
+  - gambas3
+  - nodejs
+  - npm
+  - github-desktop
   # - node - use docker
 # net/prod
   - thunderbird
   - firefox
-  - xul-ext-lightning
+  # - xul-ext-lightning - now included in thunderbird?
   - nextcloud-client
   - nextcloud-client-dolphin
   - keepassxc
   - libreoffice
   - qownnotes
   - kwalletcli
-  - go-for-it
 # media
   - gpodder
   - vlc
@@ -58,15 +64,14 @@ desktop_packages:
   # - kdenlive
   # - audacity
 # other
-  - qemu-user
   - ansible
   - virt-manager
   - ssh-askpass
   - virt-viewer
-  - qemu-kvm
   - bridge-utils
   - plasma-workspace-wallpapers
-  - skanlite
+  - figlet
+  - lolcat
 
 
 
@@ -81,14 +86,15 @@ desktop_packages_snaps:
     channel: extended
   - name: kubectl
     classic: yes
-  - name: lxd
   # - name: multipass
   #   options: --classic
   # - name: microk8s
   #   options: --classic
   # - name: android-studio
   #   options: --classic
-
+  - name: powershell
+    classic: yes
+  - name: lxd
 
 # scrcpy
 

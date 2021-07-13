@@ -32,7 +32,7 @@ ssh-keygen -R ${hostname} >/dev/null
 ssh-keyscan -H ${hostname} >~/.ssh/known_hosts  2>/dev/null
 
 # copy cert to remote
-ssh-copy-id -i ~/.ssh/id_rsa.pub $address
+ssh-copy-id -i ~/.ssh/id_ed25519.pub $address
 read -p "Press enter to continue"
 
 # check if we can connect

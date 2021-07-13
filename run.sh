@@ -20,4 +20,4 @@ hostname=""
 [ "$2" ] && hostname="-e host=$2"
 
 # use -v or -vvv for debugging
-ansible-playbook $ymlfile
+ansible-playbook  $ymlfile $hostname
